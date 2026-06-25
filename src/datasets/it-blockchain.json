@@ -1,0 +1,122 @@
+[
+  {
+    "id": "it1",
+    "question": "Thuật toán băm nào được dùng trong Bitcoin?",
+    "options": [
+      "MD5",
+      "SHA-1",
+      "SHA-256",
+      "RSA"
+    ],
+    "answer_hash": "4d624da7d90336cee438aa65c7b7ad95fe6a57480ec707d68f2f5800f58387bb",
+    "salt": "it_salt_0"
+  },
+  {
+    "id": "it2",
+    "question": "Ngôn ngữ lập trình nào thường dùng nhất để viết smart contract trên Ethereum?",
+    "options": [
+      "Python",
+      "C++",
+      "Solidity",
+      "Java"
+    ],
+    "answer_hash": "04799088d9b16eb17abe1c021a87fd03f59c04a9ed272adbd9e9a4758446609e",
+    "salt": "it_salt_1"
+  },
+  {
+    "id": "it3",
+    "question": "Thẻ HTML nào dùng để tạo một siêu liên kết (link)?",
+    "options": [
+      "<a>",
+      "<link>",
+      "<href>",
+      "<url>"
+    ],
+    "answer_hash": "1d061c1299f5abbacc0fd4820f2759d8f594610218f18fb24bb2dc21872d3d32",
+    "salt": "it_salt_2"
+  },
+  {
+    "id": "it4",
+    "question": "Lỗi 404 Not Found có nghĩa là gì?",
+    "options": [
+      "Máy chủ bị sập",
+      "Không tìm thấy trang yêu cầu",
+      "Lỗi mã nguồn PHP",
+      "Chưa cấp quyền truy cập"
+    ],
+    "answer_hash": "85f24241d1d034f8f46e8e1c3567db05de270e52a1d5a2b1637467e7f79d77d8",
+    "salt": "it_salt_3"
+  },
+  {
+    "id": "it5",
+    "question": "RAM trong máy tính có chức năng gì?",
+    "options": [
+      "Lưu trữ dữ liệu vĩnh viễn",
+      "Xử lý đồ họa",
+      "Lưu trữ dữ liệu tạm thời để CPU xử lý",
+      "Phát wifi"
+    ],
+    "answer_hash": "02823fc01a368acd78b23c40b9f43dfd591c77013a69866bd975e6839ae1f623",
+    "salt": "it_salt_4"
+  },
+  {
+    "id": "it6",
+    "question": "Cơ sở dữ liệu NoSQL nào phổ biến nhất hiện nay?",
+    "options": [
+      "MySQL",
+      "PostgreSQL",
+      "MongoDB",
+      "Oracle"
+    ],
+    "answer_hash": "cbd1aa5cc19708c864263d5e7544bbeda53853bd49b3e45068bcde08b3a53833",
+    "salt": "it_salt_5"
+  },
+  {
+    "id": "it7",
+    "question": "NFT là viết tắt của từ gì?",
+    "options": [
+      "Non-Fungible Token",
+      "New Financial Technology",
+      "Network File Transfer",
+      "Node For Transactions"
+    ],
+    "answer_hash": "ac92e87a64e29ff7e085b9de3d57e0a874e03f25e86a04f268ceee90c025c583",
+    "salt": "it_salt_6"
+  },
+  {
+    "id": "it8",
+    "question": "Docker được sử dụng chủ yếu để làm gì?",
+    "options": [
+      "Làm đẹp giao diện web",
+      "Container hóa ứng dụng",
+      "Chạy giả lập Android",
+      "Bảo mật mạng wifi"
+    ],
+    "answer_hash": "d06e475a31b437f3d0845aae60fa1dc9acd3517e91d3938602c51f152452f641",
+    "salt": "it_salt_7"
+  },
+  {
+    "id": "it9",
+    "question": "Trong mạng máy tính, địa chỉ IP (IPv4) gồm bao nhiêu byte?",
+    "options": [
+      "2",
+      "4",
+      "8",
+      "16"
+    ],
+    "answer_hash": "2e3151123bb044188e1161aa1275b4d163fac20c1bd37ac99a66290fd58ad4f1",
+    "salt": "it_salt_8"
+  },
+  {
+    "id": "it10",
+    "question": "Giao thức nào được sử dụng để truyền tải web an toàn có mã hóa?",
+    "options": [
+      "HTTP",
+      "FTP",
+      "HTTPS",
+      "SMTP"
+    ],
+    "answer_hash": "791beb9fbe20837d865edf559cee2a84536e168b75c765f16fbaa62b3fa895ca",
+    "salt": "it_salt_9"
+  }
+]

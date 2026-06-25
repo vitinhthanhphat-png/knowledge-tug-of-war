@@ -6,6 +6,7 @@ import gameBg from './assets/game_background_v3.png';
 import avatarTeam1 from './assets/avatar_team1.png';
 import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
+import { BUILT_IN_DATASETS } from './datasets';
 
 import { 
   Question, 
@@ -749,52 +750,6 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-orange-500 rounded-full fire-glow mix-blend-screen pointer-events-none z-10 origin-center"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-yellow-300 rounded-full fire-glow mix-blend-screen pointer-events-none z-10 origin-center" style={{ animationDelay: '0.5s' }}></div>
 
-        {/* Start Screen (Idle State) */}
-        {state.value === 'idle' && (
-          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md">
-            <h1 className="font-display-force text-6xl md:text-8xl text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4">
-              Knowledge Tug of War
-            </h1>
-            <p className="text-white/80 font-body-md text-xl md:text-2xl mb-12 font-bold tracking-widest">CUỘC CHIẾN TRI THỨC ĐỈNH CAO</p>
-            
-            <div className="flex flex-col gap-6 items-center">
-              {state.context.questions.length > 0 ? (
-                <button 
-                  onClick={() => send({ type: 'START_GAME' })}
-                  className="px-12 py-5 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-full font-bold font-headline-lg text-2xl tracking-wider shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:shadow-[0_0_50px_rgba(34,197,94,0.9)] hover:scale-105 transition-all duration-300 border-2 border-green-300"
-                >
-                  BẮT ĐẦU CHƠI
-                </button>
-              ) : (
-                <div className="text-yellow-400 font-bold mb-4 bg-black/50 px-6 py-2 rounded-full backdrop-blur-md border border-yellow-400/30">Vui lòng mở Admin để Import đề thi!</div>
-              )}
-              
-              <div className="flex gap-4 mt-6">
-                <button 
-                  onClick={() => {
-                    if (!document.fullscreenElement) {
-                      document.documentElement.requestFullscreen().catch(() => {});
-                    } else {
-                      document.exitFullscreen().catch(() => {});
-                    }
-                  }}
-                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
-                >
-                  <span className="material-symbols-outlined">fullscreen</span>
-                  FULLSCREEN
-                </button>
-                <button 
-                  onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
-                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
-                >
-                  <span className="material-symbols-outlined">settings</span>
-                  ADMIN
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Screen Edge Glow (Validation Error) */}
         {validationError && (
           <div className="absolute top-16 left-6 right-6 bg-[#7f1d1d]/90 backdrop-blur-md text-red-200 px-4 py-3 rounded-xl border border-red-500/30 flex items-center justify-between gap-3 z-50 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
@@ -1051,11 +1006,58 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           </div>
         </footer>
         )}
+
       </div>
+
+        {/* Start Screen (Idle State) - MOUNTED OUTSIDE THE 16:9 CANVAS */}
+        {state.value === 'idle' && (
+          <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md">
+            <h1 className="font-display-force text-6xl md:text-8xl text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4">
+              Knowledge Tug of War
+            </h1>
+            <p className="text-white/80 font-body-md text-xl md:text-2xl mb-12 font-bold tracking-widest">CUỘC CHIẾN TRI THỨC ĐỈNH CAO</p>
+            
+            <div className="flex flex-col gap-6 items-center">
+              {state.context.questions.length > 0 ? (
+                <button 
+                  onClick={() => send({ type: 'START_GAME' })}
+                  className="px-12 py-5 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-full font-bold font-headline-lg text-2xl tracking-wider shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:shadow-[0_0_50px_rgba(34,197,94,0.9)] hover:scale-105 transition-all duration-300 border-2 border-green-300"
+                >
+                  BẮT ĐẦU CHƠI
+                </button>
+              ) : (
+                <div className="text-yellow-400 font-bold mb-4 bg-black/50 px-6 py-2 rounded-full backdrop-blur-md border border-yellow-400/30">Vui lòng mở Admin để Import đề thi!</div>
+              )}
+              
+              <div className="flex gap-4 mt-6">
+                <button 
+                  onClick={() => {
+                    if (!document.fullscreenElement) {
+                      document.documentElement.requestFullscreen().catch(() => {});
+                    } else {
+                      document.exitFullscreen().catch(() => {});
+                    }
+                  }}
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined">fullscreen</span>
+                  FULLSCREEN
+                </button>
+                <button 
+                  onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined">settings</span>
+                  ADMIN
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       {/* 2. Admin Panel Overlay - MOUNTED OUTSIDE THE 16:9 CANVAS (Native Scale) */}
       {isAdminOpen && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6 transition-all duration-300">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 transition-all duration-300">
           <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-3xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">
             
             {/* Header */}
@@ -1212,6 +1214,28 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
               {/* Tab 2: Import / Export */}
               {activeTab === 'import' && (
                 <div className="space-y-6">
+                  {/* Built-in Datasets Zone */}
+                  <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 flex flex-col items-center text-center">
+                    <p className="font-bold text-blue-900 mb-2">Chọn bộ đề có sẵn</p>
+                    <p className="text-xs text-blue-700 mb-4">Nạp nhanh các bộ câu hỏi được hệ thống biên soạn sẵn</p>
+                    <div className="flex gap-4 flex-wrap justify-center">
+                      {BUILT_IN_DATASETS.map(dataset => (
+                        <button
+                          key={dataset.id}
+                          onClick={() => {
+                            if(window.confirm(`Bạn có chắc chắn muốn nạp bộ "${dataset.name}"?\nToàn bộ câu hỏi hiện tại sẽ bị ghi đè.`)) {
+                              send({ type: 'IMPORT_QUESTIONS', questions: dataset.data as Question[] });
+                              alert(`Đã nạp thành công bộ đề: ${dataset.name}`);
+                            }
+                          }}
+                          className="px-4 py-2 bg-white text-blue-700 border border-blue-300 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition-colors text-sm shadow-sm"
+                        >
+                          Nạp: {dataset.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-6">
                     {/* Import Zone */}
                     <div className="bg-neutral-50 p-6 rounded-xl border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center text-center">

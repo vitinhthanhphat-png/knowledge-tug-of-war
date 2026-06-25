@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build && powershell -Command \"Copy-Item dist-test.html dist/index.html; (Get-Content dist/index.html) -replace '\\./dist/knowledge-tug-of-war.js', './knowledge-tug-of-war.js' | Set-Content dist/index.html\"",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "preact": "^10.22.0",
@@ -15,6 +17,7 @@
   "devDependencies": {
     "@preact/preset-vite": "^2.10.5",
     "autoprefixer": "^10.4.19",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
