@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Đấu trường kéo co kiến thức - Trực quan, kịch tính và đầy trí tuệ.">
+  <meta property="og:title" content="Đấu Trường Kéo Co Kiến Thức">
+  <meta property="og:description" content="Đấu trường kéo co kiến thức - Trực quan, kịch tính và đầy trí tuệ.">
+  <title>Static Build Verification</title>
+</head>
+<body style="background: #000; margin: 0; padding: 0; min-height: 100vh; overflow: hidden;">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Space+Grotesk:wght@300..700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+  
+  <div style="width: 100vw; height: 100vh;">
+    <!-- Mount custom element -->
+    <knowledge-tug-of-war 
+      theme="kinetic-academy" 
+      default-questions='[{"id":"q1","question":"Which algorithm is used to hash passwords in this widget?","options":["MD5","SHA-256","Bcrypt","AES"],"answer_hash":"bcf0bd8e4703675ff11e92b2d545757efe64d34cc4779780f1520cdeae3db93e","salt":"my-salt-1"}]'
+    ></knowledge-tug-of-war>
+  </div>
+  
+  <!-- Load single file JS bundle directly -->
+  <script src="./knowledge-tug-of-war.js"></script>
+</body>
+</html>
