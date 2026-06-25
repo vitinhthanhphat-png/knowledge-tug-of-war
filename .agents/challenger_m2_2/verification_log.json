@@ -1,0 +1,7 @@
+{
+  "fsm_transitions": "passed",
+  "keyboard_lockout": "passed",
+  "inputs_ignored": "passed",
+  "cooldown_500ms": "passed",
+  "errors": []
+}
