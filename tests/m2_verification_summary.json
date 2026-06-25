@@ -1,0 +1,49 @@
+{
+  "url": "file:///D:/AI APP/DauTruongKienThuc/Requirement/knowledge-tug-of-war/dist-test.html",
+  "fsm_transitions": {
+    "idle": true,
+    "waiting_buzz": true,
+    "answering": true,
+    "result": true,
+    "ended": true,
+    "reset_to_idle": true
+  },
+  "keyboard_lockout": {
+    "space_locks_out_enter": true,
+    "enter_locks_out_space": true
+  },
+  "input_textarea_ignore": {
+    "input_space_ignored": true,
+    "textarea_enter_ignored": true
+  },
+  "space_scroll_prevention": {
+    "scroll_prevented": true
+  },
+  "inter_round_cooldown": {
+    "ignored_before_500ms": true,
+    "accepted_after_500ms": true
+  },
+  "logs": [
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK MD5"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team2"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    }
+  ],
+  "errors": []
+}

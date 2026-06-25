@@ -1,0 +1,37 @@
+{
+  "url": "file:///D:/AI APP/DauTruongKienThuc/Requirement/knowledge-tug-of-war/dist-test.html",
+  "local_storage_caching": {
+    "initial_cache_load": true,
+    "fallback_to_default": true,
+    "mount_protection": true,
+    "reactive_sync": true
+  },
+  "crypto_safety": {
+    "fallback_active_without_subtle": true,
+    "case_insensitivity": true,
+    "null_undefined_safety": true
+  },
+  "admin_panel": {
+    "toggle_works": true,
+    "import_validation_size_limit": true,
+    "import_validation_schema": true,
+    "import_validation_crypto_none_match": true,
+    "import_validation_crypto_multi_match": true,
+    "import_validation_success": true
+  },
+  "aspect_ratio_scaler": {
+    "container_scaled": false,
+    "admin_panel_unscaled": false
+  },
+  "logs": [
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK 3"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,52 @@
+{
+  "url": "file:///D:/AI APP/DauTruongKienThuc/Requirement/knowledge-tug-of-war/dist-test.html",
+  "logs": [],
+  "errors": [],
+  "element_registered": true,
+  "shadow_dom_mounted": true,
+  "theme_applied": "kinetic-academy",
+  "questions_loaded": true,
+  "styling_scoped": true,
+  "viewports": {
+    "desktop": {
+      "viewport_size": {
+        "width": 1280,
+        "height": 800
+      },
+      "screenshot_path": "D:\\AI APP\\DauTruongKienThuc\\Requirement\\knowledge-tug-of-war\\tests\\screenshots\\desktop.png",
+      "layout": {
+        "hostWidth": 960,
+        "hostHeight": 540,
+        "containerWidth": 960,
+        "containerHeight": 540
+      }
+    },
+    "tablet": {
+      "viewport_size": {
+        "width": 768,
+        "height": 1024
+      },
+      "screenshot_path": "D:\\AI APP\\DauTruongKienThuc\\Requirement\\knowledge-tug-of-war\\tests\\screenshots\\tablet.png",
+      "layout": {
+        "hostWidth": 688,
+        "hostHeight": 540,
+        "containerWidth": 688,
+        "containerHeight": 540
+      }
+    },
+    "mobile": {
+      "viewport_size": {
+        "width": 375,
+        "height": 667
+      },
+      "screenshot_path": "D:\\AI APP\\DauTruongKienThuc\\Requirement\\knowledge-tug-of-war\\tests\\screenshots\\mobile.png",
+      "layout": {
+        "hostWidth": 295,
+        "hostHeight": 948,
+        "containerWidth": 295,
+        "containerHeight": 948
+      }
+    }
+  },
+  "question_text": "Which algorithm is used to hash passwords in this widget?"
+}

@@ -1,0 +1,61 @@
+{
+  "build_check": {
+    "js_bundle_exists": true,
+    "js_bundle_size_kb": 1034.69
+  },
+  "visual_behaviors": {
+    "braided_rope_texture_exists": true,
+    "braided_rope_movement_on_tug": true,
+    "diamond_snapping_elastic": true,
+    "fiery_warning_indicators": true,
+    "edge_glow_backdrops": true
+  },
+  "audio_verification": {
+    "audiocontext_activation": true,
+    "procedural_buzz_sound": true,
+    "procedural_tick_sound": true,
+    "procedural_correct_sound": true,
+    "procedural_wrong_sound": true,
+    "procedural_pull_rope_sound": true
+  },
+  "mobile_layout": {
+    "scaler_disabled": true,
+    "single_column_grid": true,
+    "touch_buttons_visible": true
+  },
+  "logs": [
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK 4"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK 5"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK 6"
+    },
+    {
+      "type": "log",
+      "text": "BUZZ team1"
+    },
+    {
+      "type": "log",
+      "text": "OPTION_CLICK 3"
+    }
+  ],
+  "errors": []
+}
