@@ -7,6 +7,7 @@ import avatarTeam1 from './assets/avatar_team1.png';
 import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
 import { BUILT_IN_DATASETS } from './datasets';
+import { parseExcelToQuestions } from './excel';
 
 import { 
   Question, 
@@ -415,6 +416,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
   // Admin Panel states
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'questions' | 'import' | 'hash'>('questions');
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const [isValidating, setIsValidating] = useState(false);
@@ -584,7 +586,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     }
   };
 
-  const handleSecureImportJSON = () => {
+  const handleSecureImportJSON = (autoStart: boolean | any = false) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
@@ -611,7 +613,12 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             send({ type: 'IMPORT_QUESTIONS', questions: result.questions });
             setValidationErrors([]);
             setValidationError(null);
-            alert('Tải đề thi JSON thành công!');
+            if (autoStart === true) {
+              setIsTopicModalOpen(false);
+              send({ type: 'START_GAME' });
+            } else {
+              alert('Tải đề thi JSON thành công!');
+            }
           } else {
             const errorMsg = result.errors.map(err => err.message).join('; ');
             setValidationErrors(result.errors || []);
@@ -665,6 +672,61 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     a.download = 'questions.json';
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleExcelImport = (autoStart: boolean | any = false) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx, .xls';
+    input.onchange = async (event: Event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        setValidationErrors([{ index: -1, message: 'Kích thước file Excel vượt quá giới hạn cho phép (2MB).' }]);
+        return;
+      }
+
+      setIsValidating(true);
+      setValidationErrors([]);
+
+      try {
+        const questions = await parseExcelToQuestions(file);
+        
+        if (window.confirm('Bạn có muốn tải xuống file JSON sau khi chuyển đổi từ Excel không?')) {
+          const blob = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'questions_from_excel.json';
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
+        send({ type: 'IMPORT_QUESTIONS', questions });
+        setValidationErrors([]);
+        setValidationError(null);
+        if (autoStart === true) {
+          setIsTopicModalOpen(false);
+          send({ type: 'START_GAME' });
+        } else {
+          alert('Tải đề thi Excel thành công!');
+        }
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        setValidationErrors([{ index: -1, message: errorMsg }]);
+        setValidationError(errorMsg);
+        send({ type: 'IMPORT_QUESTIONS', questions: SAFE_DEFAULT_QUESTIONS });
+        host.dispatchEvent(new CustomEvent('questions-invalid', {
+          detail: { error: errorMsg },
+          bubbles: true,
+          composed: true
+        }));
+      } finally {
+        setIsValidating(false);
+      }
+    };
+    input.click();
   };
 
   const handleAddQuestion = async (e: Event) => {
@@ -1011,51 +1073,135 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
         {/* Start Screen (Idle State) - MOUNTED OUTSIDE THE 16:9 CANVAS */}
         {state.value === 'idle' && (
-          <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md">
-            <h1 className="font-display-force text-6xl md:text-8xl text-white uppercase tracking-tighter mb-4 drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] text-center px-4">
-              Knowledge Tug of War
-            </h1>
-            <p className="text-white/80 font-body-md text-xl md:text-2xl mb-12 font-bold tracking-widest">CUỘC CHIẾN TRI THỨC ĐỈNH CAO</p>
+          <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md overflow-hidden">
             
-            <div className="flex flex-col gap-6 items-center">
-              {state.context.questions.length > 0 ? (
-                <button 
-                  onClick={() => send({ type: 'START_GAME' })}
-                  className="px-12 py-5 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-full font-bold font-headline-lg text-2xl tracking-wider shadow-[0_0_30px_rgba(34,197,94,0.6)] hover:shadow-[0_0_50px_rgba(34,197,94,0.9)] hover:scale-105 transition-all duration-300 border-2 border-green-300"
-                >
-                  BẮT ĐẦU CHƠI
-                </button>
-              ) : (
-                <div className="text-yellow-400 font-bold mb-4 bg-black/50 px-6 py-2 rounded-full backdrop-blur-md border border-yellow-400/30">Vui lòng mở Admin để Import đề thi!</div>
-              )}
+            {/* Background Rope for Tug of War effect */}
+            <div className="absolute bottom-[20%] md:bottom-[25%] left-0 right-0 h-4 bg-gradient-to-r from-green-500 via-orange-500 to-blue-500 opacity-20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
+            
+            {/* Team 1 Character */}
+            <div className="absolute bottom-[-5%] left-[-5%] md:left-5 lg:left-20 animate-pull-left z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
+               <img src="./team_green_pulling.png?v=13" alt="Team 1" className="h-[250px] md:h-[400px] lg:h-[550px] object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
+            </div>
+
+            {/* Team 2 Character */}
+            <div className="absolute bottom-[-5%] right-[-5%] md:right-5 lg:right-20 animate-pull-right z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
+               <img src="./team_blue_pulling.png?v=13" alt="Team 2" className="h-[250px] md:h-[400px] lg:h-[550px] object-contain drop-shadow-[0_0_20px_rgba(33,112,228,0.5)] scale-x-[-1]" />
+            </div>
+
+            {/* Foreground Content */}
+            <div className="z-10 flex flex-col items-center justify-center w-full h-full pb-10">
+              <h1 className="font-display-force text-6xl md:text-8xl text-white uppercase tracking-tighter mb-4 text-center px-4 animate-glow animate-float">
+                Knowledge Tug of War
+              </h1>
+              <p className="text-white/80 font-body-md text-xl md:text-2xl mb-12 font-bold tracking-widest text-center px-4">CUỘC CHIẾN TRI THỨC ĐỈNH CAO</p>
               
-              <div className="flex gap-4 mt-6">
-                <button 
-                  onClick={() => {
-                    if (!document.fullscreenElement) {
-                      document.documentElement.requestFullscreen().catch(() => {});
-                    } else {
-                      document.exitFullscreen().catch(() => {});
-                    }
-                  }}
-                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
-                >
-                  <span className="material-symbols-outlined">fullscreen</span>
-                  FULLSCREEN
-                </button>
-                <button 
-                  onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
-                  className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
-                >
-                  <span className="material-symbols-outlined">settings</span>
-                  ADMIN
-                </button>
+              <div className="flex flex-col gap-6 items-center">
+                <div className="animate-urgent-heartbeat">
+                  <button 
+                    onClick={() => setIsTopicModalOpen(true)}
+                    className="px-14 py-6 bg-gradient-to-b from-green-400 to-green-600 text-white rounded-2xl font-black font-display-force text-4xl tracking-widest shadow-[0_10px_0_rgb(20,83,45),0_20px_30px_rgba(0,0,0,0.5)] border-2 border-green-300 active:shadow-[0_0px_0_rgb(20,83,45),0_0px_0_rgba(0,0,0,0.5)] active:translate-y-[10px] hover:brightness-110 transition-all duration-100 uppercase"
+                  >
+                    BẮT ĐẦU CHƠI
+                  </button>
+                </div>
+                
+                <div className="flex gap-4 mt-6">
+                  <button 
+                    onClick={() => {
+                      if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen().catch(() => {});
+                      } else {
+                        document.exitFullscreen().catch(() => {});
+                      }
+                    }}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined">fullscreen</span>
+                    FULLSCREEN
+                  </button>
+                  <button 
+                    onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined">settings</span>
+                    ADMIN
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
 
-      {/* 2. Admin Panel Overlay - MOUNTED OUTSIDE THE 16:9 CANVAS (Native Scale) */}
+      {/* 2. Topic Selection Modal - MOUNTED OUTSIDE THE 16:9 CANVAS */}
+      {isTopicModalOpen && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center p-6 transition-all duration-300">
+          <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-4xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">
+            {/* Header */}
+            <div className="flex justify-between items-center bg-neutral-100 p-4 border-b border-neutral-200">
+              <h3 className="font-display font-bold text-xl text-neutral-800 flex items-center gap-2">
+                📚 Chọn Chủ Đề
+              </h3>
+              <div className="flex items-center gap-4">
+                <a 
+                  href="./template_dautruongkienthuc.xlsx" 
+                  download
+                  className="text-sm font-semibold text-green-700 underline hover:text-green-900"
+                >
+                  📥 Tải file mẫu (.xlsx)
+                </a>
+                <button 
+                  onClick={() => setIsTopicModalOpen(false)}
+                  className="text-neutral-500 hover:text-neutral-800 font-bold text-2xl px-2 leading-none"
+                >
+                  &times;
+                </button>
+              </div>
+            </div>
+            {/* Body Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {BUILT_IN_DATASETS.map(dataset => (
+                  <button
+                    key={dataset.id}
+                    onClick={() => {
+                      send({ type: 'IMPORT_QUESTIONS', questions: dataset.data as Question[] });
+                      setIsTopicModalOpen(false);
+                      send({ type: 'START_GAME' });
+                    }}
+                    className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors group shadow-sm"
+                  >
+                    <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">{(dataset as any).icon || '📘'}</span>
+                    <span className="font-bold text-lg text-center group-hover:text-white text-blue-900">{dataset.name}</span>
+                    <span className="text-sm mt-2 opacity-80">{dataset.data.length} câu hỏi</span>
+                  </button>
+                ))}
+                
+                {/* Custom Import Card */}
+                <button
+                  onClick={() => handleSecureImportJSON(true)}
+                  className="flex flex-col items-center justify-center p-6 bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-xl hover:bg-green-600 hover:border-green-600 hover:text-white transition-colors group shadow-sm"
+                >
+                  <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📂</span>
+                  <span className="font-bold text-lg text-center group-hover:text-white text-neutral-800">+ Tải đề của bạn (.json)</span>
+                  <span className="text-sm mt-2 opacity-80">Tự động bắt đầu trò chơi</span>
+                </button>
+
+                {/* Custom Import Excel Card */}
+                <button
+                  onClick={() => handleExcelImport(true)}
+                  className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-dashed border-green-300 rounded-xl hover:bg-green-600 hover:border-green-600 hover:text-white transition-colors group shadow-sm"
+                >
+                  <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📊</span>
+                  <span className="font-bold text-lg text-center group-hover:text-white text-green-800">+ Tải lên Excel</span>
+                  <span className="text-sm mt-2 opacity-80">Tự động bắt đầu trò chơi</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Admin Panel Overlay - MOUNTED OUTSIDE THE 16:9 CANVAS (Native Scale) */}
       {isAdminOpen && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 transition-all duration-300">
           <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-3xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">

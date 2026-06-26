@@ -6,6 +6,20 @@ export default {
   ],
   theme: {
     extend: {
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        glow: {
+          '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.6))' },
+          '50%': { filter: 'drop-shadow(0 0 30px rgba(255,255,255,1))' },
+        }
+      },
+      animation: {
+        float: 'float 3s ease-in-out infinite',
+        glow: 'glow 2s ease-in-out infinite',
+      },
       colors: {
         surface: {
           DEFAULT: '#f9f9ff',
