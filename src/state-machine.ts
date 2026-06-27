@@ -5,6 +5,8 @@ export interface TugOfWarContext {
   questions: Question[];
   currentQuestionIndex: number;
   timer: number;
+  buzzTimer: number;
+  baseBuzzTime: number;
   score: { team1: number; team2: number };
   activeTeam: 'team1' | 'team2' | null;
   buzzWinner: 'team1' | 'team2' | null;
@@ -14,11 +16,13 @@ export interface TugOfWarContext {
 
 export type TugOfWarEvent =
   | { type: 'IMPORT_QUESTIONS'; questions: Question[] }
-  | { type: 'START_GAME' }
+  | { type: 'START_GAME'; buzzTime?: number }
   | { type: 'BUZZ'; team: 'team1' | 'team2' }
   | { type: 'SUBMIT_ANSWER'; isCorrect: boolean }
   | { type: 'TIMER_TICK' }
+  | { type: 'BUZZ_TIMER_TICK' }
   | { type: 'TIMEOUT' }
+  | { type: 'TIMEOUT_BUZZ' }
   | { type: 'NEXT_QUESTION' }
   | { type: 'RESET' };
 
@@ -34,6 +38,8 @@ export const tugOfWarMachine = createMachine({
     questions: input?.questions || [],
     currentQuestionIndex: 0,
     timer: 10,
+    buzzTimer: 10,
+    baseBuzzTime: 10,
     score: { team1: 5, team2: 5 },
     activeTeam: null,
     buzzWinner: null,
@@ -75,24 +81,30 @@ export const tugOfWarMachine = createMachine({
         START_GAME: {
           guard: ({ context }) => context.questions.length > 0,
           target: 'waiting_buzz',
-          actions: assign({
-            currentQuestionIndex: 0,
-            timer: 10,
-            score: { team1: 5, team2: 5 },
-            activeTeam: null,
-            buzzWinner: null,
-            importError: null,
-            lastResult: null,
+          actions: assign(({ event }) => {
+            const newBaseBuzzTime = event.type === 'START_GAME' && event.buzzTime !== undefined ? event.buzzTime : 10;
+            return {
+              currentQuestionIndex: 0,
+              timer: 10,
+              baseBuzzTime: newBaseBuzzTime,
+              buzzTimer: newBaseBuzzTime,
+              score: { team1: 5, team2: 5 },
+              activeTeam: null,
+              buzzWinner: null,
+              importError: null,
+              lastResult: null,
+            };
           }),
         },
       },
     },
     waiting_buzz: {
-      entry: assign({
+      entry: assign(({ context }) => ({
         activeTeam: null,
         buzzWinner: null,
         timer: 10,
-      }),
+        buzzTimer: context.baseBuzzTime,
+      })),
       on: {
         BUZZ: {
           target: 'answering',
@@ -102,12 +114,33 @@ export const tugOfWarMachine = createMachine({
             timer: 10,
           })),
         },
+        BUZZ_TIMER_TICK: [
+          {
+            guard: ({ context }) => context.buzzTimer > 1,
+            actions: assign(({ context }) => ({
+              buzzTimer: context.buzzTimer - 1,
+            })),
+          },
+          {
+            target: 'timeout_reveal',
+            actions: assign(() => ({
+              buzzTimer: 0,
+            })),
+          },
+        ],
+        TIMEOUT_BUZZ: {
+          target: 'timeout_reveal',
+          actions: assign(() => ({
+            buzzTimer: 0,
+          })),
+        },
         RESET: {
           target: 'idle',
           actions: assign(({ context }) => ({
             questions: context.questions,
             currentQuestionIndex: 0,
             timer: 10,
+            buzzTimer: context.baseBuzzTime,
             score: { team1: 5, team2: 5 },
             activeTeam: null,
             buzzWinner: null,
@@ -227,24 +260,7 @@ export const tugOfWarMachine = createMachine({
         },
       },
     },
-    result: {
-      after: {
-        2000: [
-          {
-            guard: ({ context }) => 
-              context.score.team1 === 0 || 
-              context.score.team1 === 10 || 
-              context.currentQuestionIndex + 1 >= context.questions.length,
-            target: 'ended',
-          },
-          {
-            target: 'waiting_buzz',
-            actions: assign(({ context }) => ({
-              currentQuestionIndex: context.currentQuestionIndex + 1,
-            })),
-          },
-        ],
-      },
+    timeout_reveal: {
       on: {
         NEXT_QUESTION: [
           {
@@ -267,6 +283,40 @@ export const tugOfWarMachine = createMachine({
             questions: context.questions,
             currentQuestionIndex: 0,
             timer: 10,
+            buzzTimer: context.baseBuzzTime,
+            score: { team1: 5, team2: 5 },
+            activeTeam: null,
+            buzzWinner: null,
+            importError: null,
+            lastResult: null,
+          })),
+        },
+      },
+    },
+    result: {
+      on: {
+        NEXT_QUESTION: [
+          {
+            guard: ({ context }) => 
+              context.score.team1 === 0 || 
+              context.score.team1 === 10 || 
+              context.currentQuestionIndex + 1 >= context.questions.length,
+            target: 'ended',
+          },
+          {
+            target: 'waiting_buzz',
+            actions: assign(({ context }) => ({
+              currentQuestionIndex: context.currentQuestionIndex + 1,
+            })),
+          },
+        ],
+        RESET: {
+          target: 'idle',
+          actions: assign(({ context }) => ({
+            questions: context.questions,
+            currentQuestionIndex: 0,
+            timer: 10,
+            buzzTimer: context.baseBuzzTime,
             score: { team1: 5, team2: 5 },
             activeTeam: null,
             buzzWinner: null,
@@ -284,6 +334,7 @@ export const tugOfWarMachine = createMachine({
             questions: context.questions,
             currentQuestionIndex: 0,
             timer: 10,
+            buzzTimer: context.baseBuzzTime,
             score: { team1: 5, team2: 5 },
             activeTeam: null,
             buzzWinner: null,

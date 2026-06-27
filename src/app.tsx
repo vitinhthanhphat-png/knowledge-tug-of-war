@@ -8,6 +8,38 @@ import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
 import { BUILT_IN_DATASETS } from './datasets';
 import { parseExcelToQuestions } from './excel';
+import sndCorrect1 from './assets/sounds/tra-loi-dung-01.mp3';
+import sndCorrect2 from './assets/sounds/tra-loi-dung-02.mp3';
+import sndCorrect3 from './assets/sounds/tra-loi-dung-03.mp3';
+import sndWrong1 from './assets/sounds/thua-01.mp3';
+import sndWrong2 from './assets/sounds/thua-02.mp3';
+import sndVictory1 from './assets/sounds/chien-thang-01.mp3';
+import sndVictory2 from './assets/sounds/chien-thang-02.mp3';
+import sndVictory3 from './assets/sounds/chien-thang-03.mp3';
+
+const correctSounds = [sndCorrect1, sndCorrect2, sndCorrect3];
+const wrongSounds = [sndWrong1, sndWrong2];
+const victorySounds = [sndVictory1, sndVictory2, sndVictory3];
+
+const playRandomCorrectVocal = () => {
+    const snd = correctSounds[Math.floor(Math.random() * correctSounds.length)];
+    const audio = new Audio(snd);
+    audio.play().catch(e => console.log('Audio play failed:', e));
+};
+
+const playRandomWrongVocal = () => {
+    const snd = wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
+    const audio = new Audio(snd);
+    audio.play().catch(e => console.log('Audio play failed:', e));
+};
+
+const playRandomVictoryVocal = () => {
+    const snd = victorySounds[Math.floor(Math.random() * victorySounds.length)];
+    const audio = new Audio(snd);
+    audio.play().catch(e => console.log('Audio play failed:', e));
+};
+
+import confetti from 'canvas-confetti';
 
 import { 
   Question, 
@@ -103,27 +135,29 @@ const playBuzzSound = () => {
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
-  const osc = ctx.createOscillator();
-  const filter = ctx.createBiquadFilter();
+  // A bright "Ding" chime for gaining the right to answer
+  const osc1 = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
   const gainNode = ctx.createGain();
 
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(160, ctx.currentTime);
-  osc.frequency.linearRampToValueAtTime(90, ctx.currentTime + 0.4);
+  osc1.type = 'sine';
+  osc2.type = 'sine';
+  
+  // Two frequencies for a bell-like chime
+  osc1.frequency.setValueAtTime(880, ctx.currentTime); // A5
+  osc2.frequency.setValueAtTime(1760, ctx.currentTime); // A6
+  
+  gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
 
-  filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(800, ctx.currentTime);
-  filter.frequency.linearRampToValueAtTime(200, ctx.currentTime + 0.4);
-
-  gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-
-  osc.connect(filter);
-  filter.connect(gainNode);
+  osc1.connect(gainNode);
+  osc2.connect(gainNode);
   gainNode.connect(ctx.destination);
 
-  osc.start();
-  osc.stop(ctx.currentTime + 0.4);
+  osc1.start();
+  osc2.start();
+  osc1.stop(ctx.currentTime + 0.6);
+  osc2.stop(ctx.currentTime + 0.6);
 };
 
 const playTickSound = () => {
@@ -158,19 +192,79 @@ const playCorrectSound = () => {
     const osc = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, now + index * 0.08);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, now + index * 0.1);
 
     gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(0.12, now + index * 0.08 + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, now + index * 0.08 + 0.4);
+    gainNode.gain.linearRampToValueAtTime(0.3, now + index * 0.1 + 0.02);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + index * 0.1 + 0.5);
 
     osc.connect(gainNode);
     gainNode.connect(ctx.destination);
 
-    osc.start(now + index * 0.08);
-    osc.stop(now + index * 0.08 + 0.4);
+    osc.start(now + index * 0.1);
+    osc.stop(now + index * 0.1 + 0.5);
   });
+};
+
+const playCrowdBooSound = () => {
+  const ctx = resumeAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  
+  const bufferSize = ctx.sampleRate * 2.0;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = buffer;
+  
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = 'lowpass';
+  noiseFilter.frequency.setValueAtTime(600, now);
+  noiseFilter.frequency.exponentialRampToValueAtTime(150, now + 1.5);
+  
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.5, now + 0.2);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 1.5);
+  
+  noiseSource.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  
+  noiseSource.start(now);
+  
+  const voices = 5;
+  for (let i = 0; i < voices; i++) {
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    osc.type = i % 2 === 0 ? 'triangle' : 'sawtooth';
+    const baseFreq = 150 + Math.random() * 50;
+    
+    osc.frequency.setValueAtTime(baseFreq * 1.2, now);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.7, now + 1.5);
+    
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(0.1 + Math.random() * 0.1, now + 0.3);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+    
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, now);
+    
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    osc.start(now);
+    osc.stop(now + 1.5);
+  }
 };
 
 const playWrongSound = () => {
@@ -182,22 +276,84 @@ const playWrongSound = () => {
   const gainNode = ctx.createGain();
 
   osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(120, ctx.currentTime);
-  osc.frequency.linearRampToValueAtTime(60, ctx.currentTime + 0.5);
+  osc.frequency.setValueAtTime(150, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.8);
 
   filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(300, ctx.currentTime);
-  filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 0.5);
+  filter.frequency.setValueAtTime(1000, ctx.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.8);
 
-  gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+  gainNode.gain.setValueAtTime(0.5, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
 
   osc.connect(filter);
   filter.connect(gainNode);
   gainNode.connect(ctx.destination);
 
   osc.start();
-  osc.stop(ctx.currentTime + 0.5);
+  osc.stop(ctx.currentTime + 0.8);
+};
+
+const playVictorySound = () => {
+  const ctx = resumeAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+
+  const notes = [
+    { freq: 261.63, time: 0, dur: 0.2 },
+    { freq: 261.63, time: 0.2, dur: 0.2 },
+    { freq: 261.63, time: 0.4, dur: 0.2 },
+    { freq: 415.30, time: 0.6, dur: 0.6 },
+    { freq: 349.23, time: 1.2, dur: 0.4 },
+    { freq: 311.13, time: 1.6, dur: 0.2 },
+    { freq: 349.23, time: 1.8, dur: 0.2 },
+    { freq: 392.00, time: 2.0, dur: 1.0 },
+  ];
+
+  notes.forEach((note) => {
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(note.freq, now + note.time);
+    
+    gainNode.gain.setValueAtTime(0, now + note.time);
+    gainNode.gain.linearRampToValueAtTime(0.2, now + note.time + 0.05);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, now + note.time + note.dur);
+    
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    
+    osc.start(now + note.time);
+    osc.stop(now + note.time + note.dur);
+  });
+
+  const bufferSize = ctx.sampleRate * 4.0;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = buffer;
+  
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.setValueAtTime(1000, now);
+  noiseFilter.frequency.linearRampToValueAtTime(2000, now + 2);
+  
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(0.4, now + 1);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 4);
+  
+  noiseSource.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  
+  noiseSource.start(now);
 };
 
 const playPullRopeSound = () => {
@@ -237,6 +393,64 @@ const playPullRopeSound = () => {
   noiseNode.stop(now + duration);
 };
 
+
+const playWarningBeep = () => {
+  const ctx = resumeAudioContext();
+  if (!ctx) return;
+
+  const osc = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(880, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1);
+
+  gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+  osc.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
+};
+
+const playTimeoutHorn = () => {
+  const ctx = resumeAudioContext();
+  if (!ctx) return;
+
+  const osc1 = ctx.createOscillator();
+  const osc2 = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  osc1.type = 'sawtooth';
+  osc2.type = 'square';
+  
+  // Dissonant frequencies for a harsh buzzer sound
+  osc1.frequency.setValueAtTime(150, ctx.currentTime);
+  osc2.frequency.setValueAtTime(155, ctx.currentTime);
+
+  gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+
+  osc1.connect(gainNode);
+  osc2.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  osc1.start();
+  osc2.start();
+  osc1.stop(ctx.currentTime + 0.8);
+  osc2.stop(ctx.currentTime + 0.8);
+};
+
+function shuffleArray<T>(array: T[]): T[] {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+}
 
 export function App({ defaultQuestions, host, validationError: propValidationError }: AppProps) {
   const isFirstMountRef = useRef(true);
@@ -298,6 +512,17 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
   const hasBuzzedRef = useRef(false);
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(propValidationError || null);
+  const [customDatasets, setCustomDatasets] = useState<any[]>([]);
+
+  // Settings Modal States
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [selectedDataset, setSelectedDataset] = useState<any | null>(null);
+  const [gameSettings, setGameSettings] = useState({
+    questionCount: 10,
+    shuffleQuestions: true,
+    shuffleOptions: true,
+    buzzTime: 10
+  });
 
   useEffect(() => {
     if (propValidationError) {
@@ -495,6 +720,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
         if (elapsed >= 500) {
           hasBuzzedRef.current = true;
           console.log("BUZZ team1");
+          playBuzzSound();
           send({ type: 'BUZZ', team: 'team1' });
         }
       } else if (e.code === 'Enter') {
@@ -503,6 +729,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
         if (elapsed >= 500) {
           hasBuzzedRef.current = true;
           console.log("BUZZ team2");
+          playBuzzSound();
           send({ type: 'BUZZ', team: 'team2' });
         }
       }
@@ -523,15 +750,55 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       playTickSound();
     }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
+  }, [state.value, send]);
+
+  // Timer interval for waiting_buzz state
+  useEffect(() => {
+    if (state.value !== 'waiting_buzz') return;
+
+    const interval = setInterval(() => {
+      send({ type: 'BUZZ_TIMER_TICK' });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [state.value, send]);
 
   // Play audio hooks on key state transitions
   useEffect(() => {
-    if (state.value === 'answering') {
-      playBuzzSound();
+    if (state.value === 'timeout_reveal') {
+      playTimeoutHorn();
+    }
+  }, [state.value]);
+
+  // Play sounds for buzz timer countdown
+  useEffect(() => {
+    if (state.value === 'waiting_buzz' && state.context.buzzTimer < state.context.baseBuzzTime) {
+      const remaining = state.context.buzzTimer;
+      if (remaining > 3) {
+        playTickSound();
+      } else if (remaining > 0 && remaining <= 3) {
+        playWarningBeep();
+      }
+    }
+  }, [state.context.buzzTimer, state.value, state.context.baseBuzzTime]);
+
+  // Victory animation and sound
+  useEffect(() => {
+    if (state.value === 'ended') {
+      playVictorySound();
+      playRandomVictoryVocal();
+      
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+      const interval = setInterval(function() {
+        const particleCount = 50;
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+      }, 250);
+      
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [state.value]);
 
@@ -551,6 +818,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     const elapsed = Date.now() - roundStartTimeRef.current;
     if (elapsed >= 500) {
       console.log(`BUZZ ${team}`);
+      playBuzzSound();
       send({ type: 'BUZZ', team });
     }
   };
@@ -574,8 +842,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
       if (isCorrect) {
         playCorrectSound();
+        playRandomCorrectVocal();
       } else {
         playWrongSound();
+        playCrowdBooSound();
+        playRandomWrongVocal();
       }
       send({ type: 'SUBMIT_ANSWER', isCorrect });
     } catch (err) {
@@ -674,7 +945,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     URL.revokeObjectURL(url);
   };
 
-  const handleExcelImport = (autoStart: boolean | any = false) => {
+  const handleExcelImport = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.xlsx, .xls';
@@ -693,25 +964,27 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       try {
         const questions = await parseExcelToQuestions(file);
         
-        if (window.confirm('Bạn có muốn tải xuống file JSON sau khi chuyển đổi từ Excel không?')) {
-          const blob = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'questions_from_excel.json';
-          a.click();
-          URL.revokeObjectURL(url);
+        const defaultName = file.name.replace(/\.[^/.]+$/, "");
+        let customName = window.prompt("Nhập tên chủ đề cho bộ câu hỏi này:", defaultName);
+        if (customName === null) {
+            // User cancelled
+            return;
         }
+        customName = customName.trim() || defaultName;
 
+        setCustomDatasets(prev => [...prev, {
+            id: `custom_excel_${Date.now()}`,
+            name: customName,
+            icon: '📊',
+            data: questions
+        }]);
+
+        // Still import to state so it's ready, but don't auto-start
         send({ type: 'IMPORT_QUESTIONS', questions });
         setValidationErrors([]);
         setValidationError(null);
-        if (autoStart === true) {
-          setIsTopicModalOpen(false);
-          send({ type: 'START_GAME' });
-        } else {
-          alert('Tải đề thi Excel thành công!');
-        }
+        alert('Tải đề thi Excel thành công! Vui lòng chọn chủ đề vừa tạo trong danh sách.');
+
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : String(err);
         setValidationErrors([{ index: -1, message: errorMsg }]);
@@ -722,6 +995,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           bubbles: true,
           composed: true
         }));
+        alert(`Lỗi khi tải file Excel: ${errorMsg}`);
       } finally {
         setIsValidating(false);
       }
@@ -841,23 +1115,47 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                   <span className="font-body-md font-bold text-on-surface">Lực kéo: {state.context.score.team1 * 10} Lực</span>
                 </div>
               </div>
-              {!isMobile && (
-                <div className="bg-primary/90 text-white px-md py-xs rounded-lg shadow-lg mt-2">
-                  <span className="font-key-hint text-key-hint uppercase tracking-widest">Space</span>
-                </div>
-              )}
+              <button 
+                onClick={() => handleBuzzTap('team1')}
+                className="bg-primary text-white px-xl py-sm rounded-2xl shadow-[0_6px_0_#15803d,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#15803d,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#15803d,0_5px_10px_rgba(0,0,0,0.4)] transition-all mt-4 border-2 border-white/20 group"
+              >
+                <span className="font-display-force font-black text-2xl uppercase tracking-widest drop-shadow-md group-active:drop-shadow-none">SPACE</span>
+              </button>
             </div>
 
-            {/* Center Title */}
-            <div className="flex flex-col items-center justify-center glass-panel px-xl py-sm rounded-full shadow-lg bg-white/70">
-              <h1 className="font-display-force text-headline-lg text-primary uppercase tracking-tighter">Knowledge Tug of War</h1>
-              <span className="font-label-caps text-label-caps text-on-surface-variant bg-surface-variant/80 px-md py-xs rounded-full mt-1">Vòng {state.context.currentQuestionIndex + 1} / {state.context.questions.length}</span>
-              <button 
-                onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
-                className="mt-2 text-xs text-neutral-500 hover:text-neutral-800 underline uppercase tracking-wider font-bold"
-              >
-                ⚙️ Admin
-              </button>
+            {/* Center Title & Timer */}
+            <div className="flex flex-col items-center justify-start gap-4">
+              <div className="flex flex-col items-center justify-center glass-panel px-xl py-sm rounded-full shadow-lg bg-white/70">
+                <h1 className="font-display-force text-headline-lg text-primary uppercase tracking-tighter">Knowledge Tug of War</h1>
+                <span className="font-label-caps text-label-caps text-on-surface-variant bg-surface-variant/80 px-md py-xs rounded-full mt-1">Vòng {state.context.currentQuestionIndex + 1} / {state.context.questions.length}</span>
+                <button 
+                  onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
+                  className="mt-2 text-xs text-neutral-500 hover:text-neutral-800 underline uppercase tracking-wider font-bold"
+                >
+                  ⚙️ Admin
+                </button>
+              </div>
+
+              {state.value === 'waiting_buzz' && state.context.baseBuzzTime > 0 && (
+                <div className="relative mt-2 z-40 flex flex-col items-center animate-in fade-in zoom-in duration-300">
+                  <div className="relative w-32 h-32 flex items-center justify-center bg-black/40 rounded-full shadow-[0_0_30px_rgba(0,0,0,0.6)] border border-white/20 backdrop-blur-md">
+                    <svg className="absolute inset-0 w-full h-full transform -rotate-90">
+                      <circle cx="64" cy="64" r="56" stroke="rgba(255,255,255,0.1)" strokeWidth="8" fill="transparent" />
+                      <circle 
+                        cx="64" cy="64" r="56" 
+                        stroke={state.context.buzzTimer <= 3 ? '#ef4444' : '#3b82f6'} 
+                        strokeWidth="8" fill="transparent" 
+                        strokeDasharray="351.9" 
+                        strokeDashoffset={351.9 - (351.9 * state.context.buzzTimer) / state.context.baseBuzzTime} 
+                        className="transition-all duration-1000 ease-linear drop-shadow-[0_0_15px_rgba(59,130,246,0.8)]" 
+                      />
+                    </svg>
+                    <span className={`absolute font-display-force font-black text-6xl drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] ${state.context.buzzTimer <= 3 ? 'text-red-500 animate-ping' : 'text-white'}`}>
+                      {state.context.buzzTimer}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Team 2 (Right) */}
@@ -870,11 +1168,12 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                   <span className="font-body-md font-bold text-on-surface">Lực kéo: {state.context.score.team2 * 10} Lực</span>
                 </div>
               </div>
-              {!isMobile && (
-                <div className="bg-secondary/90 text-white px-md py-xs rounded-lg shadow-lg mt-2">
-                  <span className="font-key-hint text-key-hint uppercase tracking-widest">Enter</span>
-                </div>
-              )}
+              <button 
+                onClick={() => handleBuzzTap('team2')}
+                className="bg-secondary text-white px-xl py-sm rounded-2xl shadow-[0_6px_0_#c2410c,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#c2410c,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#c2410c,0_5px_10px_rgba(0,0,0,0.4)] transition-all mt-4 border-2 border-white/20 group"
+              >
+                <span className="font-display-force font-black text-2xl uppercase tracking-widest drop-shadow-md group-active:drop-shadow-none">ENTER</span>
+              </button>
             </div>
           </header>
         )}
@@ -887,7 +1186,10 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             <div className="glass-panel p-lg rounded-2xl shadow-2xl border border-white/50 max-w-4xl w-full z-20 flex flex-col items-center gap-md bg-white/90">
               {state.value === 'ended' ? (
                  <div className="flex flex-col items-center text-center w-full">
-                   <img src={victoryTrophy} alt="Trophy" className="w-[120px] h-[120px] object-contain drop-shadow-[0_0_20px_rgba(250,204,21,0.8)] mix-blend-multiply mb-4" />
+                   <div className="relative flex justify-center items-center">
+                     <div className="absolute w-[200px] h-[200px] bg-yellow-400 rounded-full blur-[60px] opacity-80 animate-pulse"></div>
+                     <img src={victoryTrophy} alt="Trophy" className="w-[180px] h-[180px] object-contain drop-shadow-[0_0_30px_rgba(250,204,21,1)] mix-blend-multiply mb-4 relative z-10 animate-bounce" />
+                   </div>
                    <h2 className="text-3xl font-display-force font-bold text-on-surface mb-2 uppercase">
                      KẾT THÚC TRẬN ĐẤU
                    </h2>
@@ -945,9 +1247,13 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                   </div>
                 )}
                 
-                {state.value === 'result' && (
+                {(state.value === 'result' || state.value === 'timeout_reveal') && (
                    <div className="font-headline-lg font-bold text-sm tracking-widest uppercase flex flex-col items-center gap-2 my-2 text-center w-full">
-                      {state.context.lastResult === 'correct' ? (
+                      {state.value === 'timeout_reveal' ? (
+                        <span className="text-red-600 bg-red-100 px-4 py-2 rounded-lg border border-red-300">
+                          ⏰ HẾT GIỜ! KHÔNG ĐỘI NÀO GIÀNH QUYỀN TRẢ LỜI
+                        </span>
+                      ) : state.context.lastResult === 'correct' ? (
                         <span className="text-green-600">
                           🎉 ĐỘI {state.context.activeTeam === 'team1' ? '1' : '2'} TRẢ LỜI ĐÚNG! (+1 điểm / Đối thủ -1)
                         </span>
@@ -962,9 +1268,9 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                       )}
                       <button
                         onClick={() => send({ type: 'NEXT_QUESTION' })}
-                        className="mt-2 text-sm text-neutral-500 hover:text-neutral-800 underline uppercase tracking-wider font-bold"
+                        className="mt-2 px-6 py-2 bg-neutral-800 text-white hover:bg-black rounded-lg shadow-md uppercase tracking-wider font-bold transition-all hover:scale-105 active:scale-95"
                       >
-                        Tiếp tục &rarr;
+                        Câu Tiếp theo &rarr;
                       </button>
                     </div>
                 )}
@@ -973,6 +1279,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                   {(currentQuestion?.options || []).map((opt, i) => {
                     const isAnswering = state.value === 'answering';
                     const isResult = state.value === 'result';
+                    const isTimeoutReveal = state.value === 'timeout_reveal';
                     
                     let btnClass = "answer-btn relative p-lg rounded-xl border-2 flex items-center justify-center group bg-surface/90 backdrop-blur-sm transition-all duration-200 min-h-[80px]";
                     let disabled = true;
@@ -980,11 +1287,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                     if (isAnswering) {
                       disabled = isSubmitting;
                       btnClass += " border-surface-variant hover:border-primary hover:bg-white cursor-pointer hover:-translate-y-1 shadow-sm";
-                    } else if (isResult) {
+                    } else if (isResult || isTimeoutReveal) {
                       disabled = true;
                       if (i === correctOptionIndex) {
                         btnClass += " bg-green-100 border-green-500 text-green-800 shadow-[0_0_15px_rgba(34,197,94,0.3)]";
-                      } else if (i === selectedOptionIndex) {
+                      } else if (isResult && i === selectedOptionIndex) {
                         btnClass += " bg-red-100 border-red-500 text-red-800 shadow-[0_0_15px_rgba(239,68,68,0.3)]";
                       } else {
                         btnClass += " border-surface-variant opacity-50";
@@ -1001,7 +1308,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                         disabled={disabled}
                         onClick={() => handleOptionClick(opt, i)}
                       >
-                        <div className={`absolute top-sm left-sm font-label-caps w-8 h-8 flex items-center justify-center rounded-lg ${isResult && i === correctOptionIndex ? 'bg-green-500 text-white' : isResult && i === selectedOptionIndex ? 'bg-red-500 text-white' : 'bg-surface-variant text-on-surface-variant'}`}>
+                        <div className={`absolute top-sm left-sm font-label-caps w-8 h-8 flex items-center justify-center rounded-lg ${(isResult || isTimeoutReveal) && i === correctOptionIndex ? 'bg-green-500 text-white' : isResult && i === selectedOptionIndex ? 'bg-red-500 text-white' : 'bg-surface-variant text-on-surface-variant'}`}>
                           {String.fromCharCode(65 + i)}
                         </div>
                         <span className="font-headline-lg text-headline-lg-mobile text-on-surface text-center w-full block ml-2">
@@ -1071,7 +1378,136 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
       </div>
 
-        {/* Start Screen (Idle State) - MOUNTED OUTSIDE THE 16:9 CANVAS */}
+        {/* ----------------- Settings Modal ----------------- */}
+      {isSettingsModalOpen && selectedDataset && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center p-6 transition-all duration-300">
+          <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-lg shadow-2xl text-neutral-900 overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center bg-neutral-100 p-4 border-b border-neutral-200">
+              <h3 className="font-display font-bold text-xl text-neutral-800 flex items-center gap-2">
+                ⚙️ Tùy chỉnh trò chơi
+              </h3>
+              <button 
+                onClick={() => {
+                  setIsSettingsModalOpen(false);
+                  setIsTopicModalOpen(true);
+                }}
+                className="text-neutral-500 hover:text-neutral-800 font-bold text-2xl px-2 leading-none"
+              >
+                &times;
+              </button>
+            </div>
+            
+            <div className="p-6 flex flex-col gap-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="font-bold text-blue-900 mb-1">Chủ đề: {selectedDataset.name}</p>
+                <p className="text-sm text-blue-700">Tổng số câu hỏi: {selectedDataset.data.length}</p>
+              </div>
+
+              {/* Number of Questions Slider */}
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label className="font-bold text-neutral-700">Số lượng câu hỏi tham gia:</label>
+                  <span className="font-bold text-lg text-blue-600">{gameSettings.questionCount}</span>
+                </div>
+                <input 
+                  type="range" 
+                  min={Math.min(10, selectedDataset.data.length)} 
+                  max={selectedDataset.data.length} 
+                  value={gameSettings.questionCount}
+                  onChange={(e) => setGameSettings(prev => ({...prev, questionCount: parseInt((e.target as HTMLInputElement).value)}))}
+                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-xs text-neutral-500 font-medium">
+                  <span>{Math.min(10, selectedDataset.data.length)}</span>
+                  <span>{selectedDataset.data.length}</span>
+                </div>
+              </div>
+
+              {/* Buzz Timer Slider */}
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label className="font-bold text-neutral-700">Thời gian giành quyền (giây):</label>
+                  <span className="font-bold text-lg text-orange-600">{gameSettings.buzzTime}s</span>
+                </div>
+                <input 
+                  type="range" 
+                  min={3} 
+                  max={30} 
+                  value={gameSettings.buzzTime}
+                  onChange={(e) => setGameSettings(prev => ({...prev, buzzTime: parseInt((e.target as HTMLInputElement).value)}))}
+                  className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-xs text-neutral-500 font-medium">
+                  <span>3s</span>
+                  <span>30s</span>
+                </div>
+              </div>
+
+              {/* Toggles */}
+              <div className="flex flex-col gap-4">
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <div>
+                    <div className="font-bold text-neutral-700 group-hover:text-blue-600 transition-colors">Trộn thứ tự câu hỏi</div>
+                    <div className="text-xs text-neutral-500">Các câu hỏi sẽ xuất hiện ngẫu nhiên</div>
+                  </div>
+                  <div className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${gameSettings.shuffleQuestions ? 'bg-blue-600' : 'bg-neutral-300'}`}>
+                    <input 
+                      type="checkbox" 
+                      className="hidden" 
+                      checked={gameSettings.shuffleQuestions} 
+                      onChange={(e) => setGameSettings(prev => ({...prev, shuffleQuestions: (e.target as HTMLInputElement).checked}))} 
+                    />
+                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${gameSettings.shuffleQuestions ? 'translate-x-6' : ''}`}></div>
+                  </div>
+                </label>
+
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <div>
+                    <div className="font-bold text-neutral-700 group-hover:text-blue-600 transition-colors">Trộn vị trí đáp án (A,B,C,D)</div>
+                    <div className="text-xs text-neutral-500">Hoán đổi ngẫu nhiên các lựa chọn trong mỗi câu</div>
+                  </div>
+                  <div className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${gameSettings.shuffleOptions ? 'bg-blue-600' : 'bg-neutral-300'}`}>
+                    <input 
+                      type="checkbox" 
+                      className="hidden" 
+                      checked={gameSettings.shuffleOptions} 
+                      onChange={(e) => setGameSettings(prev => ({...prev, shuffleOptions: (e.target as HTMLInputElement).checked}))} 
+                    />
+                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${gameSettings.shuffleOptions ? 'translate-x-6' : ''}`}></div>
+                  </div>
+                </label>
+              </div>
+
+              <button 
+                onClick={() => {
+                  let finalQuestions = [...selectedDataset.data] as Question[];
+                  if (gameSettings.shuffleQuestions) {
+                    finalQuestions = shuffleArray(finalQuestions);
+                  }
+                  
+                  finalQuestions = finalQuestions.slice(0, gameSettings.questionCount);
+                  
+                  if (gameSettings.shuffleOptions) {
+                    finalQuestions = finalQuestions.map(q => ({
+                      ...q,
+                      options: shuffleArray(q.options)
+                    }));
+                  }
+
+                  send({ type: 'IMPORT_QUESTIONS', questions: finalQuestions });
+                  setIsSettingsModalOpen(false);
+                  send({ type: 'START_GAME', buzzTime: gameSettings.buzzTime });
+                }}
+                className="mt-4 w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold font-display text-xl uppercase tracking-wider shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+              >
+                Bắt đầu Chiến! 🚀
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Start Screen (Idle State) - MOUNTED OUTSIDE THE 16:9 CANVAS */}
         {state.value === 'idle' && (
           <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md overflow-hidden">
             
@@ -1160,20 +1596,42 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             {/* Body Content */}
             <div className="flex-1 overflow-y-auto p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {BUILT_IN_DATASETS.map(dataset => (
-                  <button
+                {[...BUILT_IN_DATASETS, ...customDatasets].map(dataset => (
+                  <div
                     key={dataset.id}
                     onClick={() => {
-                      send({ type: 'IMPORT_QUESTIONS', questions: dataset.data as Question[] });
+                      setSelectedDataset(dataset);
+                      setGameSettings({
+                        questionCount: dataset.data.length,
+                        shuffleQuestions: true,
+                        shuffleOptions: true,
+                        buzzTime: 10
+                      });
+                      setIsSettingsModalOpen(true);
                       setIsTopicModalOpen(false);
-                      send({ type: 'START_GAME' });
                     }}
-                    className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors group shadow-sm"
+                    className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors group shadow-sm cursor-pointer"
                   >
                     <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">{(dataset as any).icon || '📘'}</span>
                     <span className="font-bold text-lg text-center group-hover:text-white text-blue-900">{dataset.name}</span>
                     <span className="text-sm mt-2 opacity-80">{dataset.data.length} câu hỏi</span>
-                  </button>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const blob = new Blob([JSON.stringify(dataset.data, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${dataset.name}.json`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                      className="mt-3 px-3 py-1.5 bg-white/60 text-blue-800 rounded-full text-xs font-bold hover:bg-white hover:text-blue-900 transition-colors shadow-sm"
+                      title="Tải xuống file JSON của bộ câu hỏi này"
+                    >
+                      📥 Tải JSON
+                    </button>
+                  </div>
                 ))}
                 
                 {/* Custom Import Card */}
@@ -1188,12 +1646,12 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
                 {/* Custom Import Excel Card */}
                 <button
-                  onClick={() => handleExcelImport(true)}
+                  onClick={() => handleExcelImport()}
                   className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-dashed border-green-300 rounded-xl hover:bg-green-600 hover:border-green-600 hover:text-white transition-colors group shadow-sm"
                 >
                   <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📊</span>
                   <span className="font-bold text-lg text-center group-hover:text-white text-green-800">+ Tải lên Excel</span>
-                  <span className="text-sm mt-2 opacity-80">Tự động bắt đầu trò chơi</span>
+                  <span className="text-sm mt-2 opacity-80">Tự đặt tên và tải vào danh sách</span>
                 </button>
               </div>
             </div>
@@ -1364,8 +1822,8 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                   <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 flex flex-col items-center text-center">
                     <p className="font-bold text-blue-900 mb-2">Chọn bộ đề có sẵn</p>
                     <p className="text-xs text-blue-700 mb-4">Nạp nhanh các bộ câu hỏi được hệ thống biên soạn sẵn</p>
-                    <div className="flex gap-4 flex-wrap justify-center">
-                      {BUILT_IN_DATASETS.map(dataset => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[...BUILT_IN_DATASETS, ...customDatasets].map(dataset => (
                         <button
                           key={dataset.id}
                           onClick={() => {
