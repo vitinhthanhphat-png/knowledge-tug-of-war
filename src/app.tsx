@@ -6,6 +6,8 @@ import gameBg from './assets/game_background_v3.png';
 import avatarTeam1 from './assets/avatar_team1.png';
 import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
+import team1Pulling from './assets/team_green_pulling.png';
+import team2Pulling from './assets/team_blue_pulling.png';
 
 import { parseExcelToQuestions } from './excel';
 import sndCorrect1 from './assets/sounds/tra-loi-dung-01.mp3';
@@ -123,12 +125,133 @@ const initAudio = (): AudioContext | null => {
   return audioCtx;
 };
 
+export let isBgmMuted = false;
+
+let bgmBuffer: AudioBuffer | null = null;
+let bgmSource: AudioBufferSourceNode | null = null;
+let bgmGain: GainNode | null = null;
+
+let inGameBuffer: AudioBuffer | null = null;
+let inGameSource: AudioBufferSourceNode | null = null;
+let inGameGain: GainNode | null = null;
+
+export const toggleBgmMute = () => {
+  isBgmMuted = !isBgmMuted;
+  if (bgmGain) {
+    bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
+  }
+  if (inGameGain) {
+    inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
+  }
+};
+
 const resumeAudioContext = (): AudioContext | null => {
   const ctx = initAudio();
   if (ctx && ctx.state === 'suspended') {
     ctx.resume().catch((err) => console.warn('Failed to resume AudioContext:', err));
   }
   return ctx;
+};
+
+let isBgmIntendedToPlay = false;
+let isInGameIntendedToPlay = false;
+
+let bgmLoadPromise: Promise<AudioBuffer | null> | null = null;
+const loadBgmBuffer = async (ctx: AudioContext) => {
+  if (bgmBuffer) return bgmBuffer;
+  if (bgmLoadPromise) return bgmLoadPromise;
+  bgmLoadPromise = (async () => {
+    try {
+      const response = await fetch('./audio/Three_Seconds_Left.mp3');
+      const arrayBuffer = await response.arrayBuffer();
+      bgmBuffer = await ctx.decodeAudioData(arrayBuffer);
+      return bgmBuffer;
+    } catch (err) {
+      console.error("Failed to load BGM:", err);
+      return null;
+    }
+  })();
+  return bgmLoadPromise;
+};
+
+let inGameLoadPromise: Promise<AudioBuffer | null> | null = null;
+const loadInGameBuffer = async (ctx: AudioContext) => {
+  if (inGameBuffer) return inGameBuffer;
+  if (inGameLoadPromise) return inGameLoadPromise;
+  inGameLoadPromise = (async () => {
+    try {
+      const response = await fetch('./audio/Three_Seconds_Remaining.mp3');
+      const arrayBuffer = await response.arrayBuffer();
+      inGameBuffer = await ctx.decodeAudioData(arrayBuffer);
+      return inGameBuffer;
+    } catch (err) {
+      console.error("Failed to load in-game BGM:", err);
+      return null;
+    }
+  })();
+  return inGameLoadPromise;
+};
+
+export const stopStartScreenMusic = () => {
+  isBgmIntendedToPlay = false;
+  if (bgmSource) {
+    try { bgmSource.stop(); } catch (e) {}
+    bgmSource = null;
+  }
+};
+
+export const stopInGameMusic = () => {
+  isInGameIntendedToPlay = false;
+  if (inGameSource) {
+    try { inGameSource.stop(); } catch (e) {}
+    inGameSource = null;
+  }
+};
+
+export const playStartScreenMusic = async () => {
+  isBgmIntendedToPlay = true;
+  if (bgmSource) return; // already playing
+  const ctx = initAudio();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') {
+    await ctx.resume().catch(() => {});
+  }
+  const buffer = await loadBgmBuffer(ctx);
+  if (!buffer) return;
+
+  if (bgmSource || !isBgmIntendedToPlay) return; // check again after async
+  bgmGain = ctx.createGain();
+  bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
+  bgmGain.connect(ctx.destination);
+
+  bgmSource = ctx.createBufferSource();
+  bgmSource.buffer = buffer;
+  bgmSource.loop = true;
+  bgmSource.connect(bgmGain);
+  bgmSource.start();
+};
+
+export const playInGameMusic = async () => {
+  isInGameIntendedToPlay = true;
+  if (inGameSource) return; // already playing
+  const ctx = initAudio();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') {
+    await ctx.resume().catch(() => {});
+  }
+  const buffer = await loadInGameBuffer(ctx);
+  if (!buffer) return;
+
+  if (inGameSource || !isInGameIntendedToPlay) return; // check again after async
+  inGameGain = ctx.createGain();
+  inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
+  inGameGain.connect(ctx.destination);
+
+  inGameSource = ctx.createBufferSource();
+  inGameSource.buffer = buffer;
+  inGameSource.loop = true;
+  inGameSource.connect(inGameGain);
+  inGameSource.start();
 };
 
 const playBuzzSound = () => {
@@ -514,26 +637,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Auto-resume AudioContext on first player interaction (click or keydown)
-  useEffect(() => {
-    const unlockAudio = () => {
-      const ctx = initAudio();
-      if (ctx) {
-        ctx.resume().then(() => {
-          if (ctx.state === 'running') {
-            window.removeEventListener('click', unlockAudio);
-            window.removeEventListener('keydown', unlockAudio);
-          }
-        }).catch((err) => console.warn('Failed to resume AudioContext:', err));
-      }
-    };
-    window.addEventListener('click', unlockAudio);
-    window.addEventListener('keydown', unlockAudio);
-    return () => {
-      window.removeEventListener('click', unlockAudio);
-      window.removeEventListener('keydown', unlockAudio);
-    };
-  }, []);
+
 
 
   // Custom useActor subscription logic to keep dependencies minimal
@@ -573,6 +677,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
   
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTopicTab, setActiveTopicTab] = useState<'builtin' | 'custom'>('builtin');
+  const [muted, setMuted] = useState(isBgmMuted);
 
   useEffect(() => {
     try {
@@ -641,6 +746,46 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
   }, [actor, host]);
 
   const send = actor.send;
+
+  // Auto-resume AudioContext on first player interaction (click or keydown)
+  useEffect(() => {
+    const unlockAudio = () => {
+      const ctx = initAudio();
+      if (ctx) {
+        ctx.resume().then(() => {
+          if (ctx.state === 'running') {
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('keydown', unlockAudio);
+            
+            // If unlocked on idle screen, trigger BGM
+            if (actor.getSnapshot().value === 'idle') {
+              playStartScreenMusic();
+            }
+          }
+        }).catch((err) => console.warn('Failed to resume AudioContext:', err));
+      }
+    };
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+    return () => {
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+  }, [actor]);
+
+  // Manage BGM according to state changes
+  useEffect(() => {
+    if (state.value === 'idle') {
+      playStartScreenMusic();
+      stopInGameMusic();
+    } else if (state.value === 'ended') {
+      stopStartScreenMusic();
+      stopInGameMusic();
+    } else {
+      stopStartScreenMusic();
+      playInGameMusic();
+    }
+  }, [state.value]);
 
   // Handle validation checking and state updates for invalid configuration
   useEffect(() => {
@@ -725,6 +870,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
   // Modal and validation states
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
+  const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
 
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
@@ -861,10 +1007,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
+      playFireworkSound();
+
       const interval = setInterval(function() {
         const particleCount = 50;
         confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-        playFireworkSound();
       }, 250);
       
       return () => {
@@ -926,20 +1073,6 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       setIsSubmitting(false);
       isSubmittingRef.current = false;
     }
-  };
-
-  const handleExportJSON = () => {
-    if (!state.context.questions || state.context.questions.length === 0) {
-      alert('Không có câu hỏi nào để xuất.');
-      return;
-    }
-    const blob = new Blob([JSON.stringify(state.context.questions, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'questions.json';
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   const handleExcelImport = () => {
@@ -1008,6 +1141,34 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30"></div>
       </div>
 
+      {/* Global Controls */}
+      <div className="absolute top-6 right-6 z-[100] flex flex-col items-center gap-3">
+        <button
+          onClick={() => {
+            toggleBgmMute();
+            setMuted(isBgmMuted);
+          }}
+          className="w-12 h-12 flex items-center justify-center bg-black/40 text-white rounded-full hover:bg-black/60 backdrop-blur-md transition-all border border-white/20 shadow-lg pointer-events-auto"
+          title={muted ? "Bật âm thanh" : "Tắt âm thanh"}
+        >
+          <span className="material-symbols-outlined text-[26px]">
+            {muted ? 'volume_off' : 'volume_up'}
+          </span>
+        </button>
+        
+        <button 
+          onClick={() => {
+            if (confirm('Bạn có chắc chắn muốn cài lại điểm số về mặc định?')) {
+              send({ type: 'RESET' });
+            }
+          }}
+          title="Cài lại điểm số (Reset)"
+          className="w-10 h-10 flex items-center justify-center bg-neutral-800/80 text-white rounded-full hover:bg-neutral-900 transition-colors backdrop-blur-md border border-white/20 shadow-lg pointer-events-auto"
+        >
+          <span className="material-symbols-outlined text-[20px]">refresh</span>
+        </button>
+      </div>
+
       <div 
         ref={containerRef}
         style={isMobile ? {
@@ -1023,7 +1184,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: 'center center',
         }}
-        className={`aspect-video transition-all duration-300 overflow-hidden z-10 ${isMobile ? '' : ''}`}
+        className={`aspect-video transition-all duration-300 overflow-visible z-10 ${isMobile ? '' : ''}`}
       >
 
         {/* Center Fire Effect */}
@@ -1051,48 +1212,44 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           <header className="absolute top-0 left-0 right-0 z-30 flex justify-between items-start px-xl py-lg w-full">
             {/* Team 1 (Left) */}
             <div className="flex flex-col items-start gap-sm">
-              <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-primary-container glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/80 transition-all duration-300 relative`}>
-                <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
-                <span className="font-headline-lg text-headline-lg text-primary">Đội 1 (Trái)</span>
-                <div className="flex items-center gap-xs">
-                  <span className="material-symbols-outlined text-primary-container" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                  <span className="font-body-md font-bold text-on-surface">Lực kéo: {state.context.score.team1 * 10} Lực</span>
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team1' ? 'shadow-[0_0_30px_rgba(34,197,94,0.5)]' : 'shadow-md'}`}>
+                {state.context.activeTeam === 'team1' && (
+                  <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#22c55e_100%)] z-0" />
+                )}
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-primary-container/0 glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/95 relative z-10 w-full h-full`}>
+                  <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
+                  <span className="font-headline-lg text-headline-lg text-primary">Đội 1 (Trái)</span>
+                  <div className="flex items-center gap-xs">
+                    <span className="material-symbols-outlined text-primary-container" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className="font-body-lg font-bold text-on-surface whitespace-nowrap">
+                      Lực kéo: <span className="text-3xl font-black text-primary drop-shadow-sm mx-1">{state.context.score.team1 * 10}</span> Lực
+                    </span>
+                  </div>
                 </div>
               </div>
               <button 
                 onClick={() => handleBuzzTap('team1')}
-                className="bg-primary text-white px-xl py-sm rounded-2xl shadow-[0_6px_0_#15803d,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#15803d,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#15803d,0_5px_10px_rgba(0,0,0,0.4)] transition-all mt-4 border-2 border-white/20 group"
+                disabled={state.value !== 'waiting_buzz'}
+                className={`px-xl py-sm rounded-2xl transition-all mt-4 border-2 pointer-events-auto group flex items-center justify-center gap-2 ${
+                  state.value === 'waiting_buzz'
+                    ? 'bg-primary text-white border-white/20 shadow-[0_6px_0_#15803d,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#15803d,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#15803d,0_5px_10px_rgba(0,0,0,0.4)]'
+                    : 'bg-neutral-400 text-neutral-100 border-neutral-500 shadow-none opacity-80 cursor-not-allowed translate-y-[6px]'
+                }`}
               >
-                <span className="font-display-force font-black text-2xl uppercase tracking-widest drop-shadow-md group-active:drop-shadow-none">SPACE</span>
+                {state.value !== 'waiting_buzz' && <span className="material-symbols-outlined text-[24px]">lock</span>}
+                <span className={`font-display-force font-black text-2xl uppercase tracking-widest ${state.value === 'waiting_buzz' ? 'drop-shadow-md group-active:drop-shadow-none' : ''}`}>SPACE</span>
               </button>
+              
+              <div className="mt-8 animate-pull-left transform origin-bottom flex justify-center w-full pointer-events-none relative -left-12 md:-left-20 lg:-left-28 xl:-left-32">
+                <img src={team1Pulling} alt="Team 1 Pulling" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
+              </div>
             </div>
 
             {/* Center Title & Timer */}
             <div className="flex flex-col items-center justify-start gap-4">
-              <div className="flex flex-col items-center justify-center glass-panel px-xl py-sm rounded-full shadow-lg bg-white/70">
+              <div className="flex flex-col items-center justify-center glass-panel px-xl py-sm rounded-full shadow-lg bg-white/90">
                 <h1 className="font-display-force text-headline-lg text-primary uppercase tracking-tighter">Knowledge Tug of War</h1>
                 <span className="font-label-caps text-label-caps text-on-surface-variant bg-surface-variant/80 px-md py-xs rounded-full mt-1">Vòng {state.context.currentQuestionIndex + 1} / {state.context.questions.length}</span>
-                <div className="flex gap-4 mt-2">
-                  <button 
-                    onClick={() => {
-                      if (confirm('Bạn có chắc chắn muốn cài lại điểm số về mặc định?')) {
-                        send({ type: 'RESET' });
-                      }
-                    }}
-                    className="px-4 py-2 bg-neutral-800/80 text-white rounded-lg font-bold hover:bg-neutral-900 transition-colors text-xs flex items-center gap-1 backdrop-blur-sm shadow-sm"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">refresh</span>
-                    Reset
-                  </button>
-                  <button 
-                    onClick={handleExportJSON}
-                    disabled={state.context.questions.length === 0}
-                    className="px-4 py-2 bg-blue-600/80 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors text-xs flex items-center gap-1 disabled:opacity-50 backdrop-blur-sm shadow-sm"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">download</span>
-                    JSON
-                  </button>
-                </div>
               </div>
 
               {state.value === 'waiting_buzz' && state.context.baseBuzzTime > 0 && (
@@ -1119,30 +1276,47 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
             {/* Team 2 (Right) */}
             <div className="flex flex-col items-end gap-sm">
-              <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-secondary-container glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/80 shadow-md transition-all duration-300 relative`}>
-                <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(249,115,22,0.6)] mix-blend-multiply" />
-                <span className="font-headline-lg text-headline-lg text-secondary">Đội 2 (Phải)</span>
-                <div className="flex items-center gap-xs">
-                  <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                  <span className="font-body-md font-bold text-on-surface">Lực kéo: {state.context.score.team2 * 10} Lực</span>
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_30px_rgba(249,115,22,0.5)]' : 'shadow-md'}`}>
+                {state.context.activeTeam === 'team2' && (
+                  <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#f97316_100%)] z-0" />
+                )}
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-secondary-container/0 glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/95 relative z-10 w-full h-full`}>
+                  <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(249,115,22,0.6)] mix-blend-multiply" />
+                  <span className="font-headline-lg text-headline-lg text-secondary">Đội 2 (Phải)</span>
+                  <div className="flex items-center gap-xs">
+                    <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className="font-body-lg font-bold text-on-surface whitespace-nowrap">
+                      Lực kéo: <span className="text-3xl font-black text-secondary drop-shadow-sm mx-1">{state.context.score.team2 * 10}</span> Lực
+                    </span>
+                  </div>
                 </div>
               </div>
               <button 
                 onClick={() => handleBuzzTap('team2')}
-                className="bg-secondary text-white px-xl py-sm rounded-2xl shadow-[0_6px_0_#c2410c,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#c2410c,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#c2410c,0_5px_10px_rgba(0,0,0,0.4)] transition-all mt-4 border-2 border-white/20 group"
+                disabled={state.value !== 'waiting_buzz'}
+                className={`px-xl py-sm rounded-2xl transition-all mt-4 border-2 pointer-events-auto group flex items-center justify-center gap-2 ${
+                  state.value === 'waiting_buzz'
+                    ? 'bg-secondary text-white border-white/20 shadow-[0_6px_0_#c2410c,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#c2410c,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#c2410c,0_5px_10px_rgba(0,0,0,0.4)]'
+                    : 'bg-neutral-400 text-neutral-100 border-neutral-500 shadow-none opacity-80 cursor-not-allowed translate-y-[6px]'
+                }`}
               >
-                <span className="font-display-force font-black text-2xl uppercase tracking-widest drop-shadow-md group-active:drop-shadow-none">ENTER</span>
+                {state.value !== 'waiting_buzz' && <span className="material-symbols-outlined text-[24px]">lock</span>}
+                <span className={`font-display-force font-black text-2xl uppercase tracking-widest ${state.value === 'waiting_buzz' ? 'drop-shadow-md group-active:drop-shadow-none' : ''}`}>ENTER</span>
               </button>
+
+              <div className="mt-8 animate-pull-right transform origin-bottom flex justify-center w-full pointer-events-none relative -right-12 md:-right-20 lg:-right-28 xl:-right-32">
+                <img src={team2Pulling} alt="Team 2 Pulling" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] -scale-x-100" />
+              </div>
             </div>
           </header>
         )}
 
         {/* Main Arena (Center) */}
         {state.value !== 'idle' && (
-          <main className="absolute inset-0 z-20 flex items-center justify-center px-lg">
+          <main className="absolute inset-0 z-40 flex items-center justify-center px-lg pointer-events-none">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-px h-[40%] border-l-2 border-dashed border-white/30"></div>
             
-            <div className="glass-panel p-lg rounded-2xl shadow-2xl border border-white/50 max-w-4xl w-full z-20 flex flex-col items-center gap-md bg-white/90">
+            <div className="glass-panel p-lg rounded-2xl shadow-2xl border border-white/50 max-w-4xl w-full flex flex-col items-center gap-md bg-white/90 pointer-events-auto max-h-[85vh] overflow-y-auto">
               {state.value === 'ended' ? (
                  <div className="flex flex-col items-center text-center w-full">
                    <div className="relative flex justify-center items-center">
@@ -1207,27 +1381,27 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 )}
                 
                 {(state.value === 'result' || state.value === 'timeout_reveal') && (
-                   <div className="font-headline-lg font-bold text-sm tracking-widest uppercase flex flex-col items-center gap-2 my-2 text-center w-full">
+                   <div className="font-headline-lg font-bold text-sm tracking-widest uppercase flex flex-col items-center gap-2 my-2 text-center w-full relative z-50">
                       {state.value === 'timeout_reveal' ? (
-                        <span className="text-red-600 bg-red-100 px-4 py-2 rounded-lg border border-red-300">
+                        <span className="text-red-600 bg-red-100 px-4 py-2 rounded-lg border border-red-300 relative z-50">
                           ⏰ HẾT GIỜ! KHÔNG ĐỘI NÀO GIÀNH QUYỀN TRẢ LỜI
                         </span>
                       ) : state.context.lastResult === 'correct' ? (
-                        <span className="text-green-600">
+                        <span className="text-green-600 relative z-50">
                           🎉 ĐỘI {state.context.activeTeam === 'team1' ? '1' : '2'} TRẢ LỜI ĐÚNG! (+1 điểm / Đối thủ -1)
                         </span>
                       ) : state.context.lastResult === 'incorrect' ? (
-                        <span className="text-red-600">
+                        <span className="text-red-600 relative z-50">
                           ❌ ĐỘI {state.context.activeTeam === 'team1' ? '1' : '2'} TRẢ LỜI SAI! (-1 điểm / Đối thủ +1)
                         </span>
                       ) : (
-                        <span className="text-red-600">
+                        <span className="text-red-600 relative z-50">
                           ⏰ HẾT GIỜ TRẢ LỜI! Đội {state.context.activeTeam === 'team1' ? '1' : '2'} bị phạt (-1 điểm / Đối thủ +1)
                         </span>
                       )}
                       <button
                         onClick={() => send({ type: 'NEXT_QUESTION' })}
-                        className="mt-2 px-6 py-2 bg-neutral-800 text-white hover:bg-black rounded-lg shadow-md uppercase tracking-wider font-bold transition-all hover:scale-105 active:scale-95"
+                        className="mt-2 px-6 py-2 bg-neutral-800 text-white hover:bg-black rounded-lg shadow-md uppercase tracking-wider font-bold transition-all hover:scale-105 active:scale-95 pointer-events-auto relative z-50"
                       >
                         Câu Tiếp theo &rarr;
                       </button>
@@ -1514,6 +1688,13 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                     <span className="material-symbols-outlined">fullscreen</span>
                     FULLSCREEN
                   </button>
+                  <button 
+                    onClick={() => setIsRulesModalOpen(true)}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-lg font-bold font-body-md transition-all flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined">menu_book</span>
+                    HƯỚNG DẪN
+                  </button>
                 </div>
               </div>
             </div>
@@ -1766,6 +1947,67 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Game Rules Modal - MOUNTED OUTSIDE THE 16:9 CANVAS */}
+      {isRulesModalOpen && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center p-6 transition-all duration-300">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col border border-white/20">
+            <h2 className="text-2xl font-black mb-6 text-center font-display-force uppercase text-green-700 tracking-wider">
+              Luật Chơi (Game Rules)
+            </h2>
+            
+            <div className="text-left space-y-4 overflow-y-auto p-2 font-body-md text-neutral-700 flex-1">
+              <div className="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                <h3 className="font-bold text-green-800 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined">flag</span>
+                  Mục tiêu (Objective)
+                </h3>
+                <p>Trả lời đúng câu hỏi để kéo cờ về phía đội mình. Đội nào kéo cờ qua vạch chiến thắng trước sẽ giành phần thắng.</p>
+              </div>
+              
+              <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined">touch_app</span>
+                  Cách trả lời (How to Answer)
+                </h3>
+                <ul className="list-disc pl-6 space-y-1">
+                  <li>Đọc kỹ câu hỏi hiển thị trên màn hình.</li>
+                  <li>Chọn đáp án đúng từ các lựa chọn có sẵn.</li>
+                </ul>
+              </div>
+
+              <div className="bg-orange-50 p-4 rounded-xl border border-orange-100 shadow-sm">
+                <h3 className="font-bold text-orange-800 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined">swap_horiz</span>
+                  Cơ chế Kéo Co (Mechanics)
+                </h3>
+                <ul className="list-disc pl-6 space-y-1">
+                  <li><strong className="text-green-600">Trả lời đúng:</strong> Cộng điểm cho đội, kéo cờ về phía đội mình một nhịp.</li>
+                  <li><strong className="text-red-600">Trả lời sai:</strong> Không kéo được dây, tạo cơ hội cho đội bạn phản công.</li>
+                </ul>
+              </div>
+
+              <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 shadow-sm">
+                <h3 className="font-bold text-purple-800 mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined">emoji_events</span>
+                  Điều kiện thắng (Winning)
+                </h3>
+                <ul className="list-disc pl-6 space-y-1">
+                  <li>Trò chơi kết thúc khi một đội kéo cờ hoàn toàn về phía mình (điểm tuyệt đối).</li>
+                  <li>Nếu hết câu hỏi mà chưa bên nào kéo được về đích: đội có cờ nằm nghiêng về phía mình nhiều hơn sẽ thắng (hoặc <strong>Hòa</strong> nếu cờ ở giữa).</li>
+                </ul>
+              </div>
+            </div>
+
+            <button 
+              className="mt-6 w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition font-black uppercase shadow-[0_5px_0_rgb(20,83,45)] active:shadow-[0_0px_0_rgb(20,83,45)] active:translate-y-[5px] text-lg tracking-widest"
+              onClick={() => setIsRulesModalOpen(false)}
+            >
+              Đã Hiểu (Close)
+            </button>
           </div>
         </div>
       )}

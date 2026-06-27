@@ -7,10 +7,10 @@
     "color": "blue"
   },
   {
-    "id": "it-blockchain",
-    "name": "IT & Blockchain cơ bản",
-    "description": "10 câu hỏi",
-    "file": "it-blockchain.json",
+    "id": "ky-nang-di-choi-cong-vien",
+    "name": "Kỹ năng đi chơi công viên",
+    "description": "100 câu hỏi",
+    "file": "ky-nang-di-choi-cong-vien.json",
     "color": "light-blue"
   }
 ]
