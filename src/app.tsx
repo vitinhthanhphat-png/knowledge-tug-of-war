@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo, useRef } from 'preact/hooks';
 import { createActor } from 'xstate';
 import { tugOfWarMachine } from './state-machine';
-import { verifyAnswer, hashAnswer } from './crypto';
+import { verifyAnswer } from './crypto';
 import gameBg from './assets/game_background_v3.png';
 import avatarTeam1 from './assets/avatar_team1.png';
 import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
-import { BUILT_IN_DATASETS } from './datasets';
+
 import { parseExcelToQuestions } from './excel';
 import sndCorrect1 from './assets/sounds/tra-loi-dung-01.mp3';
 import sndCorrect2 from './assets/sounds/tra-loi-dung-02.mp3';
@@ -294,6 +294,55 @@ const playWrongSound = () => {
   osc.stop(ctx.currentTime + 0.8);
 };
 
+const playFireworkSound = () => {
+  const ctx = resumeAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  
+  // Sharp pop
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1000, now);
+  osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+  
+  const oscGain = ctx.createGain();
+  oscGain.gain.setValueAtTime(0, now);
+  oscGain.gain.linearRampToValueAtTime(1.0, now + 0.01);
+  oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+  
+  osc.connect(oscGain);
+  oscGain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.1);
+
+  const bufferSize = Math.floor(ctx.sampleRate * 0.3);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * 2; // Increase noise amplitude
+  }
+  
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = buffer;
+  
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.value = 1000;
+  
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0, now);
+  noiseGain.gain.linearRampToValueAtTime(1.0, now + 0.02);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+  
+  noiseSource.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(ctx.destination);
+  
+  noiseSource.start(now);
+  noiseSource.stop(now + 0.3);
+};
+
 const playVictorySound = () => {
   const ctx = resumeAudioContext();
   if (!ctx) return;
@@ -510,9 +559,28 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
   const prevStateRef = useRef<string>('');
   const isSubmittingRef = useRef(false);
   const hasBuzzedRef = useRef(false);
-  const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+
   const [validationError, setValidationError] = useState<string | null>(propValidationError || null);
-  const [customDatasets, setCustomDatasets] = useState<any[]>([]);
+  const [customDatasets, setCustomDatasets] = useState<any[]>(() => {
+    try {
+      const saved = localStorage.getItem('knowledgeTugOfWar_customDatasets');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn("Failed to parse customDatasets from localStorage", e);
+    }
+    return [];
+  });
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTopicTab, setActiveTopicTab] = useState<'builtin' | 'custom'>('builtin');
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('knowledgeTugOfWar_customDatasets', JSON.stringify(customDatasets));
+    } catch (e) {
+      console.error("Failed to save customDatasets to localStorage", e);
+    }
+  }, [customDatasets]);
 
   // Settings Modal States
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -523,6 +591,22 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     shuffleOptions: true,
     buzzTime: 10
   });
+
+  const [builtInDatasets, setBuiltInDatasets] = useState<any[]>([]);
+  const [datasetError, setDatasetError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('./datasets/index.json')
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => setBuiltInDatasets(data))
+      .catch(err => {
+        console.error('Failed to fetch built-in datasets:', err);
+        setDatasetError('Lỗi tải danh sách bộ đề. Đảm bảo bạn đang chạy web qua HTTP/HTTPS (không mở trực tiếp file html) và thư mục datasets tồn tại.');
+      });
+  }, []);
 
   useEffect(() => {
     if (propValidationError) {
@@ -639,23 +723,9 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     }
   }, [state.context.questions]);
 
-  // Admin Panel states
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  // Modal and validation states
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'questions' | 'import' | 'hash'>('questions');
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
-  const [isValidating, setIsValidating] = useState(false);
 
-  // New question form state
-  const [newQText, setNewQText] = useState('');
-  const [newQOptions, setNewQOptions] = useState(['', '', '', '']);
-  const [newQCorrectIdx, setNewQCorrectIdx] = useState(0);
-  const [newQSalt, setNewQSalt] = useState('');
-
-  // For Hash Utility Tool
-  const [hashInput, setHashInput] = useState('');
-  const [hashSaltInput, setHashSaltInput] = useState('');
-  const [generatedHash, setGeneratedHash] = useState('');
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
   const [correctOptionIndex, setCorrectOptionIndex] = useState<number | null>(null);
@@ -794,6 +864,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       const interval = setInterval(function() {
         const particleCount = 50;
         confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+        playFireworkSound();
       }, 250);
       
       return () => {
@@ -857,80 +928,6 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     }
   };
 
-  const handleSecureImportJSON = (autoStart: boolean | any = false) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = async (event: Event) => {
-      const file = (event.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-
-      // Guard: Max Size 500KB
-      if (file.size > 500 * 1024) {
-        setValidationErrors([{ index: -1, message: 'Kích thước file vượt quá giới hạn cho phép (500KB).' }]);
-        return;
-      }
-
-      setIsValidating(true);
-      setValidationErrors([]);
-
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const text = e.target?.result as string;
-          const result = await validateQuestionsJSON(text);
-          
-          if (result.isValid && result.questions) {
-            send({ type: 'IMPORT_QUESTIONS', questions: result.questions });
-            setValidationErrors([]);
-            setValidationError(null);
-            if (autoStart === true) {
-              setIsTopicModalOpen(false);
-              send({ type: 'START_GAME' });
-            } else {
-              alert('Tải đề thi JSON thành công!');
-            }
-          } else {
-            const errorMsg = result.errors.map(err => err.message).join('; ');
-            setValidationErrors(result.errors || []);
-            setValidationError(errorMsg);
-            send({ type: 'IMPORT_QUESTIONS', questions: SAFE_DEFAULT_QUESTIONS });
-            host.dispatchEvent(new CustomEvent('questions-invalid', {
-              detail: { error: errorMsg },
-              bubbles: true,
-              composed: true
-            }));
-          }
-        } catch (err) {
-          const errorMsg = err instanceof Error ? err.message : String(err);
-          setValidationErrors([{ index: -1, message: errorMsg }]);
-          setValidationError(errorMsg);
-          send({ type: 'IMPORT_QUESTIONS', questions: SAFE_DEFAULT_QUESTIONS });
-          host.dispatchEvent(new CustomEvent('questions-invalid', {
-            detail: { error: errorMsg },
-            bubbles: true,
-            composed: true
-          }));
-        } finally {
-          setIsValidating(false);
-        }
-      };
-
-      reader.onerror = () => {
-        setValidationErrors([{ index: -1, message: 'Lỗi FileReader khi đọc file.' }]);
-        setIsValidating(false);
-      };
-
-      reader.onabort = () => {
-        setValidationErrors([{ index: -1, message: 'FileReader đã bị hủy bỏ.' }]);
-        setIsValidating(false);
-      };
-
-      reader.readAsText(file);
-    };
-    input.click();
-  };
-
   const handleExportJSON = () => {
     if (!state.context.questions || state.context.questions.length === 0) {
       alert('Không có câu hỏi nào để xuất.');
@@ -954,12 +951,9 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       if (!file) return;
 
       if (file.size > 2 * 1024 * 1024) {
-        setValidationErrors([{ index: -1, message: 'Kích thước file Excel vượt quá giới hạn cho phép (2MB).' }]);
+        alert('Kích thước file Excel vượt quá giới hạn cho phép (2MB).');
         return;
       }
-
-      setIsValidating(true);
-      setValidationErrors([]);
 
       try {
         const questions = await parseExcelToQuestions(file);
@@ -981,13 +975,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
         // Still import to state so it's ready, but don't auto-start
         send({ type: 'IMPORT_QUESTIONS', questions });
-        setValidationErrors([]);
         setValidationError(null);
         alert('Tải đề thi Excel thành công! Vui lòng chọn chủ đề vừa tạo trong danh sách.');
 
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : String(err);
-        setValidationErrors([{ index: -1, message: errorMsg }]);
         setValidationError(errorMsg);
         send({ type: 'IMPORT_QUESTIONS', questions: SAFE_DEFAULT_QUESTIONS });
         host.dispatchEvent(new CustomEvent('questions-invalid', {
@@ -996,57 +988,9 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           composed: true
         }));
         alert(`Lỗi khi tải file Excel: ${errorMsg}`);
-      } finally {
-        setIsValidating(false);
       }
     };
     input.click();
-  };
-
-  const handleAddQuestion = async (e: Event) => {
-    e.preventDefault();
-    if (isAddingQuestion) return;
-    if (!newQText.trim() || newQOptions.some(o => !o.trim())) {
-      alert('Vui lòng điền đầy đủ câu hỏi và 4 đáp án.');
-      return;
-    }
-    
-    setIsAddingQuestion(true);
-    try {
-      const salt = newQSalt.trim() || Math.random().toString(36).substring(2, 10);
-      const correctText = newQOptions[newQCorrectIdx];
-      const answer_hash = await hashAnswer(correctText, salt);
-
-      const newQuestion: Question = {
-        id: `q_${Date.now()}`,
-        question: newQText.trim(),
-        options: newQOptions.map(o => o.trim()),
-        answer_hash,
-        salt
-      };
-
-      const updatedQuestions = [...state.context.questions, newQuestion];
-      send({ type: 'IMPORT_QUESTIONS', questions: updatedQuestions });
-      
-      // Reset form
-      setNewQText('');
-      setNewQOptions(['', '', '', '']);
-      setNewQCorrectIdx(0);
-      setNewQSalt('');
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsAddingQuestion(false);
-    }
-  };
-
-  const handleGenerateHash = async () => {
-    if (!hashInput.trim()) {
-      alert('Vui lòng nhập đáp án chính xác để tạo hash.');
-      return;
-    }
-    const hash = await hashAnswer(hashInput.trim(), hashSaltInput.trim());
-    setGeneratedHash(hash);
   };
 
   const currentQuestion = state.context.questions[state.context.currentQuestionIndex];
@@ -1128,12 +1072,27 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
               <div className="flex flex-col items-center justify-center glass-panel px-xl py-sm rounded-full shadow-lg bg-white/70">
                 <h1 className="font-display-force text-headline-lg text-primary uppercase tracking-tighter">Knowledge Tug of War</h1>
                 <span className="font-label-caps text-label-caps text-on-surface-variant bg-surface-variant/80 px-md py-xs rounded-full mt-1">Vòng {state.context.currentQuestionIndex + 1} / {state.context.questions.length}</span>
-                <button 
-                  onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
-                  className="mt-2 text-xs text-neutral-500 hover:text-neutral-800 underline uppercase tracking-wider font-bold"
-                >
-                  ⚙️ Admin
-                </button>
+                <div className="flex gap-4 mt-2">
+                  <button 
+                    onClick={() => {
+                      if (confirm('Bạn có chắc chắn muốn cài lại điểm số về mặc định?')) {
+                        send({ type: 'RESET' });
+                      }
+                    }}
+                    className="px-4 py-2 bg-neutral-800/80 text-white rounded-lg font-bold hover:bg-neutral-900 transition-colors text-xs flex items-center gap-1 backdrop-blur-sm shadow-sm"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">refresh</span>
+                    Reset
+                  </button>
+                  <button 
+                    onClick={handleExportJSON}
+                    disabled={state.context.questions.length === 0}
+                    className="px-4 py-2 bg-blue-600/80 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors text-xs flex items-center gap-1 disabled:opacity-50 backdrop-blur-sm shadow-sm"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">download</span>
+                    JSON
+                  </button>
+                </div>
               </div>
 
               {state.value === 'waiting_buzz' && state.context.baseBuzzTime > 0 && (
@@ -1535,7 +1494,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 <div className="animate-urgent-heartbeat">
                   <button 
                     onClick={() => setIsTopicModalOpen(true)}
-                    className="px-14 py-6 bg-gradient-to-b from-green-400 to-green-600 text-white rounded-2xl font-black font-display-force text-4xl tracking-widest shadow-[0_10px_0_rgb(20,83,45),0_20px_30px_rgba(0,0,0,0.5)] border-2 border-green-300 active:shadow-[0_0px_0_rgb(20,83,45),0_0px_0_rgba(0,0,0,0.5)] active:translate-y-[10px] hover:brightness-110 transition-all duration-100 uppercase"
+                    className="px-14 py-6 bg-gradient-to-b from-green-400 to-green-600 text-white rounded-xl font-black font-display-force text-4xl tracking-widest shadow-[0_10px_0_rgb(20,83,45),0_20px_30px_rgba(0,0,0,0.5)] border-2 border-green-300 active:shadow-[0_0px_0_rgb(20,83,45),0_0px_0_rgba(0,0,0,0.5)] active:translate-y-[10px] hover:brightness-110 transition-all duration-100 uppercase"
                   >
                     BẮT ĐẦU CHƠI
                   </button>
@@ -1550,17 +1509,10 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                         document.exitFullscreen().catch(() => {});
                       }
                     }}
-                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-lg font-bold font-body-md transition-all flex items-center gap-2"
                   >
                     <span className="material-symbols-outlined">fullscreen</span>
                     FULLSCREEN
-                  </button>
-                  <button 
-                    onClick={() => { setValidationErrors([]); setIsAdminOpen(true); }}
-                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md text-white rounded-xl font-bold font-body-md transition-all flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined">settings</span>
-                    ADMIN
                   </button>
                 </div>
               </div>
@@ -1571,411 +1523,249 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       {/* 2. Topic Selection Modal - MOUNTED OUTSIDE THE 16:9 CANVAS */}
       {isTopicModalOpen && (
         <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center p-6 transition-all duration-300">
-          <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-4xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">
+          <div className="bg-white rounded-lg border-2 border-neutral-200 w-full max-w-4xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">
             {/* Header */}
-            <div className="flex justify-between items-center bg-neutral-100 p-4 border-b border-neutral-200">
-              <h3 className="font-display font-bold text-xl text-neutral-800 flex items-center gap-2">
-                📚 Chọn Chủ Đề
-              </h3>
-              <div className="flex items-center gap-4">
-                <a 
-                  href="./template_dautruongkienthuc.xlsx" 
-                  download
-                  className="text-sm font-semibold text-green-700 underline hover:text-green-900"
-                >
-                  📥 Tải file mẫu (.xlsx)
-                </a>
-                <button 
-                  onClick={() => setIsTopicModalOpen(false)}
-                  className="text-neutral-500 hover:text-neutral-800 font-bold text-2xl px-2 leading-none"
-                >
-                  &times;
-                </button>
-              </div>
-            </div>
-            {/* Body Content */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...BUILT_IN_DATASETS, ...customDatasets].map(dataset => (
-                  <div
-                    key={dataset.id}
-                    onClick={() => {
-                      setSelectedDataset(dataset);
-                      setGameSettings({
-                        questionCount: dataset.data.length,
-                        shuffleQuestions: true,
-                        shuffleOptions: true,
-                        buzzTime: 10
-                      });
-                      setIsSettingsModalOpen(true);
-                      setIsTopicModalOpen(false);
-                    }}
-                    className="flex flex-col items-center justify-center p-6 bg-blue-50 border-2 border-blue-200 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors group shadow-sm cursor-pointer"
+            <div className="flex flex-col bg-neutral-100 p-4 border-b border-neutral-200">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-display font-bold text-xl text-neutral-800 flex items-center gap-2">
+                  📚 Chọn Chủ Đề
+                </h3>
+                <div className="flex items-center gap-4">
+                  <a 
+                    href="./template_dautruongkienthuc.xlsx" 
+                    download
+                    className="text-sm font-semibold text-neutral-500 underline hover:text-neutral-700"
                   >
-                    <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">{(dataset as any).icon || '📘'}</span>
-                    <span className="font-bold text-lg text-center group-hover:text-white text-blue-900">{dataset.name}</span>
-                    <span className="text-sm mt-2 opacity-80">{dataset.data.length} câu hỏi</span>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const blob = new Blob([JSON.stringify(dataset.data, null, 2)], { type: 'application/json' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `${dataset.name}.json`;
-                        a.click();
-                        URL.revokeObjectURL(url);
-                      }}
-                      className="mt-3 px-3 py-1.5 bg-white/60 text-blue-800 rounded-full text-xs font-bold hover:bg-white hover:text-blue-900 transition-colors shadow-sm"
-                      title="Tải xuống file JSON của bộ câu hỏi này"
-                    >
-                      📥 Tải JSON
-                    </button>
-                  </div>
-                ))}
-                
-                {/* Custom Import Card */}
-                <button
-                  onClick={() => handleSecureImportJSON(true)}
-                  className="flex flex-col items-center justify-center p-6 bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-xl hover:bg-green-600 hover:border-green-600 hover:text-white transition-colors group shadow-sm"
-                >
-                  <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📂</span>
-                  <span className="font-bold text-lg text-center group-hover:text-white text-neutral-800">+ Tải đề của bạn (.json)</span>
-                  <span className="text-sm mt-2 opacity-80">Tự động bắt đầu trò chơi</span>
-                </button>
+                    Tải file mẫu
+                  </a>
+                  <button
+                    onClick={() => handleExcelImport()}
+                    className="px-4 py-2 bg-green-100 text-green-700 border border-green-300 rounded-md hover:bg-green-600 hover:text-white transition-colors font-bold text-sm flex items-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-lg">upload_file</span>
+                    Tải lên Excel
+                  </button>
+                  <button 
+                    onClick={() => setIsTopicModalOpen(false)}
+                    className="text-neutral-500 hover:text-neutral-800 font-bold text-2xl px-2 leading-none ml-2"
+                  >
+                    &times;
+                  </button>
+                </div>
+              </div>
+              <div className="w-full relative mt-4 px-2">
+                 <div className="absolute inset-y-0 left-2 w-10 flex items-center justify-center pointer-events-none">
+                    <span className="material-symbols-outlined text-neutral-400 text-[22px]">search</span>
+                 </div>
+                 <input
+                    type="text"
+                    placeholder="Tìm kiếm bộ đề..."
+                    value={searchQuery}
+                    onChange={(e: any) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 bg-white text-neutral-900 rounded-md border border-neutral-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all font-body-md shadow-sm"
+                 />
+              </div>
 
-                {/* Custom Import Excel Card */}
+              {/* Tabs */}
+              <div className="flex gap-6 mt-6 px-2">
                 <button
-                  onClick={() => handleExcelImport()}
-                  className="flex flex-col items-center justify-center p-6 bg-green-50 border-2 border-dashed border-green-300 rounded-xl hover:bg-green-600 hover:border-green-600 hover:text-white transition-colors group shadow-sm"
+                  className={`pb-3 font-bold text-sm transition-colors relative flex items-center gap-2 ${activeTopicTab === 'builtin' ? 'text-blue-600' : 'text-neutral-500 hover:text-neutral-700'}`}
+                  onClick={() => setActiveTopicTab('builtin')}
                 >
-                  <span className="text-4xl mb-2 group-hover:scale-110 transition-transform">📊</span>
-                  <span className="font-bold text-lg text-center group-hover:text-white text-green-800">+ Tải lên Excel</span>
-                  <span className="text-sm mt-2 opacity-80">Tự đặt tên và tải vào danh sách</span>
+                  <span className="material-symbols-outlined text-[18px]">inventory_2</span>
+                  BỘ ĐỀ HỆ THỐNG
+                  {activeTopicTab === 'builtin' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-lg"></div>}
+                </button>
+                <button
+                  className={`pb-3 font-bold text-sm transition-colors relative flex items-center gap-2 ${activeTopicTab === 'custom' ? 'text-green-600' : 'text-neutral-500 hover:text-neutral-700'}`}
+                  onClick={() => setActiveTopicTab('custom')}
+                >
+                  <span className="material-symbols-outlined text-[18px]">folder_special</span>
+                  BỘ ĐỀ CỦA BẠN {customDatasets.length > 0 && `(${customDatasets.length})`}
+                  {activeTopicTab === 'custom' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-600 rounded-t-lg"></div>}
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* 3. Admin Panel Overlay - MOUNTED OUTSIDE THE 16:9 CANVAS (Native Scale) */}
-      {isAdminOpen && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6 transition-all duration-300">
-          <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-3xl max-h-[90%] flex flex-col overflow-hidden shadow-2xl text-neutral-900">
-            
-            {/* Header */}
-            <div className="flex justify-between items-center bg-neutral-100 p-4 border-b border-neutral-200">
-              <h3 className="font-display font-bold text-lg text-neutral-800 flex items-center gap-2">
-                ⚙️ Bảng Điều Khiển Admin
-              </h3>
-              <button 
-                onClick={() => setIsAdminOpen(false)}
-                className="text-neutral-500 hover:text-neutral-800 font-bold text-xl px-2"
-              >
-                &times;
-              </button>
-            </div>
-
-            {/* Navigation Tabs */}
-            <div className="flex border-b border-neutral-200 bg-neutral-50">
-              <button 
-                onClick={() => setActiveTab('questions')}
-                className={`flex-1 py-2.5 font-display text-sm font-bold border-b-2 transition-all ${activeTab === 'questions' ? 'border-green-600 text-green-700' : 'border-transparent text-neutral-500 hover:text-neutral-800'}`}
-              >
-                Danh sách câu hỏi ({state.context.questions.length})
-              </button>
-              <button 
-                onClick={() => setActiveTab('import')}
-                className={`flex-1 py-2.5 font-display text-sm font-bold border-b-2 transition-all ${activeTab === 'import' ? 'border-green-600 text-green-700' : 'border-transparent text-neutral-500 hover:text-neutral-800'}`}
-              >
-                Import / Export JSON
-              </button>
-              <button 
-                onClick={() => setActiveTab('hash')}
-                className={`flex-1 py-2.5 font-display text-sm font-bold border-b-2 transition-all ${activeTab === 'hash' ? 'border-green-600 text-green-700' : 'border-transparent text-neutral-500 hover:text-neutral-800'}`}
-              >
-                Tiện ích Tạo Hash
-              </button>
-            </div>
-
             {/* Body Content */}
-            <div className="flex-1 overflow-y-auto p-6 text-sm">
-              
-              {/* Tab 1: Questions list & Add Form */}
-              {activeTab === 'questions' && (
-                <div className="space-y-6">
-                  {/* Form to Add Question */}
-                  <form onSubmit={handleAddQuestion} className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 space-y-4">
-                    <h4 className="font-display font-bold text-neutral-800">Thêm câu hỏi mới</h4>
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold text-neutral-600">Câu hỏi</label>
-                      <input 
-                        type="text" 
-                        value={newQText} 
-                        onChange={e => setNewQText((e.target as HTMLInputElement).value)}
-                        placeholder="Nhập câu hỏi..." 
-                        className="w-full p-2 border border-neutral-300 rounded bg-white text-neutral-900"
-                        required
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      {newQOptions.map((opt, idx) => (
-                        <div key={idx} className="space-y-1">
-                          <label className="block text-xs font-bold text-neutral-600">Đáp án {String.fromCharCode(65 + idx)}</label>
-                          <div className="flex gap-2 items-center">
-                            <input 
-                              type="radio" 
-                              name="correct_option" 
-                              checked={newQCorrectIdx === idx}
-                              onChange={() => setNewQCorrectIdx(idx)}
-                              title="Đánh dấu đây là đáp án ĐÚNG"
-                            />
-                            <input 
-                              type="text" 
-                              value={opt} 
-                              onChange={e => {
-                                const opts = [...newQOptions];
-                                opts[idx] = (e.target as HTMLInputElement).value;
-                                setNewQOptions(opts);
+            <div className="flex-1 overflow-y-auto p-6 bg-neutral-50/50">
+              {datasetError && (
+                <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-800 rounded-lg text-center font-bold">
+                  ⚠️ {datasetError}
+                </div>
+              )}
+              <div className="flex flex-col gap-3">
+                
+                {/* Built-in Datasets */}
+                {activeTopicTab === 'builtin' && (
+                  <>
+                    {builtInDatasets.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).map(dataset => (
+                      <div
+                        key={dataset.id}
+                        className="flex items-center justify-between p-4 bg-white border border-neutral-200 rounded-md hover:border-blue-300 hover:shadow-md transition-all group"
+                      >
+                        <div 
+                           className="flex items-center gap-4 flex-1 cursor-pointer"
+                           onClick={() => {
+                              if (!dataset.data) {
+                                fetch(`./datasets/${dataset.file}`)
+                                  .then(res => res.json())
+                                  .then(data => {
+                                    const fullDataset = { ...dataset, data };
+                                    setSelectedDataset(fullDataset);
+                                    setGameSettings({
+                                      questionCount: data.length,
+                                      shuffleQuestions: true,
+                                      shuffleOptions: true,
+                                      buzzTime: 10
+                                    });
+                                    setIsSettingsModalOpen(true);
+                                    setIsTopicModalOpen(false);
+                                  })
+                                  .catch(() => alert("Không thể tải bộ đề này!"));
+                              } else {
+                                setSelectedDataset(dataset);
+                                setGameSettings({
+                                  questionCount: dataset.data.length,
+                                  shuffleQuestions: true,
+                                  shuffleOptions: true,
+                                  buzzTime: 10
+                                });
+                                setIsSettingsModalOpen(true);
+                                setIsTopicModalOpen(false);
+                              }
+                           }}
+                        >
+                           <div className="w-12 h-12 flex items-center justify-center bg-blue-50 text-blue-500 rounded-lg text-2xl group-hover:scale-110 transition-transform">
+                              {(dataset as any).icon || '📘'}
+                           </div>
+                           <div>
+                              <h5 className="font-bold text-lg text-neutral-800 group-hover:text-blue-600 transition-colors">{dataset.name}</h5>
+                              <p className="text-sm text-neutral-500">{dataset.description || (dataset.data ? `${dataset.data.length} câu hỏi` : '')}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-2 pl-4 border-l border-neutral-100">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (!dataset.data) {
+                                  fetch(`./datasets/${dataset.file}`)
+                                    .then(res => res.json())
+                                    .then(data => {
+                                      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                                      const url = URL.createObjectURL(blob);
+                                      const a = document.createElement('a');
+                                      a.href = url;
+                                      a.download = `${dataset.name}.json`;
+                                      a.click();
+                                      URL.revokeObjectURL(url);
+                                    })
+                                    .catch(() => alert("Không thể tải file!"));
+                                } else {
+                                  const blob = new Blob([JSON.stringify(dataset.data, null, 2)], { type: 'application/json' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `${dataset.name}.json`;
+                                  a.click();
+                                  URL.revokeObjectURL(url);
+                                }
                               }}
-                              placeholder={`Đáp án ${String.fromCharCode(65 + idx)}...`} 
-                              className="flex-1 p-2 border border-neutral-300 rounded bg-white text-neutral-900"
-                              required
-                            />
+                              className="px-4 py-2 bg-neutral-50 text-neutral-600 rounded-md hover:bg-neutral-200 transition-colors flex items-center gap-2 text-sm font-semibold"
+                              title="Tải xuống file JSON"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">download</span>
+                              Tải JSON
+                            </button>
+                        </div>
+                      </div>
+                    ))}
+                    {builtInDatasets.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                        <p className="text-neutral-400 text-center py-4 italic">Không tìm thấy bộ đề phù hợp.</p>
+                    )}
+                  </>
+                )}
+
+                {/* Custom Datasets (Only show if exists) */}
+                {activeTopicTab === 'custom' && (
+                  <>
+                      {customDatasets.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).map(dataset => (
+                        <div
+                          key={dataset.id}
+                          className="flex items-center justify-between p-4 bg-white border border-green-200 rounded-md hover:border-green-400 hover:shadow-md transition-all group"
+                        >
+                          <div 
+                             className="flex items-center gap-4 flex-1 cursor-pointer"
+                             onClick={() => {
+                                setSelectedDataset(dataset);
+                                setGameSettings({
+                                  questionCount: dataset.data.length,
+                                  shuffleQuestions: true,
+                                  shuffleOptions: true,
+                                  buzzTime: 10
+                                });
+                                setIsSettingsModalOpen(true);
+                                setIsTopicModalOpen(false);
+                             }}
+                          >
+                             <div className="w-12 h-12 flex items-center justify-center bg-green-50 text-green-500 rounded-lg text-2xl group-hover:scale-110 transition-transform">
+                                {(dataset as any).icon || '📊'}
+                             </div>
+                             <div>
+                                <h5 className="font-bold text-lg text-neutral-800 group-hover:text-green-600 transition-colors">{dataset.name}</h5>
+                                <p className="text-sm text-neutral-500">{dataset.data ? `${dataset.data.length} câu hỏi` : ''}</p>
+                             </div>
+                          </div>
+                          <div className="flex items-center gap-2 pl-4 border-l border-neutral-100">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const blob = new Blob([JSON.stringify(dataset.data, null, 2)], { type: 'application/json' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `${dataset.name}.json`;
+                                  a.click();
+                                  URL.revokeObjectURL(url);
+                                }}
+                                className="px-4 py-2 bg-neutral-50 text-neutral-600 rounded-lg hover:bg-neutral-200 transition-colors flex items-center gap-2 text-sm font-semibold"
+                                title="Tải xuống file JSON"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">download</span>
+                                Tải JSON
+                              </button>
+                              
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (window.confirm(`Bạn có chắc chắn muốn xoá bộ đề "${dataset.name}" không?`)) {
+                                    setCustomDatasets(prev => prev.filter(d => d.id !== dataset.id));
+                                  }
+                                }}
+                                className="w-9 h-9 flex items-center justify-center bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors"
+                                title="Xoá bộ đề này"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
                           </div>
                         </div>
                       ))}
-                    </div>
+                      {customDatasets.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase())).length === 0 && (
+                          <div className="flex flex-col items-center justify-center py-10 text-neutral-400">
+                             <span className="material-symbols-outlined text-4xl mb-2 opacity-50">folder_off</span>
+                             <p className="italic">Chưa có bộ đề nào của riêng bạn.</p>
+                             <button
+                               onClick={() => handleExcelImport()}
+                               className="mt-4 px-4 py-2 text-sm font-bold bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-lg transition-colors"
+                             >
+                               + Tải lên ngay
+                             </button>
+                          </div>
+                      )}
+                  </>
+                )}
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="block text-xs font-bold text-neutral-600">Salt (tùy chọn - tự sinh nếu bỏ trống)</label>
-                        <input 
-                          type="text" 
-                          value={newQSalt} 
-                          onChange={e => setNewQSalt((e.target as HTMLInputElement).value)}
-                          placeholder="Chuỗi salt ngẫu nhiên..." 
-                          className="w-full p-2 border border-neutral-300 rounded bg-white text-neutral-900"
-                        />
-                      </div>
-                      <div className="flex items-end">
-                        <button 
-                          type="submit"
-                          disabled={isAddingQuestion}
-                          className="w-full py-2 bg-green-600 text-white font-bold rounded hover:bg-green-700 transition-colors disabled:opacity-50"
-                        >
-                          {isAddingQuestion ? 'Đang xử lý...' : '+ Lưu câu hỏi'}
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-
-                  {/* Question List Table */}
-                  <div className="space-y-3">
-                    <h4 className="font-display font-bold text-neutral-800">Danh sách câu hỏi hiện tại</h4>
-                    {state.context.questions.length === 0 ? (
-                      <p className="text-neutral-500 italic">Chưa có câu hỏi nào được nạp.</p>
-                    ) : (
-                      <div className="border border-neutral-200 rounded-xl overflow-hidden bg-white max-h-60 overflow-y-auto">
-                        <table className="w-full border-collapse text-left">
-                          <thead>
-                            <tr className="bg-neutral-50">
-                              <th className="p-3 text-xs font-bold text-neutral-600 border-b border-neutral-200">ID</th>
-                              <th className="p-3 text-xs font-bold text-neutral-600 border-b border-neutral-200">Câu hỏi</th>
-                              <th className="p-3 text-xs font-bold text-neutral-600 border-b border-neutral-200">Salt</th>
-                              <th className="p-3 text-xs font-bold text-neutral-600 border-b border-neutral-200">Hành động</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {state.context.questions.map((q, idx) => (
-                              <tr key={q.id || idx} className="hover:bg-neutral-50">
-                                <td className="p-3 font-mono text-xs border-b border-neutral-200">{q.id}</td>
-                                <td className="p-3 border-b border-neutral-200 max-w-xs truncate">{q.question}</td>
-                                <td className="p-3 font-mono text-xs text-neutral-500 border-b border-neutral-200">{q.salt || '-'}</td>
-                                <td className="p-3 border-b border-neutral-200">
-                                  <button 
-                                    onClick={() => {
-                                      const updated = state.context.questions.filter((_, qIdx) => qIdx !== idx);
-                                      send({ type: 'IMPORT_QUESTIONS', questions: updated });
-                                    }}
-                                    className="text-red-600 hover:text-red-800 font-bold hover:underline"
-                                  >
-                                    Xóa
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Tab 2: Import / Export */}
-              {activeTab === 'import' && (
-                <div className="space-y-6">
-                  {/* Built-in Datasets Zone */}
-                  <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 flex flex-col items-center text-center">
-                    <p className="font-bold text-blue-900 mb-2">Chọn bộ đề có sẵn</p>
-                    <p className="text-xs text-blue-700 mb-4">Nạp nhanh các bộ câu hỏi được hệ thống biên soạn sẵn</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {[...BUILT_IN_DATASETS, ...customDatasets].map(dataset => (
-                        <button
-                          key={dataset.id}
-                          onClick={() => {
-                            if(window.confirm(`Bạn có chắc chắn muốn nạp bộ "${dataset.name}"?\nToàn bộ câu hỏi hiện tại sẽ bị ghi đè.`)) {
-                              send({ type: 'IMPORT_QUESTIONS', questions: dataset.data as Question[] });
-                              alert(`Đã nạp thành công bộ đề: ${dataset.name}`);
-                            }
-                          }}
-                          className="px-4 py-2 bg-white text-blue-700 border border-blue-300 rounded-lg font-bold hover:bg-blue-600 hover:text-white transition-colors text-sm shadow-sm"
-                        >
-                          Nạp: {dataset.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-6">
-                    {/* Import Zone */}
-                    <div className="bg-neutral-50 p-6 rounded-xl border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center text-center">
-                      <p className="font-bold text-neutral-800 mb-2">Tải lên đề thi mới</p>
-                      <p className="text-xs text-neutral-500 mb-4">Hỗ trợ file JSON cấu trúc kéo co dưới 500KB</p>
-                      
-                      <button 
-                        onClick={handleSecureImportJSON}
-                        disabled={isValidating}
-                        className="px-5 py-2.5 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition-colors disabled:opacity-50"
-                      >
-                        {isValidating ? 'Đang kiểm tra băm...' : 'Chọn file JSON'}
-                      </button>
-                    </div>
-
-                    {/* Export Zone */}
-                    <div className="bg-neutral-50 p-6 rounded-xl border border-neutral-200 flex flex-col items-center justify-center text-center">
-                      <p className="font-bold text-neutral-800 mb-2">Xuất đề thi hiện tại</p>
-                      <p className="text-xs text-neutral-500 mb-4">Tải về danh sách câu hỏi hiện tại dưới dạng file JSON</p>
-                      
-                      <button 
-                        onClick={handleExportJSON}
-                        disabled={state.context.questions.length === 0}
-                        className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
-                      >
-                        Tải file JSON xuống
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Validation Errors Log */}
-                  {validationErrors.length > 0 && (
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2">
-                      <p className="font-bold text-red-700 text-sm">Phát hiện lỗi định dạng / bảo mật trong file JSON:</p>
-                      <ul className="list-disc pl-5 text-xs text-red-600 space-y-1">
-                        {validationErrors.map((err, idx) => (
-                          <li key={idx}>{err.message}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Tab 3: Hash Helper */}
-              {activeTab === 'hash' && (
-                <div className="space-y-4">
-                  <p className="text-neutral-600 text-xs">Công cụ tạo mã hóa SHA-256 dùng để viết sẵn câu hỏi trong các trình soạn thảo text bên ngoài.</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="block text-xs font-bold text-neutral-600">Đáp án chính xác</label>
-                      <input 
-                        type="text" 
-                        value={hashInput} 
-                        onChange={e => setHashInput((e.target as HTMLInputElement).value)}
-                        placeholder="Ví dụ: 4" 
-                        className="w-full p-2 border border-neutral-300 rounded bg-white text-neutral-900"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="block text-xs font-bold text-neutral-600">Salt</label>
-                      <input 
-                        type="text" 
-                        value={hashSaltInput} 
-                        onChange={e => setHashSaltInput((e.target as HTMLInputElement).value)}
-                        placeholder="Ví dụ: my-salt" 
-                        className="w-full p-2 border border-neutral-300 rounded bg-white text-neutral-900"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button 
-                      onClick={handleGenerateHash}
-                      className="px-4 py-2 bg-green-600 text-white rounded font-bold hover:bg-green-700 transition-colors"
-                    >
-                      Tạo Hash SHA-256
-                    </button>
-                    <button 
-                      onClick={() => {
-                        const rand = Math.random().toString(36).substring(2, 10);
-                        setHashSaltInput(rand);
-                      }}
-                      className="px-4 py-2 bg-neutral-200 text-neutral-800 rounded font-bold hover:bg-neutral-300 transition-colors"
-                    >
-                      Tạo Salt ngẫu nhiên
-                    </button>
-                  </div>
-
-                  {generatedHash && (
-                    <div className="space-y-1 pt-2">
-                      <label className="block text-xs font-bold text-neutral-600">Kết quả hash (Copy vào trường "answer_hash"):</label>
-                      <div className="flex gap-2">
-                        <input 
-                          type="text" 
-                          readOnly 
-                          value={generatedHash} 
-                          className="flex-1 p-2 bg-neutral-100 font-mono text-xs border border-neutral-300 rounded"
-                        />
-                        <button 
-                          onClick={() => {
-                            navigator.clipboard.writeText(generatedHash);
-                            alert('Đã copy hash!');
-                          }}
-                          className="px-3 py-1 bg-neutral-800 text-white rounded text-xs hover:bg-black font-bold"
-                        >
-                          Copy
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
+              </div>
             </div>
-
-            {/* Footer Reset button inside Admin Panel */}
-            <div className="bg-neutral-50 p-4 border-t border-neutral-200 flex justify-between">
-              <button 
-                onClick={() => {
-                  if (confirm('Bạn có chắc chắn muốn cài lại điểm số về mặc định?')) {
-                    send({ type: 'RESET' });
-                  }
-                }}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors text-xs"
-              >
-                Reset Điểm & Trận Đấu
-              </button>
-              <button 
-                onClick={() => setIsAdminOpen(false)}
-                className="px-4 py-2 bg-neutral-800 text-white rounded-lg font-bold hover:bg-neutral-900 transition-colors text-xs"
-              >
-                Đóng
-              </button>
-            </div>
-
           </div>
         </div>
       )}
