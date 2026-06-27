@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ky-nang-song",
+    "name": "Kỹ năng sống 5-13 tuổi",
+    "description": "100 câu hỏi",
+    "file": "ky-nang-song.json",
+    "color": "blue"
+  },
+  {
+    "id": "it-blockchain",
+    "name": "IT & Blockchain cơ bản",
+    "description": "10 câu hỏi",
+    "file": "it-blockchain.json",
+    "color": "light-blue"
+  }
+]
