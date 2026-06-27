@@ -1212,11 +1212,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           <header className="absolute top-0 left-0 right-0 z-30 flex justify-between items-start px-xl py-lg w-full">
             {/* Team 1 (Left) */}
             <div className="flex flex-col items-start gap-sm">
-              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team1' ? 'shadow-[0_0_30px_rgba(34,197,94,0.5)]' : 'shadow-md'}`}>
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team1' ? 'shadow-[0_0_40px_rgba(34,197,94,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
                 {state.context.activeTeam === 'team1' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#22c55e_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-primary-container/0 glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/95 relative z-10 w-full h-full`}>
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-primary-container/0 glow-pulse bg-green-100/95' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
                   <span className="font-headline-lg text-headline-lg text-primary">Đội 1 (Trái)</span>
                   <div className="flex items-center gap-xs">
@@ -1276,11 +1276,11 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
             {/* Team 2 (Right) */}
             <div className="flex flex-col items-end gap-sm">
-              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_30px_rgba(249,115,22,0.5)]' : 'shadow-md'}`}>
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_40px_rgba(249,115,22,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
                 {state.context.activeTeam === 'team2' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#f97316_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-secondary-container/0 glow-pulse' : 'border-surface-dim fade-inactive'} flex flex-col items-center gap-xs bg-white/95 relative z-10 w-full h-full`}>
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-secondary-container/0 glow-pulse bg-orange-100/95' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(249,115,22,0.6)] mix-blend-multiply" />
                   <span className="font-headline-lg text-headline-lg text-secondary">Đội 2 (Phải)</span>
                   <div className="flex items-center gap-xs">
