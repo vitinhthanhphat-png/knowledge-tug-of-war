@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "excel_q_0_1782571759920",
+    "question": "Khi bị lạc bố mẹ ở công viên, việc đầu tiên em nên làm là gì?",
+    "options": [
+      "Khóc thật to và chạy lung tung",
+      "Đứng yên tại chỗ và quan sát xung quanh",
+      "Đi theo một người lạ mặt",
+      "Tự đi bộ về nhà"
+    ],
+    "answer_hash": "9d5ba02c0534bd73d168127ee7f330bd0600dca17334acc3245d285e8287befb",
+    "salt": "0zagc507"
+  },
+  {
+    "id": "excel_q_1_1782571759920",
+    "question": "Nếu không thấy bố mẹ quay lại, em nên nhờ ai giúp đỡ?",
+    "options": [
+      "Một chú bảo vệ hoặc công an mặc đồng phục",
+      "Một người lạ mặt trông có vẻ tốt bụng",
+      "Một bạn nhỏ khác",
+      "Bất kỳ ai đi ngang qua"
+    ],
+    "answer_hash": "1de3f5e10155d1cd2f09e0c6d9795c506e69874e3a6bdda6b4102327dcbf8e2f",
+    "salt": "bjkzmdox"
+  },
+  {
+    "id": "excel_q_2_1782571759920",
+    "question": "Thông tin nào sau đây em cần nhớ rõ để nhờ người khác liên lạc với gia đình?",
+    "options": [
+      "Tên của chú cún cưng",
+      "Món ăn yêu thích",
+      "Số điện thoại của bố hoặc mẹ",
+      "Tên trò chơi em vừa chơi"
+    ],
+    "answer_hash": "bd09b373ef25ca2dedd4eed3f1c707e824f6f5223b4b2a0414fcfaff4d8f321b",
+    "salt": "axc7kmal"
+  },
+  {
+    "id": "excel_q_3_1782571759920",
+    "question": "Khi có người lạ cho kẹo hoặc đồ chơi ở công viên, em nên làm gì?",
+    "options": [
+      "Nhận ngay và cảm ơn",
+      "Từ chối lịch sự và đi ra chỗ khác",
+      "Lấy kẹo nhưng không ăn",
+      "Xin thêm cho bạn bè"
+    ],
+    "answer_hash": "ddfd6b633c3bda67e6d7f84edcf91fa16b27658042ba3222722b4b148141561e",
+    "salt": "23uivn1l"
+  },
+  {
+    "id": "excel_q_4_1782571759920",
+    "question": "Nếu một người lạ nhờ em đi theo để tìm thú cưng bị lạc, em sẽ làm gì?",
+    "options": [
+      "Đi theo ngay để giúp đỡ",
+      "Nói 'Cháu phải hỏi ý kiến bố mẹ đã' rồi bỏ đi",
+      "Rủ thêm bạn bè cùng đi",
+      "Chỉ đường cho họ rồi đi theo"
+    ],
+    "answer_hash": "8a752e34e32146fedc5ac48067f5b36bd9de875e3ea6ab81716b76441e15efb6",
+    "salt": "s5oc4134"
+  },
+  {
+    "id": "excel_q_5_1782571759920",
+    "question": "Khi chơi cầu trượt, tư thế nào là an toàn nhất?",
+    "options": [
+      "Trượt bằng đầu xuống trước",
+      "Trượt bằng bụng",
+      "Ngồi trượt, chân hướng xuống dưới",
+      "Đứng trên máng trượt"
+    ],
+    "answer_hash": "e320bd493b4c846c8c0068a99d5510fcbce8dc138be0b22d3818300cee14983d",
+    "salt": "4wt82ft3"
+  },
+  {
+    "id": "excel_q_6_1782571759920",
+    "question": "Khi chơi xích đu, em nên làm gì để đảm bảo an toàn?",
+    "options": [
+      "Đứng trên ghế xích đu",
+      "Ngồi ngay ngắn và bám chặt hai tay",
+      "Nhảy khỏi xích đu khi đang bay cao",
+      "Đẩy bạn thật mạnh"
+    ],
+    "answer_hash": "7afee3af6dac3b9c61f10e62231d617fb61b1db8bc3ce00fc7b8676fdf301c58",
+    "salt": "zqipyyuu"
+  },
+  {
+    "id": "excel_q_7_1782571759920",
+    "question": "Nếu thấy một chú chó lạ đang đi dạo trong công viên, em nên làm gì?",
+    "options": [
+      "Chạy lại ôm và vuốt ve",
+      "Trêu chọc chú chó",
+      "Đứng yên hoặc đi chậm ra xa, không nhìn chằm chằm",
+      "Ném đá vào chú chó"
+    ],
+    "answer_hash": "d4e3fe2abc5745cdd0e2512e954ebb574d5a1f6c283802204c131721f50ad3d8",
+    "salt": "rmmgvxid"
+  },
+  {
+    "id": "excel_q_8_1782571759920",
+    "question": "Khi muốn vứt rác ở công viên, em nên vứt ở đâu?",
+    "options": [
+      "Vứt ngay dưới gốc cây",
+      "Vứt xuống hồ nước",
+      "Bỏ vào thùng rác quy định",
+      "Giấu dưới ghế đá"
+    ],
+    "answer_hash": "0eed4a8ecb41387b38156c5c902c408fde9bcb9c1930453e5520a6bf0c93af02",
+    "salt": "uwy4t25g"
+  },
+  {
+    "id": "excel_q_9_1782571759920",
+    "question": "Nếu em bị trầy xước và chảy máu khi đang chơi, em nên làm gì?",
+    "options": [
+      "Giấu không cho ai biết",
+      "Rửa tay bằng nước bẩn",
+      "Báo ngay cho bố mẹ hoặc người lớn đi cùng",
+      "Tự lấy lá cây đắp lên"
+    ],
+    "answer_hash": "81eab3ff58fc4798e8eea5b775c2e95e437c93171a4bba317fab483ba8ead6cd",
+    "salt": "g274hnvi"
+  },
+  {
+    "id": "excel_q_10_1782571759920",
+    "question": "Khi chơi bập bênh, em cần chú ý điều gì?",
+    "options": [
+      "Nhảy xuống bất ngờ",
+      "Bám chặt tay cầm và phối hợp với bạn",
+      "Đứng trên bập bênh",
+      "Ngồi quay lưng lại"
+    ],
+    "answer_hash": "add185c685a5f2722024c42b08e3971b17078df7278ffc4c393e9e8fc9a59a26",
+    "salt": "uhlmcj6r"
+  },
+  {
+    "id": "excel_q_11_1782571759920",
+    "question": "Nếu bạn em bị ngã xuống hồ nước, em nên làm gì?",
+    "options": [
+      "Nhảy xuống cứu bạn",
+      "Khóc lóc",
+      "Hô hoán thật to nhờ người lớn giúp đỡ",
+      "Bỏ chạy"
+    ],
+    "answer_hash": "ddd50c7ed98208c850cb41ea226c79c30239030a17ebb869745df245317a3b8a",
+    "salt": "5q0fs9xj"
+  },
+  {
+    "id": "excel_q_12_1782571759920",
+    "question": "Khi đi dạo gần hồ nước, em nên đi như thế nào?",
+    "options": [
+      "Chạy nhảy sát mép hồ",
+      "Đi chậm rãi, cách xa mép nước",
+      "Trèo lên lan can hồ",
+      "Ném đá xuống hồ"
+    ],
+    "answer_hash": "6c8dc7fc5fca0c825d4db3b7239b679da8c4acc11f623f37f50fad645184747a",
+    "salt": "lgqqea15"
+  },
+  {
+    "id": "excel_q_13_1782571759920",
+    "question": "Nếu trời bỗng nhiên đổ mưa to và có sấm sét, em nên trú ở đâu?",
+    "options": [
+      "Dưới gốc cây to",
+      "Trong nhà chòi hoặc khu vực có mái che an toàn",
+      "Giữa bãi cỏ rộng",
+      "Dưới cột điện"
+    ],
+    "answer_hash": "70f7d83f6daf7e262afb7929b773cb0ce6c5e85f45568866b735dca340e97396",
+    "salt": "mqc057vn"
+  },
+  {
+    "id": "excel_q_14_1782571759920",
+    "question": "Khi thấy một tổ ong trên cây, em nên làm gì?",
+    "options": [
+      "Lấy gậy chọc vào tổ ong",
+      "Ném đá vào tổ ong",
+      "Tránh xa và không trêu chọc",
+      "Rủ bạn đến xem gần"
+    ],
+    "answer_hash": "dd3448665830024d9a6ed7daec913ec73304bcb08d503b28ad37b796660049f9",
+    "salt": "z0f303d2"
+  },
+  {
+    "id": "excel_q_15_1782571759920",
+    "question": "Nếu bị ong đốt, em nên làm gì?",
+    "options": [
+      "Gãi thật mạnh",
+      "Bôi bùn đất lên",
+      "Báo cho người lớn để xử lý",
+      "Bắt con ong đó"
+    ],
+    "answer_hash": "d70439db38ff05a94971ec8c0a149342c80776023bb42121ac563df7db6cb7de",
+    "salt": "e5bii2i7"
+  },
+  {
+    "id": "excel_q_16_1782571759920",
+    "question": "Khi khát nước ở công viên, em nên uống nước gì?",
+    "options": [
+      "Nước trong hồ",
+      "Nước vòi phun nước",
+      "Nước lọc mang theo hoặc mua ở nơi đảm bảo",
+      "Nước mưa"
+    ],
+    "answer_hash": "6be646a711a08f8726b058b36b0a472c58a52d0a839b32b7497265aff5016d21",
+    "salt": "9smixw5x"
+  },
+  {
+    "id": "excel_q_17_1782571759920",
+    "question": "Nếu có người lạ cố tình kéo tay em đi, em phải làm gì?",
+    "options": [
+      "Im lặng đi theo",
+      "Hét thật to 'Cứu cháu với, người này bắt cóc cháu!'",
+      "Cắn vào tay họ",
+      "Cả B và C đều đúng"
+    ],
+    "answer_hash": "87cb9a4c63053d4cbde1c5d699e61318af936be988ad4910d57c23de3e469781",
+    "salt": "lm8ucmy8"
+  },
+  {
+    "id": "excel_q_18_1782571759920",
+    "question": "Khi đi vệ sinh ở công viên, em nên đi cùng ai?",
+    "options": [
+      "Đi một mình",
+      "Đi cùng bố mẹ hoặc người lớn đi cùng",
+      "Đi cùng một người lạ",
+      "Đi cùng một em bé nhỏ hơn"
+    ],
+    "answer_hash": "ce2211f992b1d08ba26fb41697aae9cdccfdb855b20532dcfbfcf90bc757a94d",
+    "salt": "517d4tlz"
+  },
+  {
+    "id": "excel_q_19_1782571759920",
+    "question": "Nếu em nhặt được đồ rơi của người khác ở công viên, em nên làm gì?",
+    "options": [
+      "Lấy làm của riêng",
+      "Vứt đi chỗ khác",
+      "Đưa cho bố mẹ hoặc chú bảo vệ để trả lại",
+      "Giấu đi"
+    ],
+    "answer_hash": "f0185ae7838792b303e3f3b8be929ff85d01c9ff38b3ccb145388b78604ac456",
+    "salt": "lqm3t83f"
+  },
+  {
+    "id": "excel_q_20_1782571759920",
+    "question": "Khi chơi leo trèo trên các thiết bị, em không nên làm gì?",
+    "options": [
+      "Bám chắc tay",
+      "Chú ý bước chân",
+      "Xô đẩy bạn khác",
+      "Nhường bạn chơi cùng"
+    ],
+    "answer_hash": "4afe70e38788e964f76f6a64dfd0caee74e7861961d197ac599bfadb8344c647",
+    "salt": "z0noue0q"
+  },
+  {
+    "id": "excel_q_21_1782571759920",
+    "question": "Nếu em cảm thấy mệt và chóng mặt vì nắng nóng, em nên làm gì?",
+    "options": [
+      "Tiếp tục chơi",
+      "Chạy thật nhanh",
+      "Tìm chỗ bóng râm nghỉ ngơi và uống nước",
+      "Nằm ra giữa đường"
+    ],
+    "answer_hash": "29d7c9573faa24d4eea978053f97f0870927d198c050bdf42dcf8b29637a0345",
+    "salt": "klr1syu5"
+  },
+  {
+    "id": "excel_q_22_1782571759920",
+    "question": "Khi ăn vặt ở công viên, trước khi ăn em cần làm gì?",
+    "options": [
+      "Rửa tay sạch sẽ hoặc dùng nước rửa tay khô",
+      "Cứ thế bốc ăn",
+      "Chùi tay vào quần áo",
+      "Rửa tay bằng nước hồ"
+    ],
+    "answer_hash": "fbdf1084ce588ea3b4b6331aa9f9d168cc659068cec4b6147934f968345da2f0",
+    "salt": "3umzjxeg"
+  },
+  {
+    "id": "excel_q_23_1782571759920",
+    "question": "Nếu một bạn nhỏ khác tranh đồ chơi với em, em nên làm gì?",
+    "options": [
+      "Đánh bạn",
+      "Khóc lóc",
+      "Nhường bạn hoặc nói chuyện hòa bình, nhờ người lớn can thiệp",
+      "Giật lại bằng được"
+    ],
+    "answer_hash": "93832985ea11b7424fa36f693b3f4f15c4fee473b991a0f0407751f0a4214a4b",
+    "salt": "67ifl9xt"
+  },
+  {
+    "id": "excel_q_24_1782571759920",
+    "question": "Khi đi xe đạp trong công viên, em nên đi ở đâu?",
+    "options": [
+      "Đi trên bãi cỏ",
+      "Đi vào khu vực đông người đi bộ",
+      "Đi đúng làn đường dành cho xe đạp",
+      "Đi xuống cầu thang"
+    ],
+    "answer_hash": "7aae2876360a7f3071ed17a5c107bf40d29679a28baebf27fe1c96a52987cbcc",
+    "salt": "bonic1kh"
+  },
+  {
+    "id": "excel_q_25_1782571759920",
+    "question": "Nếu em muốn chơi một trò chơi nhưng có rất đông người đang đợi, em nên làm gì?",
+    "options": [
+      "Chen lấn lên trước",
+      "Xếp hàng chờ đến lượt",
+      "Bỏ đi không chơi nữa",
+      "Đẩy các bạn khác ra"
+    ],
+    "answer_hash": "cfc60b583bd94fdbff8051a1793da6843fa028c8aeeaf9909f08df225752ef5a",
+    "salt": "sx94g6iq"
+  },
+  {
+    "id": "excel_q_26_1782571759920",
+    "question": "Khi thấy một bông hoa rất đẹp trong công viên, em có nên hái không?",
+    "options": [
+      "Có, hái mang về",
+      "Không, chỉ ngắm và để hoa làm đẹp công viên",
+      "Hái tặng bạn",
+      "Ngắt cánh hoa chơi"
+    ],
+    "answer_hash": "0c189e2ed05fe9e9a502925981706c1a9693b9732b74641a9d3144859f4d0871",
+    "salt": "crwdmf6e"
+  },
+  {
+    "id": "excel_q_27_1782571759920",
+    "question": "Nếu em đi dạo vào buổi tối ở công viên, em nên đi ở khu vực nào?",
+    "options": [
+      "Chỗ tối tăm không có đèn",
+      "Khu vực có nhiều ánh sáng đèn và đông người",
+      "Chỗ bụi rậm",
+      "Đi ra bờ hồ tối"
+    ],
+    "answer_hash": "67bdf1e765f97594575f1ffae96bce06280ff5d903a7d90e6c8c2553da3736dd",
+    "salt": "62e1umk9"
+  },
+  {
+    "id": "excel_q_28_1782571759920",
+    "question": "Khi người lạ hỏi đường, em nên làm gì?",
+    "options": [
+      "Dẫn họ đi đến tận nơi",
+      "Chỉ đường từ xa, tuyệt đối không đi theo họ",
+      "Lên xe họ để chỉ đường",
+      "Chạy trốn"
+    ],
+    "answer_hash": "5f400cd8dc30a960c6a120309887a6732548f31605335daf34484c5702a431b1",
+    "salt": "y8ggbykj"
+  },
+  {
+    "id": "excel_q_29_1782571759920",
+    "question": "Nếu bố mẹ hẹn em ở một địa điểm nếu bị lạc, em nên làm gì khi lạc?",
+    "options": [
+      "Đi tìm bố mẹ khắp nơi",
+      "Đi đến đúng địa điểm đã hẹn và đứng chờ",
+      "Về nhà",
+      "Đi chơi tiếp"
+    ],
+    "answer_hash": "dca6ff6c30fb1386918831382ec5c5a54d6f420a572d2ab823093b5b24078814",
+    "salt": "xkpa4lc7"
+  },
+  {
+    "id": "excel_q_30_1782571759920",
+    "question": "Khi có báo động cháy hoặc sự cố ở công viên, em nên làm gì?",
+    "options": [
+      "Chạy hoảng loạn",
+      "Bình tĩnh nghe theo hướng dẫn của người lớn và ban quản lý",
+      "Đứng xem",
+      "Trốn vào nhà vệ sinh"
+    ],
+    "answer_hash": "db0392374a915a2710e4d571a6ba6a9fadd0122413bb5cbecd9041eb38a275d4",
+    "salt": "sh4fbdwh"
+  },
+  {
+    "id": "excel_q_31_1782571759920",
+    "question": "Nếu thấy một đồ vật lạ, bọc kín vô chủ ở ghế đá, em nên làm gì?",
+    "options": [
+      "Mở ra xem",
+      "Cầm lên chơi",
+      "Tránh xa và báo cho người lớn hoặc bảo vệ",
+      "Đá nó đi"
+    ],
+    "answer_hash": "277524bc586ee2b06ca53068f8c9657dbbfef507feab0ec67ab176c6dd1e9d7f",
+    "salt": "fu69k2p7"
+  },
+  {
+    "id": "excel_q_32_1782571759920",
+    "question": "Khi đi giày trượt patin trong công viên, em cần trang bị gì?",
+    "options": [
+      "Chỉ cần giày trượt",
+      "Đội mũ bảo hiểm và đeo đồ bảo hộ chân tay",
+      "Đeo kính râm",
+      "Cầm theo đồ ăn"
+    ],
+    "answer_hash": "00e1c02a9159efdb96f250a292b43bc49a1e1ceece8aad01e17ab50935597b84",
+    "salt": "62gqno7s"
+  },
+  {
+    "id": "excel_q_33_1782571759920",
+    "question": "Nếu em bị bạn bè trêu chọc quá mức ở công viên, em nên làm gì?",
+    "options": [
+      "Đánh lại bạn",
+      "Im lặng chịu đựng",
+      "Tránh đi chỗ khác và báo cho người lớn",
+      "Trêu lại bạn"
+    ],
+    "answer_hash": "f1a730d32c82584afaa5d5748f20f00d26c655c621dd07c3fb37e3922524caa3",
+    "salt": "lv8ymbcf"
+  },
+  {
+    "id": "excel_q_34_1782571759920",
+    "question": "Khi đi qua đường trong khu vực công viên, em cần chú ý gì?",
+    "options": [
+      "Cứ thế chạy qua",
+      "Nhìn trái, nhìn phải xem có xe không rồi mới đi",
+      "Vừa đi vừa dùng điện thoại",
+      "Nhắm mắt đi qua"
+    ],
+    "answer_hash": "4ae3e460236e31b1ede777b873977f0b9a96b83e0635e39edc2409ee64c3ccb1",
+    "salt": "ay344a4h"
+  },
+  {
+    "id": "excel_q_35_1782571759920",
+    "question": "Nếu em muốn cho động vật trong công viên ăn, em nên làm gì?",
+    "options": [
+      "Cho chúng ăn bất cứ thứ gì em có",
+      "Ném thức ăn vào người chúng",
+      "Chỉ cho ăn thức ăn được phép và theo hướng dẫn",
+      "Trêu chọc khi chúng đang ăn"
+    ],
+    "answer_hash": "85fc3db0dc37f3e95ea802eec8c2d33710685068ffc84a28f75ced5343f18f95",
+    "salt": "2n62lmv0"
+  },
+  {
+    "id": "excel_q_36_1782571759920",
+    "question": "Khi thời tiết trở nên quá lạnh, em nên làm gì?",
+    "options": [
+      "Cởi bớt áo",
+      "Uống nước đá",
+      "Mặc thêm áo ấm và tránh gió",
+      "Chạy nhảy cho ra mồ hôi rồi cởi áo"
+    ],
+    "answer_hash": "8c69a4cca2b381a0dd54e9ccf43f9aa69c92882be70a66f23912f23e1a068b6e",
+    "salt": "30q6x2sa"
+  },
+  {
+    "id": "excel_q_37_1782571759920",
+    "question": "Nếu em thấy một bạn nhỏ đang khóc vì bị lạc, em nên làm gì?",
+    "options": [
+      "Cười chê bạn",
+      "Mặc kệ bạn",
+      "Báo cho bố mẹ em hoặc chú bảo vệ để giúp bạn",
+      "Dọa bạn thêm"
+    ],
+    "answer_hash": "76bfce12cc0bb7d87bc0fac27096e0d7996af9ae09265743c6800a1f7e0725e1",
+    "salt": "ihigar8v"
+  },
+  {
+    "id": "excel_q_38_1782571759920",
+    "question": "Khi chơi thả diều, em nên chọn khu vực nào?",
+    "options": [
+      "Gần đường dây điện",
+      "Chỗ có nhiều cây cối",
+      "Bãi đất trống, không có dây điện",
+      "Gần đường xe chạy"
+    ],
+    "answer_hash": "82515bd9b23efd6bbf61bc0b3532c5eae65e142277f1fada88d9a4af84f0a7e7",
+    "salt": "1qn9n9tq"
+  },
+  {
+    "id": "excel_q_39_1782571759920",
+    "question": "Nếu dây diều bị vướng vào cột điện, em nên làm gì?",
+    "options": [
+      "Tự trèo lên gỡ",
+      "Dùng gậy chọc",
+      "Bỏ diều, tuyệt đối không cố lấy lại",
+      "Ném đá cho diều rớt xuống"
+    ],
+    "answer_hash": "24c9237c1a1209d15a8f4e0a5d5095254d0301a409cb7f774f6e93f209483c0b",
+    "salt": "ykeyi8qx"
+  },
+  {
+    "id": "excel_q_40_1782571759920",
+    "question": "Khi đi dã ngoại ở công viên, em nên làm gì với rác của mình?",
+    "options": [
+      "Để lại trên bãi cỏ",
+      "Thu gom vào túi và bỏ vào thùng rác",
+      "Đốt rác",
+      "Chôn xuống đất"
+    ],
+    "answer_hash": "7295d8ab2e3b567d8f0ee6ff7cde4c094cdf72cdd5213366c88e740acd853dbd",
+    "salt": "1l8gmxkl"
+  },
+  {
+    "id": "excel_q_41_1782571759920",
+    "question": "Nếu em muốn kết bạn với một bạn mới, em nên bắt đầu thế nào?",
+    "options": [
+      "Giật đồ chơi của bạn",
+      "Chào hỏi lịch sự và rủ bạn cùng chơi",
+      "Đứng nhìn chằm chằm",
+      "Trêu chọc bạn"
+    ],
+    "answer_hash": "311517d52e9be26c1ef7e51e905995049f50553e5322688aef2aaf09a736bdf7",
+    "salt": "5mtww50s"
+  },
+  {
+    "id": "excel_q_42_1782571759920",
+    "question": "Khi đang chơi mà buồn đi vệ sinh, em nên làm gì?",
+    "options": [
+      "Đi bậy ra gốc cây",
+      "Nhịn về nhà đi",
+      "Nhờ bố mẹ dẫn vào nhà vệ sinh công cộng",
+      "Đi xuống hồ nước"
+    ],
+    "answer_hash": "1b7509f464dd9400e1c889a79c56dee8c882f5632f03cf05ec2a334e3bf2828d",
+    "salt": "n1qsr78e"
+  },
+  {
+    "id": "excel_q_43_1782571759920",
+    "question": "Nếu em thấy biển báo 'Khu vực đang thi công', em nên làm gì?",
+    "options": [
+      "Tránh xa khu vực đó",
+      "Đi vào xem có gì vui",
+      "Lấy đồ nghề thi công ra chơi",
+      "Chạy qua thật nhanh"
+    ],
+    "answer_hash": "f9320f232b285bdf26727484cd69eff889956faaac49ecaab9b2549e03e4484c",
+    "salt": "a4l541et"
+  },
+  {
+    "id": "excel_q_44_1782571759920",
+    "question": "Khi chơi trong hố cát, em không nên làm gì?",
+    "options": [
+      "Xây lâu đài cát",
+      "Ném cát vào mắt bạn",
+      "Dùng khuôn tạo hình",
+      "Chia sẻ đồ chơi"
+    ],
+    "answer_hash": "8168b5effe691200e24a56e166da63a5a278eb1b50162a948299b6689825b554",
+    "salt": "dynjhsh6"
+  },
+  {
+    "id": "excel_q_45_1782571759920",
+    "question": "Nếu lỡ ném cát vào mắt bạn, em nên làm gì?",
+    "options": [
+      "Bỏ chạy",
+      "Cười bạn",
+      "Xin lỗi và nhờ người lớn rửa mắt cho bạn bằng nước sạch",
+      "Dụi mắt cho bạn"
+    ],
+    "answer_hash": "64bde9849b6940e4eac625e9a4f19d5250b70f29d09b7e362ad33d423ade766e",
+    "salt": "rj0dpw0o"
+  },
+  {
+    "id": "excel_q_46_1782571759920",
+    "question": "Khi tham gia một trò chơi tập thể, em nên thái độ thế nào?",
+    "options": [
+      "Tức giận khi thua",
+      "Tuân thủ luật chơi và vui vẻ dù thắng hay thua",
+      "Ăn gian để thắng",
+      "Không chơi với bạn yếu hơn"
+    ],
+    "answer_hash": "6b2c7530ff2f0b504bad525b02c206203486a0977b44985aaa3c83c7ebfd57f2",
+    "salt": "fkhudqnw"
+  },
+  {
+    "id": "excel_q_47_1782571759920",
+    "question": "Nếu em mang theo điện thoại thông minh, em nên chú ý gì?",
+    "options": [
+      "Vừa đi vừa cắm cúi xem điện thoại",
+      "Cất cẩn thận, chỉ dùng khi cần liên lạc",
+      "Khoe với người lạ",
+      "Vứt lung tung"
+    ],
+    "answer_hash": "d57c15c6f2712e5e7198fe58cb87f8057e41595b7c5c079dd8d8a6d5ff68f051",
+    "salt": "slthw330"
+  },
+  {
+    "id": "excel_q_48_1782571759920",
+    "question": "Khi thấy một người lạ đang chụp ảnh em mà chưa xin phép, em nên làm gì?",
+    "options": [
+      "Tạo dáng cho họ chụp",
+      "Đi chỗ khác và báo ngay cho bố mẹ",
+      "Lấy điện thoại chụp lại họ",
+      "Xin tiền họ"
+    ],
+    "answer_hash": "edbc6a2c957294d529c00f57cc3ab588b3a1a05d226d4cea1899331fb86f512c",
+    "salt": "ji998toc"
+  },
+  {
+    "id": "excel_q_49_1782571759920",
+    "question": "Nếu em bị dằm đâm vào tay khi bám vào ghế gỗ, em nên làm gì?",
+    "options": [
+      "Tự lấy kim khều ra",
+      "Báo cho người lớn để rút dằm và sát trùng",
+      "Cứ để vậy",
+      "Chà xát mạnh vào chỗ đó"
+    ],
+    "answer_hash": "b1b1595dc25887b08d599d03159d398d229f0009a680ffdc89bfcdd6417bd966",
+    "salt": "butw85ns"
+  },
+  {
+    "id": "excel_q_50_1782571759920",
+    "question": "Khi đi qua cầu gỗ trong công viên, em nên đi thế nào?",
+    "options": [
+      "Nhảy múa trên cầu",
+      "Đi cẩn thận, không xô đẩy",
+      "Đu bám lan can cầu",
+      "Chạy thật nhanh"
+    ],
+    "answer_hash": "40b2c0f7d7d5a6e8ecfff6121e9bc6aafa87650980ef4a57be4879f188f712b5",
+    "salt": "suchzfos"
+  },
+  {
+    "id": "excel_q_51_1782571759920",
+    "question": "Nếu em làm rơi đồ xuống nước, em nên làm gì?",
+    "options": [
+      "Tự nhoài người xuống vớt",
+      "Bỏ đi",
+      "Nhờ người lớn giúp đỡ",
+      "Khóc lóc"
+    ],
+    "answer_hash": "26ef1486f27f87deda0459297fd5d37ed5dfd02feefd92b185ec8f956c694215",
+    "salt": "s11b9ska"
+  },
+  {
+    "id": "excel_q_52_1782571759920",
+    "question": "Khi thấy biển cấm giẫm lên cỏ, em nên làm gì?",
+    "options": [
+      "Cứ giẫm lên",
+      "Tuân thủ và đi trên đường lát gạch",
+      "Đợi không có ai rồi giẫm",
+      "Nhổ cỏ chơi"
+    ],
+    "answer_hash": "927971b18d42598d8a11ad3b759f8d64717b8263f96b908208e609bf9727b022",
+    "salt": "7mnwcl4g"
+  },
+  {
+    "id": "excel_q_53_1782571759920",
+    "question": "Nếu người lạ mời em lên xe đi tìm bố mẹ, em sẽ nói gì?",
+    "options": [
+      "Vâng ạ",
+      "Cháu không đi, cháu đợi bố mẹ ở đây",
+      "Chú cho cháu mượn điện thoại",
+      "Cháu sẽ đi nếu chú cho kẹo"
+    ],
+    "answer_hash": "90cdbab42388006e95265d6684fb0b2f74a61f606cfecfec96481629ad4e4ed7",
+    "salt": "nm27r6rd"
+  },
+  {
+    "id": "excel_q_54_1782571759920",
+    "question": "Khi chơi trốn tìm ở công viên, em không nên trốn ở đâu?",
+    "options": [
+      "Sau thân cây to",
+      "Những nơi vắng vẻ, nguy hiểm, khó tìm",
+      "Sau ghế đá",
+      "Trong khu vui chơi"
+    ],
+    "answer_hash": "eb080796afa6c6ff87df48de6ea1492b5dc8fd8af847469da769b4a1166155d2",
+    "salt": "sqwq1asv"
+  },
+  {
+    "id": "excel_q_55_1782571759920",
+    "question": "Nếu em thấy một bạn đang bẻ cành cây, em nên làm gì?",
+    "options": [
+      "Bẻ cùng bạn",
+      "Cổ vũ bạn",
+      "Khuyên bạn không nên làm hỏng cây xanh",
+      "Mặc kệ bạn"
+    ],
+    "answer_hash": "2ce0178e0f62adfb03aba58e2d6688a77983ab3fe6624404f6009217421c87f8",
+    "salt": "0l36cmm9"
+  },
+  {
+    "id": "excel_q_56_1782571759920",
+    "question": "Khi chạy bộ trong công viên, em nên chú ý gì?",
+    "options": [
+      "Nhìn thẳng về phía trước, tránh va chạm",
+      "Vừa chạy vừa nhắm mắt",
+      "Chạy zíc zắc qua dòng người",
+      "Chạy vào đường xe đạp"
+    ],
+    "answer_hash": "787052c85b9497a763831a030ad055096de000df85d8f6ae29f04de817ac80ad",
+    "salt": "8aluvwq8"
+  },
+  {
+    "id": "excel_q_57_1782571759920",
+    "question": "Nếu em bị chảy máu cam, em nên làm gì?",
+    "options": [
+      "Ngửa cổ ra sau thật xa",
+      "Cúi nhẹ về phía trước, bóp nhẹ cánh mũi và báo người lớn",
+      "Nhét giấy ăn bẩn vào mũi",
+      "Khóc to"
+    ],
+    "answer_hash": "d824400b0776242733da6877e153606ebcb51dcb92d320dca531e8f7a0175200",
+    "salt": "6hhnia9j"
+  },
+  {
+    "id": "excel_q_58_1782571759920",
+    "question": "Khi đi chơi công viên vào mùa hè, em nên đội gì?",
+    "options": [
+      "Mũ len",
+      "Mũ rộng vành hoặc mũ lưỡi trai",
+      "Không đội gì",
+      "Đội nón lá rách"
+    ],
+    "answer_hash": "624105b3e2352d2cb1eb5be9983c2fe37ef7ea65b975eef14e7eb6a06a9d2a66",
+    "salt": "xcy3v7f5"
+  },
+  {
+    "id": "excel_q_59_1782571759920",
+    "question": "Nếu em mang theo thú cưng, em phải làm gì?",
+    "options": [
+      "Thả rông cho chạy thoải mái",
+      "Rọ mõm và dắt bằng dây",
+      "Cho cắn người khác",
+      "Để thú cưng phóng uế bừa bãi"
+    ],
+    "answer_hash": "6a6ef198f7ab34e366dac2011979803e56df9af8310649dcc15e16c838143aa9",
+    "salt": "gz62m0rd"
+  },
+  {
+    "id": "excel_q_60_1782571759920",
+    "question": "Khi người lạ khen em ngoan và muốn ôm em, em nên làm gì?",
+    "options": [
+      "Cho họ ôm",
+      "Lùi lại và nói 'Cháu không thích ạ'",
+      "Ôm lại họ",
+      "Cười và đứng yên"
+    ],
+    "answer_hash": "90c3bca3ec765078ac6a6b402a68c62ed8ab9ffc5efd4f8e88fd116fa83240f6",
+    "salt": "ezahboka"
+  },
+  {
+    "id": "excel_q_61_1782571759920",
+    "question": "Nếu em phát hiện mình quên mang nước uống, em nên làm gì?",
+    "options": [
+      "Xin nước của người lạ",
+      "Uống nước máy trong nhà vệ sinh",
+      "Xin bố mẹ mua nước",
+      "Nhịn khát cả ngày"
+    ],
+    "answer_hash": "2252438832fe5e21894cc992692ee0f0f80d8d356db75303038f8628d169ae4b",
+    "salt": "m1t4h94p"
+  },
+  {
+    "id": "excel_q_62_1782571759920",
+    "question": "Khi tham gia các trò chơi cảm giác mạnh (nếu có), em cần tuân thủ gì?",
+    "options": [
+      "Quy định về chiều cao và độ tuổi",
+      "Lén chơi dù không đủ tuổi",
+      "Không thắt dây an toàn",
+      "Đứng lên khi đang chơi"
+    ],
+    "answer_hash": "dc4891f4bdb770333e7f3901bf44b0ebae0ccd12ca220ae5e01d2736e7afdfd8",
+    "salt": "pnqfqmf6"
+  },
+  {
+    "id": "excel_q_63_1782571759920",
+    "question": "Nếu em thấy một người đang gặp nạn (ngất xỉu), em nên làm gì?",
+    "options": [
+      "Lại gần lay họ",
+      "Bỏ chạy",
+      "Hô hoán gọi người lớn đến giúp",
+      "Lấy đồ của họ"
+    ],
+    "answer_hash": "4ab2a1b9738e8bc1d222062f766d8fa8c5882271bcd1377cff24b356ebd91203",
+    "salt": "iohck0qi"
+  },
+  {
+    "id": "excel_q_64_1782571759920",
+    "question": "Khi đi dạo quanh hồ sen, em có được với tay hái hoa sen không?",
+    "options": [
+      "Có, vì hoa rất đẹp",
+      "Không, rất nguy hiểm vì có thể ngã xuống hồ",
+      "Chỉ hái khi có người lớn",
+      "Dùng gậy khều"
+    ],
+    "answer_hash": "5c24adcada86e4f140cff010cb47369b44586aa585a03acfcd2a540e8dc47d4a",
+    "salt": "hetshg3r"
+  },
+  {
+    "id": "excel_q_65_1782571759920",
+    "question": "Nếu em bị một bạn lớn tuổi hơn bắt nạt, em nên làm gì?",
+    "options": [
+      "Đánh lại",
+      "Báo cho bố mẹ hoặc bảo vệ",
+      "Đưa tiền cho bạn",
+      "Im lặng chịu đựng"
+    ],
+    "answer_hash": "5f188b9a9c443c8b83231139c6421b9c6952d5b7c1256f7e0228c5cc4ed17a2a",
+    "salt": "rokvsc44"
+  },
+  {
+    "id": "excel_q_66_1782571759920",
+    "question": "Khi chơi ở khu vực có nhiều cát sỏi, em cần cẩn thận điều gì?",
+    "options": [
+      "Trơn trượt, vấp ngã",
+      "Bị lún",
+      "Bị ướt",
+      "Bị bẩn áo"
+    ],
+    "answer_hash": "57c5d855da1a1611b35dc87dfd6b1aa08a136abb52507b58766ea81e154db11d",
+    "salt": "4lwwup3i"
+  },
+  {
+    "id": "excel_q_67_1782571759920",
+    "question": "Nếu em thấy có nhóm thanh niên đang đánh nhau, em nên làm gì?",
+    "options": [
+      "Đứng lại xem",
+      "Cổ vũ",
+      "Tránh xa khu vực đó và đi tìm người lớn",
+      "Lấy điện thoại quay phim"
+    ],
+    "answer_hash": "2e2f801a5f28e84ded80bbbca908b1197d7842d3a9cb7ef77f10c90a8c29f4da",
+    "salt": "wjab6z0x"
+  },
+  {
+    "id": "excel_q_68_1782571759920",
+    "question": "Khi đang chơi mà trời tối dần, em nên làm gì?",
+    "options": [
+      "Chơi tiếp trong bóng tối",
+      "Nhắc bố mẹ chuẩn bị về nhà",
+      "Trốn vào bụi rậm",
+      "Khóc vì sợ"
+    ],
+    "answer_hash": "4ec0ba4bfab2be59b88ed69e06675f996828cd5a55c8137e4fed561f3f6f720c",
+    "salt": "8tij7ppp"
+  },
+  {
+    "id": "excel_q_69_1782571759920",
+    "question": "Nếu em nhặt được một chiếc ví tiền, em sẽ đưa cho ai?",
+    "options": [
+      "Giữ lại tiêu",
+      "Đưa cho chú bảo vệ hoặc công an",
+      "Vứt vào thùng rác",
+      "Cho bạn bè"
+    ],
+    "answer_hash": "5ba9388ae2eddb59447feda35c1950ca511ac9b0607a91f2c87cb440edfe0621",
+    "salt": "nhio5m7g"
+  },
+  {
+    "id": "excel_q_70_1782571759920",
+    "question": "Khi đi ngang qua khu vực người ta đang cắt cỏ, em nên làm gì?",
+    "options": [
+      "Đứng xem",
+      "Đi nhanh qua hoặc đi đường vòng để tránh đá văng",
+      "Chạy vào nghịch máy",
+      "Lấy cỏ ném nhau"
+    ],
+    "answer_hash": "f5509e47be51b9c22a1e5d96a1c4b1f7edf24b9d145f3104f8aefbaaa67891ff",
+    "salt": "nbex19qw"
+  },
+  {
+    "id": "excel_q_71_1782571759920",
+    "question": "Nếu em bị côn trùng bay vào mắt, em nên làm gì?",
+    "options": [
+      "Dụi mắt liên tục",
+      "Nhờ người lớn thổi hoặc rửa mắt bằng nước sạch",
+      "Nhắm tịt mắt lại khóc",
+      "Dùng tay bẩn móc ra"
+    ],
+    "answer_hash": "d75de8f2d187141b3cd7adfcceb060e13f8e88141c39bde8dced3b6ee8794d44",
+    "salt": "z2pfqcot"
+  },
+  {
+    "id": "excel_q_72_1782571759920",
+    "question": "Khi đi công viên nước, em nhất thiết phải mặc gì?",
+    "options": [
+      "Quần áo mùa đông",
+      "Đồ bơi gọn gàng",
+      "Quần jean",
+      "Áo mưa"
+    ],
+    "answer_hash": "c8da3c7ce002aae7c32e56befea864817f3fc1f710abf8a1ddef335d8d58a9ee",
+    "salt": "iutqukdp"
+  },
+  {
+    "id": "excel_q_73_1782571759920",
+    "question": "Nếu em không biết bơi nhưng muốn xuống hồ bơi trẻ em, em cần gì?",
+    "options": [
+      "Phao bơi và sự giám sát của người lớn",
+      "Nhảy xuống luôn",
+      "Bám vào bạn khác",
+      "Nhắm mắt lại"
+    ],
+    "answer_hash": "65e83af6a08014cb72d50d5e69b6ab975a66e1633be34223d71f5b3ac1a3d1d2",
+    "salt": "km22owa8"
+  },
+  {
+    "id": "excel_q_74_1782571759920",
+    "question": "Khi ăn kem xong, que kem em xử lý thế nào?",
+    "options": [
+      "Vứt xuống đường",
+      "Bỏ vào thùng rác",
+      "Cắm xuống đất",
+      "Ném vào bạn"
+    ],
+    "answer_hash": "9604cc8253d5d1719845cef1ca21ae0ac680c12614702dbd6444f85709c68770",
+    "salt": "6aknrll2"
+  },
+  {
+    "id": "excel_q_75_1782571759920",
+    "question": "Nếu em thấy một chú chim non bị rơi khỏi tổ, em nên làm gì?",
+    "options": [
+      "Bắt về nuôi",
+      "Trêu chọc nó",
+      "Báo cho bảo vệ hoặc để yên không chạm vào",
+      "Ném đá nó"
+    ],
+    "answer_hash": "71b9d32a7e519ef330dba69f5de15f7c907474de29626441eb580e7878f33efd",
+    "salt": "d66tdyvg"
+  },
+  {
+    "id": "excel_q_76_1782571759920",
+    "question": "Khi chơi ném bóng, em nên ném ở đâu?",
+    "options": [
+      "Khu vực đông người",
+      "Bãi cỏ rộng, ít người qua lại",
+      "Gần cửa kính",
+      "Gần hồ nước"
+    ],
+    "answer_hash": "5d6ae48cc657c4b0e58fc90fde91877c2cc203686e8df5c1c7fc5b5a821394e3",
+    "salt": "x2anmtwj"
+  },
+  {
+    "id": "excel_q_77_1782571759920",
+    "question": "Nếu quả bóng rơi xuống đường giao thông, em nên làm gì?",
+    "options": [
+      "Chạy ra nhặt ngay lập tức",
+      "Nhờ người lớn quan sát an toàn rồi mới nhặt",
+      "Khóc lóc",
+      "Bỏ luôn quả bóng"
+    ],
+    "answer_hash": "71a189d2a9a8c24c04301b91d70fc70e58cccf0974ac5168af8e465b93e30cd3",
+    "salt": "yxx7o2cq"
+  },
+  {
+    "id": "excel_q_78_1782571759920",
+    "question": "Khi đi chơi xa trong công viên rộng, em nên mang theo gì?",
+    "options": [
+      "Thật nhiều đồ chơi",
+      "Chai nước và mũ nón",
+      "Tiền của bố mẹ",
+      "Máy tính bảng"
+    ],
+    "answer_hash": "05a84d7dcf1e7b8690f9532378648d32186ce56968c517cb1b516681fcb156b3",
+    "salt": "4aeuhvdy"
+  },
+  {
+    "id": "excel_q_79_1782571759920",
+    "question": "Nếu em bị say nắng, dấu hiệu nào cho thấy điều đó?",
+    "options": [
+      "Đói bụng",
+      "Hoa mắt, chóng mặt, buồn nôn",
+      "Buồn ngủ",
+      "Đau chân"
+    ],
+    "answer_hash": "e0eb7d6897d1453fbb0fa71e199295c9c8be704d0bdf96c12b9f07b22af1a225",
+    "salt": "0ki35dnv"
+  },
+  {
+    "id": "excel_q_80_1782571759920",
+    "question": "Khi bố mẹ đang mải nói chuyện với người khác, em có nên tự ý bỏ đi chơi không?",
+    "options": [
+      "Có, vì bố mẹ đang bận",
+      "Không, phải xin phép và được sự đồng ý",
+      "Rủ bạn đi cùng cho vui",
+      "Lén đi không ai biết"
+    ],
+    "answer_hash": "583ab9e942651fc466e45978f1a4139b9f19d1f46fa1394ba155798b7b5e7265",
+    "salt": "5ypwtd8w"
+  },
+  {
+    "id": "excel_q_81_1782571759920",
+    "question": "Nếu người lạ tự xưng là bạn của bố mẹ và muốn đón em về, em làm gì?",
+    "options": [
+      "Đi theo ngay",
+      "Không đi và gọi điện thoại xác nhận với bố mẹ",
+      "Lên xe họ",
+      "Xin kẹo họ"
+    ],
+    "answer_hash": "13f45b831ece1fdfca40325658a8c584be58bfcb1837cdce2a6aa58a7f2fa6b1",
+    "salt": "zjwk9juh"
+  },
+  {
+    "id": "excel_q_82_1782571759920",
+    "question": "Khi chơi ở khu vực có đài phun nước, em cần chú ý gì?",
+    "options": [
+      "Không chạy nhảy để tránh trơn trượt ngã",
+      "Uống nước từ đài phun",
+      "Ném rác vào đài phun",
+      "Tắm trong đài phun"
+    ],
+    "answer_hash": "a53984be019c18d6c2eaed54ae751992f4dcb63b9fbd06f93cfd8dba6565c289",
+    "salt": "ss8ycu8f"
+  },
+  {
+    "id": "excel_q_83_1782571759920",
+    "question": "Nếu em bị đau bụng khi đang ở công viên, em nên làm gì?",
+    "options": [
+      "Chịu đựng",
+      "Báo ngay cho bố mẹ để tìm cách xử lý",
+      "Uống nước hồ",
+      "Nằm ra ghế đá"
+    ],
+    "answer_hash": "ecc0e6895d17f3fd2bccd47a348ef5100f92c5d748629d5b463ec95be5169c5d",
+    "salt": "db96ukq0"
+  },
+  {
+    "id": "excel_q_84_1782571759920",
+    "question": "Khi có người lạ xin chụp ảnh chung với em, em nên làm gì?",
+    "options": [
+      "Đồng ý ngay",
+      "Từ chối và đi ra chỗ bố mẹ",
+      "Đòi tiền",
+      "Làm mặt xấu"
+    ],
+    "answer_hash": "5c20218e66e0458e61379b6d2a64d13295069d3340a2e643ce088d48373b9b1b",
+    "salt": "4aw7iums"
+  },
+  {
+    "id": "excel_q_85_1782571759920",
+    "question": "Nếu em thấy một khu vực có rào chắn và biển báo nguy hiểm, em có nên vượt qua không?",
+    "options": [
+      "Có, để khám phá",
+      "Không, tuyệt đối tuân thủ biển báo",
+      "Trèo qua xem một tí rồi về",
+      "Rủ bạn cùng trèo"
+    ],
+    "answer_hash": "1b717a06ed6938391f4e989261ab225af65a60c10b86d818a8abaaba098d67d3",
+    "salt": "a1a5eey6"
+  },
+  {
+    "id": "excel_q_86_1782571759920",
+    "question": "Khi chơi cầu lông trong công viên, em nên chọn vị trí nào?",
+    "options": [
+      "Chỗ có nhiều gió",
+      "Khu vực bằng phẳng, ít người qua lại",
+      "Giữa đường đi bộ",
+      "Gần bãi xe"
+    ],
+    "answer_hash": "52a2a6754dbbbf7499fda4e64f6054891ced703236909c8897f3af470b943519",
+    "salt": "qmkag892"
+  },
+  {
+    "id": "excel_q_87_1782571759920",
+    "question": "Nếu em lỡ làm vỡ một chậu hoa của công viên, em nên làm gì?",
+    "options": [
+      "Bỏ chạy trốn",
+      "Đổ lỗi cho bạn khác",
+      "Xin lỗi và nhờ bố mẹ báo với ban quản lý",
+      "Giấu mảnh vỡ đi"
+    ],
+    "answer_hash": "d7c746c347af39a9756800d180e514c10cb20e68411e0a9476dc8bb5733264ad",
+    "salt": "jisvp3nq"
+  },
+  {
+    "id": "excel_q_88_1782571759920",
+    "question": "Khi thấy một bạn nhỏ xả rác bừa bãi, em có thể làm gì?",
+    "options": [
+      "Chửi bạn",
+      "Nhắc nhở bạn nhẹ nhàng bỏ rác vào thùng",
+      "Xả rác theo bạn",
+      "Đánh bạn"
+    ],
+    "answer_hash": "f62684b5e4008fd9a6810cdf11d68130731ebc850df67c76d4dab9ef44b479d8",
+    "salt": "5j29hutx"
+  },
+  {
+    "id": "excel_q_89_1782571759920",
+    "question": "Nếu em mang theo đồ ăn có mùi thơm, em cần chú ý gì với động vật hoang dã (như khỉ, sóc)?",
+    "options": [
+      "Cất kín để chúng không lao vào cướp",
+      "Giơ ra nhử chúng",
+      "Ném cho chúng ăn bừa bãi",
+      "Đuổi đánh chúng"
+    ],
+    "answer_hash": "3eef2d6fedb5e58be0c552591adbc574ecb1466d8eef07c33f1ae498f0baf8dd",
+    "salt": "zd0pa8p4"
+  },
+  {
+    "id": "excel_q_90_1782571759920",
+    "question": "Khi đi vệ sinh công cộng, em cần giữ gìn vệ sinh chung bằng cách nào?",
+    "options": [
+      "Xả nước sau khi dùng",
+      "Vứt giấy vệ sinh bừa bãi",
+      "Vẽ bậy lên tường",
+      "Giẫm lên bồn cầu"
+    ],
+    "answer_hash": "869817d839dac8f11d7365bc5401884a1e6ade1f695baa7ab59c784c88a6ce0d",
+    "salt": "hv8g3ule"
+  },
+  {
+    "id": "excel_q_91_1782571759920",
+    "question": "Nếu em thấy có người hút thuốc lá ở khu vực cấm hút thuốc, em nên làm gì?",
+    "options": [
+      "Đứng hít khói",
+      "Tránh xa khu vực đó để không hít phải khói độc",
+      "Giật điếu thuốc",
+      "Khóc to"
+    ],
+    "answer_hash": "16d40bebdd6b81aa58309c4813ecc10c9a8b30b82a04b57102b942587f3968d4",
+    "salt": "6dlrw1im"
+  },
+  {
+    "id": "excel_q_92_1782571759920",
+    "question": "Khi chuẩn bị ra về, em cần làm gì?",
+    "options": [
+      "Bỏ quên đồ chơi",
+      "Kiểm tra lại đồ đạc cá nhân và dọn sạch rác của mình",
+      "Chạy về trước",
+      "Đòi mua thêm đồ"
+    ],
+    "answer_hash": "50a46340657b807cc3ef4db71296e0bc38b6e4b3f52725ec0bbc9e1ae9e9b9db",
+    "salt": "yza6shca"
+  },
+  {
+    "id": "excel_q_93_1782571759920",
+    "question": "Nếu em bị một con chó đuổi theo, em nên làm gì?",
+    "options": [
+      "Chạy thật nhanh",
+      "Đứng yên như bức tượng, không nhìn vào mắt nó",
+      "La hét và vung tay",
+      "Ném đá lại nó"
+    ],
+    "answer_hash": "b1d86293ea7e3269c80c61a1efde0eca4d68304891b947614beac31af919cf60",
+    "salt": "kd1fr3eb"
+  },
+  {
+    "id": "excel_q_94_1782571759920",
+    "question": "Khi muốn băng qua một bãi cỏ rộng, em nên làm gì?",
+    "options": [
+      "Đi theo lối mòn hoặc đường lát gạch nếu có",
+      "Cứ đi thẳng qua",
+      "Chạy xe đạp lên cỏ",
+      "Đào bới cỏ"
+    ],
+    "answer_hash": "6459fb6f3b85019a563c44249df60523791782270a2acaf241f6ff909874cffb",
+    "salt": "s5ajsnpr"
+  },
+  {
+    "id": "excel_q_95_1782571759921",
+    "question": "Nếu em thấy một người đang phá hoại tài sản công viên (như bẻ ghế, đập đèn), em nên làm gì?",
+    "options": [
+      "Bắt chước làm theo",
+      "Đứng xem",
+      "Tránh xa và báo cho bảo vệ",
+      "Lại gần can ngăn"
+    ],
+    "answer_hash": "58f6dc95f75443cd03ebab02c43af40bd70d918c2491ce3b7f7633fd4573665a",
+    "salt": "oyvpf7xu"
+  },
+  {
+    "id": "excel_q_96_1782571759921",
+    "question": "Khi chơi trò chơi trốn tìm, em nên quy định gì với các bạn?",
+    "options": [
+      "Không có giới hạn khu vực",
+      "Giới hạn khu vực chơi an toàn, dễ quan sát",
+      "Trốn càng xa càng tốt",
+      "Trốn ngoài đường"
+    ],
+    "answer_hash": "7a9c1ace92935504532a46dfc0f1798562e8d0255201d278c198841cd645e829",
+    "salt": "dvl7r88l"
+  },
+  {
+    "id": "excel_q_97_1782571759921",
+    "question": "Nếu em muốn mua đồ chơi ở công viên, em nên làm gì?",
+    "options": [
+      "Tự ý lấy tiền đi mua",
+      "Ăn vạ đòi bố mẹ mua",
+      "Xin phép bố mẹ đàng hoàng",
+      "Lấy trộm của người bán"
+    ],
+    "answer_hash": "8d652cfc7f005fffc90698489c5728df5adb53fa9a1b211e9382e134aa45830d",
+    "salt": "py7okkf9"
+  },
+  {
+    "id": "excel_q_98_1782571759921",
+    "question": "Khi thời tiết bất ngờ có gió lốc, em nên làm gì?",
+    "options": [
+      "Đứng xem gió",
+      "Tìm nơi trú ẩn kiên cố, tránh xa cây to",
+      "Chạy ra giữa sân",
+      "Trèo lên cây"
+    ],
+    "answer_hash": "1967e16f834c8f9ca4c6f7619c72dd253b5a98c118b5ede92a9277bdfaa5b341",
+    "salt": "3sv3td2l"
+  },
+  {
+    "id": "excel_q_99_1782571759921",
+    "question": "Kỹ năng quan trọng nhất khi đi chơi công viên là gì?",
+    "options": [
+      "Luôn giữ khoảng cách an toàn và trong tầm mắt của người lớn",
+      "Chơi được nhiều trò chơi nhất",
+      "Mua được nhiều đồ chơi",
+      "Chạy nhanh nhất"
+    ],
+    "answer_hash": "8abca347f695fa790bbd542f12185b5d44545b45766e0fe51dc9f09b9e094bb4",
+    "salt": "0re5rsjk"
+  }
+]
