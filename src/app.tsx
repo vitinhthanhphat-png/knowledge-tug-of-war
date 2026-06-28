@@ -155,6 +155,15 @@ const resumeAudioContext = (): AudioContext | null => {
 
 let isBgmIntendedToPlay = false;
 let isInGameIntendedToPlay = false;
+let isBgmLoading = false;
+let isInGameLoading = false;
+
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    if (bgmSource) { try { bgmSource.stop(); } catch(e){} }
+    if (inGameSource) { try { inGameSource.stop(); } catch(e){} }
+  });
+}
 
 let bgmLoadPromise: Promise<AudioBuffer | null> | null = null;
 const loadBgmBuffer = async (ctx: AudioContext) => {
@@ -210,48 +219,58 @@ export const stopInGameMusic = () => {
 
 export const playStartScreenMusic = async () => {
   isBgmIntendedToPlay = true;
-  if (bgmSource) return; // already playing
-  const ctx = initAudio();
-  if (!ctx) return;
-  if (ctx.state === 'suspended') {
-    await ctx.resume().catch(() => {});
+  if (bgmSource || isBgmLoading) return; // already playing or loading
+  isBgmLoading = true;
+  try {
+    const ctx = initAudio();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') {
+      await ctx.resume().catch(() => {});
+    }
+    const buffer = await loadBgmBuffer(ctx);
+    if (!buffer) return;
+
+    if (bgmSource || !isBgmIntendedToPlay) return; // check again after async
+    bgmGain = ctx.createGain();
+    bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
+    bgmGain.connect(ctx.destination);
+
+    bgmSource = ctx.createBufferSource();
+    bgmSource.buffer = buffer;
+    bgmSource.loop = true;
+    bgmSource.connect(bgmGain);
+    bgmSource.start();
+  } finally {
+    isBgmLoading = false;
   }
-  const buffer = await loadBgmBuffer(ctx);
-  if (!buffer) return;
-
-  if (bgmSource || !isBgmIntendedToPlay) return; // check again after async
-  bgmGain = ctx.createGain();
-  bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
-  bgmGain.connect(ctx.destination);
-
-  bgmSource = ctx.createBufferSource();
-  bgmSource.buffer = buffer;
-  bgmSource.loop = true;
-  bgmSource.connect(bgmGain);
-  bgmSource.start();
 };
 
 export const playInGameMusic = async () => {
   isInGameIntendedToPlay = true;
-  if (inGameSource) return; // already playing
-  const ctx = initAudio();
-  if (!ctx) return;
-  if (ctx.state === 'suspended') {
-    await ctx.resume().catch(() => {});
+  if (inGameSource || isInGameLoading) return; // already playing or loading
+  isInGameLoading = true;
+  try {
+    const ctx = initAudio();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') {
+      await ctx.resume().catch(() => {});
+    }
+    const buffer = await loadInGameBuffer(ctx);
+    if (!buffer) return;
+
+    if (inGameSource || !isInGameIntendedToPlay) return; // check again after async
+    inGameGain = ctx.createGain();
+    inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
+    inGameGain.connect(ctx.destination);
+
+    inGameSource = ctx.createBufferSource();
+    inGameSource.buffer = buffer;
+    inGameSource.loop = true;
+    inGameSource.connect(inGameGain);
+    inGameSource.start();
+  } finally {
+    isInGameLoading = false;
   }
-  const buffer = await loadInGameBuffer(ctx);
-  if (!buffer) return;
-
-  if (inGameSource || !isInGameIntendedToPlay) return; // check again after async
-  inGameGain = ctx.createGain();
-  inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
-  inGameGain.connect(ctx.destination);
-
-  inGameSource = ctx.createBufferSource();
-  inGameSource.buffer = buffer;
-  inGameSource.loop = true;
-  inGameSource.connect(inGameGain);
-  inGameSource.start();
 };
 
 const playBuzzSound = () => {
