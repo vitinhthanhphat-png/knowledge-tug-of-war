@@ -1216,13 +1216,13 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 {state.context.activeTeam === 'team1' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#22c55e_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-primary-container/0 glow-pulse bg-green-100/95' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-white glow-pulse bg-green-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
-                  <span className="font-headline-lg text-headline-lg text-primary">Đội 1 (Trái)</span>
+                  <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team1' ? 'text-white drop-shadow-md' : 'text-primary'}`}>Đội 1 (Trái)</span>
                   <div className="flex items-center gap-xs">
-                    <span className="material-symbols-outlined text-primary-container" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                    <span className="font-body-lg font-bold text-on-surface whitespace-nowrap">
-                      Lực kéo: <span className="text-3xl font-black text-primary drop-shadow-sm mx-1">{state.context.score.team1 * 10}</span> Lực
+                    <span className={`material-symbols-outlined ${state.context.activeTeam === 'team1' ? 'text-yellow-300' : 'text-primary-container'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team1' ? 'text-green-100' : 'text-on-surface'}`}>
+                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${state.context.activeTeam === 'team1' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-primary'}`}>{state.context.score.team1 * 10}</span> Lực
                     </span>
                   </div>
                 </div>
@@ -1280,13 +1280,13 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 {state.context.activeTeam === 'team2' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#f97316_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-secondary-container/0 glow-pulse bg-orange-100/95' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-white glow-pulse bg-orange-500 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(249,115,22,0.6)] mix-blend-multiply" />
-                  <span className="font-headline-lg text-headline-lg text-secondary">Đội 2 (Phải)</span>
+                  <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-md' : 'text-secondary'}`}>Đội 2 (Phải)</span>
                   <div className="flex items-center gap-xs">
-                    <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                    <span className="font-body-lg font-bold text-on-surface whitespace-nowrap">
-                      Lực kéo: <span className="text-3xl font-black text-secondary drop-shadow-sm mx-1">{state.context.score.team2 * 10}</span> Lực
+                    <span className={`material-symbols-outlined ${state.context.activeTeam === 'team2' ? 'text-yellow-300' : 'text-secondary'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team2' ? 'text-orange-100' : 'text-on-surface'}`}>
+                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-secondary'}`}>{state.context.score.team2 * 10}</span> Lực
                     </span>
                   </div>
                 </div>
