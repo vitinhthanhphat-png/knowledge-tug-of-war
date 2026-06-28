@@ -1216,7 +1216,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 {state.context.activeTeam === 'team1' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#22c55e_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-white glow-pulse bg-green-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                <div className={`px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-white glow-pulse bg-green-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
                   <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team1' ? 'text-white drop-shadow-md' : 'text-primary'}`}>Đội 1 (Trái)</span>
                   <div className="flex items-center gap-xs">
@@ -1276,16 +1276,16 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
             {/* Team 2 (Right) */}
             <div className="flex flex-col items-end gap-sm">
-              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_40px_rgba(249,115,22,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_40px_rgba(59,130,246,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
                 {state.context.activeTeam === 'team2' && (
-                  <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#f97316_100%)] z-0" />
+                  <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#3b82f6_100%)] z-0" />
                 )}
-                <div className={`glass-panel px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-white glow-pulse bg-orange-500 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'border-surface-dim fade-inactive bg-white/60' : 'border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
-                  <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(249,115,22,0.6)] mix-blend-multiply" />
+                <div className={`px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-white glow-pulse bg-blue-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                  <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] mix-blend-multiply" />
                   <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-md' : 'text-secondary'}`}>Đội 2 (Phải)</span>
                   <div className="flex items-center gap-xs">
                     <span className={`material-symbols-outlined ${state.context.activeTeam === 'team2' ? 'text-yellow-300' : 'text-secondary'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team2' ? 'text-orange-100' : 'text-on-surface'}`}>
+                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team2' ? 'text-blue-100' : 'text-on-surface'}`}>
                       Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-secondary'}`}>{state.context.score.team2 * 10}</span> Lực
                     </span>
                   </div>
@@ -1296,7 +1296,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 disabled={state.value !== 'waiting_buzz'}
                 className={`px-xl py-sm rounded-2xl transition-all mt-4 border-2 pointer-events-auto group flex items-center justify-center gap-2 ${
                   state.value === 'waiting_buzz'
-                    ? 'bg-secondary text-white border-white/20 shadow-[0_6px_0_#c2410c,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#c2410c,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#c2410c,0_5px_10px_rgba(0,0,0,0.4)]'
+                    ? 'bg-secondary text-white border-white/20 shadow-[0_6px_0_#1d4ed8,0_10px_20px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:shadow-[0_8px_0_#1d4ed8,0_15px_25px_rgba(0,0,0,0.5)] active:translate-y-[6px] active:shadow-[0_0px_0_#1d4ed8,0_5px_10px_rgba(0,0,0,0.4)]'
                     : 'bg-neutral-400 text-neutral-100 border-neutral-500 shadow-none opacity-80 cursor-not-allowed translate-y-[6px]'
                 }`}
               >
