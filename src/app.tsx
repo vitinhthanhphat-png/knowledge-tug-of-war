@@ -7,7 +7,14 @@ import avatarTeam1 from './assets/avatar_team1.png';
 import avatarTeam2 from './assets/avatar_team2.png';
 import victoryTrophy from './assets/victory_trophy.png';
 import team1Pulling from './assets/team_green_pulling.png';
+import team1Thinking from './assets/team_green_thinking.png';
+import team1Winning from './assets/team_green_winning.png';
+import team1Loosed from './assets/team_green_loosed.png';
+
 import team2Pulling from './assets/team_blue_pulling.png';
+import team2Thinking from './assets/team_blue_thinking.png';
+import team2Winning from './assets/team_blue_winning.png';
+import team2Loosed from './assets/team_blue_loosed.png';
 
 import { parseExcelToQuestions } from './excel';
 import sndCorrect1 from './assets/sounds/tra-loi-dung-01.mp3';
@@ -24,18 +31,21 @@ const wrongSounds = [sndWrong1, sndWrong2];
 const victorySounds = [sndVictory1, sndVictory2, sndVictory3];
 
 const playRandomCorrectVocal = () => {
+    if (isBgmMuted) return;
     const snd = correctSounds[Math.floor(Math.random() * correctSounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
 };
 
 const playRandomWrongVocal = () => {
+    if (isBgmMuted) return;
     const snd = wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
 };
 
 const playRandomVictoryVocal = () => {
+    if (isBgmMuted) return;
     const snd = victorySounds[Math.floor(Math.random() * victorySounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
@@ -231,6 +241,11 @@ export const playStartScreenMusic = async () => {
     if (!buffer) return;
 
     if (bgmSource || !isBgmIntendedToPlay) return; // check again after async
+
+    if (bgmGain) {
+      try { bgmGain.disconnect(); } catch (e) {}
+    }
+
     bgmGain = ctx.createGain();
     bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
     bgmGain.connect(ctx.destination);
@@ -259,6 +274,11 @@ export const playInGameMusic = async () => {
     if (!buffer) return;
 
     if (inGameSource || !isInGameIntendedToPlay) return; // check again after async
+
+    if (inGameGain) {
+      try { inGameGain.disconnect(); } catch (e) {}
+    }
+
     inGameGain = ctx.createGain();
     inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
     inGameGain.connect(ctx.destination);
@@ -273,7 +293,8 @@ export const playInGameMusic = async () => {
   }
 };
 
-const playBuzzSound = () => {
+export const playBuzzSound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -302,7 +323,8 @@ const playBuzzSound = () => {
   osc2.stop(ctx.currentTime + 0.6);
 };
 
-const playTickSound = () => {
+export const playTickSound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -323,7 +345,8 @@ const playTickSound = () => {
   osc.stop(ctx.currentTime + 0.08);
 };
 
-const playCorrectSound = () => {
+export const playCorrectSound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -409,7 +432,8 @@ const playCrowdBooSound = () => {
   }
 };
 
-const playWrongSound = () => {
+export const playWrongSound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -485,7 +509,8 @@ const playFireworkSound = () => {
   noiseSource.stop(now + 0.3);
 };
 
-const playVictorySound = () => {
+export const playVictorySound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -547,7 +572,8 @@ const playVictorySound = () => {
   noiseSource.start(now);
 };
 
-const playPullRopeSound = () => {
+export const playPullRopeSound = () => {
+  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -1145,6 +1171,96 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
     input.click();
   };
 
+  const getTeamBoxStatus = (team: 'team1' | 'team2', state: any) => {
+    const s1 = state.context.score.team1;
+    const s2 = state.context.score.team2;
+    const isGameOver = state.value === 'ended' || s1 >= 10 || s2 >= 10 || s1 <= 0 || s2 <= 0;
+    
+    if (isGameOver) {
+      if (s1 > s2) return team === 'team1' ? 'highlight' : 'dimmed';
+      if (s2 > s1) return team === 'team2' ? 'highlight' : 'dimmed';
+      return 'normal';
+    }
+    
+    if (state.context.activeTeam === team) return 'highlight';
+    if (state.context.activeTeam) return 'dimmed';
+    return 'normal';
+  };
+
+  const getRobotAnimationClass = (team: 'team1' | 'team2', state: any) => {
+    const isTeam1 = team === 'team1';
+    const isTeam2 = team === 'team2';
+    
+    if (state.value === 'ended') {
+      const score1 = state.context.score.team1;
+      const score2 = state.context.score.team2;
+      if (score1 > score2) return isTeam1 ? 'animate-zoom-pop' : 'animate-shake-shrink';
+      if (score2 > score1) return isTeam2 ? 'animate-zoom-pop' : 'animate-shake-shrink';
+      return isTeam1 ? 'animate-pull-left' : 'animate-pull-right';
+    }
+    
+    if (state.value === 'timeout_reveal') {
+      return 'animate-shake-shrink';
+    }
+    
+    if (state.value === 'result') {
+      const lastResult = state.context.lastResult;
+      const answeringTeam = state.context.activeTeam;
+      if (answeringTeam === 'team1') {
+        if (lastResult === 'correct') return isTeam1 ? 'animate-zoom-pop' : 'animate-shake-shrink';
+        if (lastResult === 'incorrect') return isTeam1 ? 'animate-shake-shrink' : 'animate-zoom-pop';
+      } else if (answeringTeam === 'team2') {
+        if (lastResult === 'correct') return isTeam2 ? 'animate-zoom-pop' : 'animate-shake-shrink';
+        if (lastResult === 'incorrect') return isTeam2 ? 'animate-shake-shrink' : 'animate-zoom-pop';
+      }
+    }
+    
+    if (state.value === 'answering') {
+      const answeringTeam = state.context.activeTeam;
+      if (answeringTeam === 'team1') return isTeam1 ? 'animate-pulse-glow' : 'animate-pull-right';
+      if (answeringTeam === 'team2') return isTeam2 ? 'animate-pulse-glow' : 'animate-pull-left';
+    }
+    
+    return isTeam1 ? 'animate-pull-left' : 'animate-pull-right';
+  };
+
+  const getRobotImage = (team: 'team1' | 'team2', state: any) => {
+    const isTeam1 = team === 'team1';
+    const isTeam2 = team === 'team2';
+    
+    if (state.value === 'ended') {
+      const score1 = state.context.score.team1;
+      const score2 = state.context.score.team2;
+      if (score1 > score2) return isTeam1 ? team1Winning : team2Loosed;
+      if (score2 > score1) return isTeam2 ? team2Winning : team1Loosed;
+      return isTeam1 ? team1Pulling : team2Pulling;
+    }
+    
+    if (state.value === 'timeout_reveal') {
+      return isTeam1 ? team1Loosed : team2Loosed;
+    }
+    
+    if (state.value === 'result') {
+      const lastResult = state.context.lastResult;
+      const answeringTeam = state.context.activeTeam;
+      if (answeringTeam === 'team1') {
+        if (lastResult === 'correct') return isTeam1 ? team1Winning : team2Loosed;
+        if (lastResult === 'incorrect') return isTeam1 ? team1Loosed : team2Winning;
+      } else if (answeringTeam === 'team2') {
+        if (lastResult === 'correct') return isTeam2 ? team2Winning : team1Loosed;
+        if (lastResult === 'incorrect') return isTeam2 ? team2Loosed : team1Winning;
+      }
+    }
+    
+    if (state.value === 'answering') {
+      const answeringTeam = state.context.activeTeam;
+      if (answeringTeam === 'team1') return isTeam1 ? team1Thinking : team2Pulling;
+      if (answeringTeam === 'team2') return isTeam2 ? team2Thinking : team1Pulling;
+    }
+    
+    return isTeam1 ? team1Pulling : team2Pulling;
+  };
+
   const currentQuestion = state.context.questions[state.context.currentQuestionIndex];
   const t1Percent = (state.context.score.team1 / 10) * 100;
   const t2Percent = (state.context.score.team2 / 10) * 100;
@@ -1231,17 +1347,17 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           <header className="absolute top-0 left-0 right-0 z-30 flex justify-between items-start px-xl py-lg w-full">
             {/* Team 1 (Left) */}
             <div className="flex flex-col items-start gap-sm">
-              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team1' ? 'shadow-[0_0_40px_rgba(34,197,94,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
-                {state.context.activeTeam === 'team1' && (
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${getTeamBoxStatus('team1', state) === 'highlight' ? 'shadow-[0_0_40px_rgba(34,197,94,0.8)] scale-110 z-50' : getTeamBoxStatus('team1', state) === 'dimmed' ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
+                {getTeamBoxStatus('team1', state) === 'highlight' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#22c55e_100%)] z-0" />
                 )}
-                <div className={`px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team1' ? 'border-white glow-pulse bg-green-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                <div className={`px-lg py-md rounded-xl border-2 ${getTeamBoxStatus('team1', state) === 'highlight' ? 'border-white glow-pulse bg-green-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : getTeamBoxStatus('team1', state) === 'dimmed' ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam1} alt="Team 1" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] mix-blend-multiply" />
-                  <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team1' ? 'text-white drop-shadow-md' : 'text-primary'}`}>Đội 1 (Trái)</span>
+                  <span className={`font-headline-lg text-headline-lg ${getTeamBoxStatus('team1', state) === 'highlight' ? 'text-white drop-shadow-md' : 'text-primary'}`}>Đội 1 (Trái)</span>
                   <div className="flex items-center gap-xs">
-                    <span className={`material-symbols-outlined ${state.context.activeTeam === 'team1' ? 'text-yellow-300' : 'text-primary-container'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team1' ? 'text-green-100' : 'text-on-surface'}`}>
-                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${state.context.activeTeam === 'team1' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-primary'}`}>{state.context.score.team1 * 10}</span> Lực
+                    <span className={`material-symbols-outlined ${getTeamBoxStatus('team1', state) === 'highlight' ? 'text-yellow-300' : 'text-primary-container'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className={`font-body-lg font-bold whitespace-nowrap ${getTeamBoxStatus('team1', state) === 'highlight' ? 'text-green-100' : 'text-on-surface'}`}>
+                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${getTeamBoxStatus('team1', state) === 'highlight' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-primary'}`}>{state.context.score.team1 * 10}</span> Lực
                     </span>
                   </div>
                 </div>
@@ -1259,8 +1375,8 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 <span className={`font-display-force font-black text-2xl uppercase tracking-widest ${state.value === 'waiting_buzz' ? 'drop-shadow-md group-active:drop-shadow-none' : ''}`}>SPACE</span>
               </button>
               
-              <div className="mt-8 animate-pull-left transform origin-bottom flex justify-center w-full pointer-events-none relative -left-12 md:-left-20 lg:-left-28 xl:-left-32">
-                <img src={team1Pulling} alt="Team 1 Pulling" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
+              <div className={`mt-8 ${getRobotAnimationClass('team1', state)} transform origin-bottom flex justify-center w-full pointer-events-none relative -left-12 md:-left-20 lg:-left-28 xl:-left-32`}>
+                <img src={getRobotImage('team1', state)} alt="Team 1" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
               </div>
             </div>
 
@@ -1295,17 +1411,17 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
 
             {/* Team 2 (Right) */}
             <div className="flex flex-col items-end gap-sm">
-              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${state.context.activeTeam === 'team2' ? 'shadow-[0_0_40px_rgba(59,130,246,0.8)] scale-110 z-50' : state.context.activeTeam ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
-                {state.context.activeTeam === 'team2' && (
+              <div className={`relative rounded-[16px] p-[4px] overflow-hidden transition-all duration-300 ${getTeamBoxStatus('team2', state) === 'highlight' ? 'shadow-[0_0_40px_rgba(59,130,246,0.8)] scale-110 z-50' : getTeamBoxStatus('team2', state) === 'dimmed' ? 'shadow-sm opacity-60 scale-95 grayscale-[50%]' : 'shadow-md opacity-100 scale-100'}`}>
+                {getTeamBoxStatus('team2', state) === 'highlight' && (
                   <div className="absolute inset-[-150%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg,transparent_0_70%,#3b82f6_100%)] z-0" />
                 )}
-                <div className={`px-lg py-md rounded-xl border-2 ${state.context.activeTeam === 'team2' ? 'border-white glow-pulse bg-blue-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : state.context.activeTeam ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
+                <div className={`px-lg py-md rounded-xl border-2 ${getTeamBoxStatus('team2', state) === 'highlight' ? 'border-white glow-pulse bg-blue-600 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]' : getTeamBoxStatus('team2', state) === 'dimmed' ? 'glass-panel border-surface-dim fade-inactive bg-white/60' : 'glass-panel border-surface-dim bg-white/95'} flex flex-col items-center gap-xs relative z-10 w-full h-full`}>
                   <img src={avatarTeam2} alt="Team 2" className="w-[80px] h-[80px] object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] mix-blend-multiply" />
-                  <span className={`font-headline-lg text-headline-lg ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-md' : 'text-secondary'}`}>Đội 2 (Phải)</span>
+                  <span className={`font-headline-lg text-headline-lg ${getTeamBoxStatus('team2', state) === 'highlight' ? 'text-white drop-shadow-md' : 'text-secondary'}`}>Đội 2 (Phải)</span>
                   <div className="flex items-center gap-xs">
-                    <span className={`material-symbols-outlined ${state.context.activeTeam === 'team2' ? 'text-yellow-300' : 'text-secondary'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                    <span className={`font-body-lg font-bold whitespace-nowrap ${state.context.activeTeam === 'team2' ? 'text-blue-100' : 'text-on-surface'}`}>
-                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${state.context.activeTeam === 'team2' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-secondary'}`}>{state.context.score.team2 * 10}</span> Lực
+                    <span className={`material-symbols-outlined ${getTeamBoxStatus('team2', state) === 'highlight' ? 'text-yellow-300' : 'text-secondary'}`} style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+                    <span className={`font-body-lg font-bold whitespace-nowrap ${getTeamBoxStatus('team2', state) === 'highlight' ? 'text-blue-100' : 'text-on-surface'}`}>
+                      Lực kéo: <span className={`text-3xl font-black drop-shadow-sm mx-1 ${getTeamBoxStatus('team2', state) === 'highlight' ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'text-secondary'}`}>{state.context.score.team2 * 10}</span> Lực
                     </span>
                   </div>
                 </div>
@@ -1323,8 +1439,8 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 <span className={`font-display-force font-black text-2xl uppercase tracking-widest ${state.value === 'waiting_buzz' ? 'drop-shadow-md group-active:drop-shadow-none' : ''}`}>ENTER</span>
               </button>
 
-              <div className="mt-8 animate-pull-right transform origin-bottom flex justify-center w-full pointer-events-none relative -right-12 md:-right-20 lg:-right-28 xl:-right-32">
-                <img src={team2Pulling} alt="Team 2 Pulling" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] -scale-x-100" />
+              <div className={`mt-8 ${getRobotAnimationClass('team2', state)} transform origin-bottom flex justify-center w-full pointer-events-none relative -right-12 md:-right-20 lg:-right-28 xl:-right-32`}>
+                <img src={getRobotImage('team2', state)} alt="Team 2" className="w-[640px] max-w-none object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] -scale-x-100" />
               </div>
             </div>
           </header>
