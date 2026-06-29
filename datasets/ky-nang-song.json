@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "qs1",
+    "question": "Khi đi qua đường, em cần làm gì đầu tiên?",
+    "options": [
+      "Chạy thật nhanh",
+      "Nắm tay người lớn và quan sát",
+      "Vừa đi vừa nhìn điện thoại",
+      "Nhắm mắt lại"
+    ],
+    "answer_hash": "56d0344dfe1c5539410a121f6891aae0083375fa7e63757b89c2e76d9e9c4a53",
+    "salt": "salt_v1_0"
+  },
+  {
+    "id": "qs2",
+    "question": "Đèn tín hiệu giao thông màu gì thì các phương tiện phải dừng lại?",
+    "options": [
+      "Xanh",
+      "Vàng",
+      "Đỏ",
+      "Tím"
+    ],
+    "answer_hash": "9ae8f7f2fa01950f37b9b8956f51cdcb11b9790eb4fd5ea84454383dee384e1f",
+    "salt": "salt_v1_1"
+  },
+  {
+    "id": "qs3",
+    "question": "Khi ngồi trên xe máy, em bắt buộc phải đội vật dụng gì?",
+    "options": [
+      "Mũ lưỡi trai",
+      "Mũ bảo hiểm",
+      "Nón lá",
+      "Khăn trùm đầu"
+    ],
+    "answer_hash": "5a6f25a9d91ef5c10b1d2cb094325225c64867ca583d33db9e3941651374bc60",
+    "salt": "salt_v1_2"
+  },
+  {
+    "id": "qs4",
+    "question": "Khi ngồi trong xe ô tô, em nên làm gì để đảm bảo an toàn?",
+    "options": [
+      "Thắt dây an toàn",
+      "Mở cửa sổ thò đầu ra ngoài",
+      "Đứng lên ghế nhảy múa",
+      "Mở cửa xe khi xe đang chạy"
+    ],
+    "answer_hash": "82aa3641bf18bf9d116644ff6cf307549a7714fa62f950d1b3f85b84e05bce80",
+    "salt": "salt_v1_3"
+  },
+  {
+    "id": "qs5",
+    "question": "Nếu bị lạc ở nơi công cộng (siêu thị, công viên), em nên tìm ai để nhờ giúp đỡ?",
+    "options": [
+      "Một người lạ bất kỳ",
+      "Chú công an hoặc chú bảo vệ",
+      "Đi theo một bạn nhỏ khác",
+      "Tự đi tìm đường về nhà"
+    ],
+    "answer_hash": "cd0e413f548804c328c9ba52bb3260c6d5546663590da3168df8e1399618d46d",
+    "salt": "salt_v1_4"
+  },
+  {
+    "id": "qs6",
+    "question": "Khi đi xe buýt, em nên làm gì khi xe đang chạy?",
+    "options": [
+      "Chạy nhảy trên xe",
+      "Thò tay ra ngoài cửa sổ",
+      "Ngồi yên tại chỗ và bám chắc",
+      "Hét thật to"
+    ],
+    "answer_hash": "a8a6301f06ec57536537794c4f92d4a50de42b86a8fa7fcfe3a0b368a495ddcd",
+    "salt": "salt_v1_5"
+  },
+  {
+    "id": "qs7",
+    "question": "Đèn tín hiệu cho người đi bộ màu xanh hình người đang bước đi có ý nghĩa gì?",
+    "options": [
+      "Dừng lại",
+      "Được phép qua đường",
+      "Chạy thật nhanh",
+      "Chuẩn bị dừng lại"
+    ],
+    "answer_hash": "7265056064ce336de249f4a28be63fde0b3f375b197101fe6de347913bd70277",
+    "salt": "salt_v1_6"
+  },
+  {
+    "id": "qs8",
+    "question": "Khi đi bộ trên đường không có vỉa hè, em nên đi ở đâu?",
+    "options": [
+      "Đi giữa lòng đường",
+      "Đi sát mép đường bên phải",
+      "Đi zíc zắc",
+      "Vừa đi vừa đá bóng"
+    ],
+    "answer_hash": "cb8cb22969bad36c36e4c7e449fd2e0d6c51c560c788423aa4f726865548cbcb",
+    "salt": "salt_v1_7"
+  },
+  {
+    "id": "qs9",
+    "question": "Làm thế nào để an toàn khi băng qua ngã tư không có đèn tín hiệu?",
+    "options": [
+      "Cứ thế chạy qua",
+      "Chờ người lớn dắt qua",
+      "Nhắm mắt chạy",
+      "Vẫy tay xin đường"
+    ],
+    "answer_hash": "4b02a218b7749f1d1b7d1de201e4bedb4a0d3ebb80dc3a9750b9973c954776d9",
+    "salt": "salt_v1_8"
+  },
+  {
+    "id": "qs10",
+    "question": "Khi đang đi xe đạp, nếu muốn rẽ trái em cần làm gì?",
+    "options": [
+      "Giơ tay trái xin đường",
+      "Giơ tay phải xin đường",
+      "Cứ thế rẽ luôn",
+      "Bấm còi liên tục"
+    ],
+    "answer_hash": "cf96b7140ce1cc80f3a9b486e51fa9f6089f53c678425ee98448067b8cc2b3b2",
+    "salt": "salt_v1_9"
+  },
+  {
+    "id": "qs11",
+    "question": "Em không nên chơi đùa ở khu vực nào?",
+    "options": [
+      "Trong công viên",
+      "Sân trường",
+      "Lòng đường xe chạy",
+      "Khu vui chơi trẻ em"
+    ],
+    "answer_hash": "ee42ceb5b5f5adb49167ec4ff75d011c58251b5534c6153be2db8ea382927185",
+    "salt": "salt_v1_10"
+  },
+  {
+    "id": "qs12",
+    "question": "Trẻ em dưới 7 tuổi khi đi qua đường cần phải làm gì?",
+    "options": [
+      "Tự đi một mình",
+      "Phải có người lớn dẫn qua",
+      "Chạy qua đường nhanh nhất có thể",
+      "Đi lùi qua đường"
+    ],
+    "answer_hash": "532651d7c98063bb23a12bc291e91e1df3f99b90fc032cb9bfaccea0ade0b32c",
+    "salt": "salt_v1_11"
+  },
+  {
+    "id": "qs13",
+    "question": "Đèn tín hiệu giao thông chuyển sang màu vàng, em phải làm gì?",
+    "options": [
+      "Đi nhanh hơn",
+      "Chạy thật lẹ",
+      "Chuẩn bị dừng lại",
+      "Dừng lại lập tức"
+    ],
+    "answer_hash": "5b27f5217fa91f69b93d5ab5a93426b7cca8e42b220a1da5bdec83e4a5ed4766",
+    "salt": "salt_v1_12"
+  },
+  {
+    "id": "qs14",
+    "question": "Khi xuống xe buýt, em nên làm gì?",
+    "options": [
+      "Nhảy xuống khi xe chưa dừng hẳn",
+      "Đợi xe dừng hẳn mới bước xuống",
+      "Chen lấn xô đẩy",
+      "Ném đồ xuống trước"
+    ],
+    "answer_hash": "db486eb27cc361ac7a7d5717672b9331170e8c096ab63773ec666e983c64cdc9",
+    "salt": "salt_v1_13"
+  },
+  {
+    "id": "qs15",
+    "question": "Nếu thấy một bạn nhỏ đang đá bóng dưới lòng đường, em sẽ khuyên bạn thế nào?",
+    "options": [
+      "Đá tiếp đi",
+      "Cho tớ đá cùng với",
+      "Đá bóng dưới đường rất nguy hiểm",
+      "Sút bóng mạnh lên"
+    ],
+    "answer_hash": "7553315f16a01b91a049338727bde69da53f95d4107c41d27d76962ab707d5db",
+    "salt": "salt_v1_14"
+  },
+  {
+    "id": "qs16",
+    "question": "Mũ bảo hiểm có tác dụng gì?",
+    "options": [
+      "Chống nắng",
+      "Làm đẹp",
+      "Bảo vệ đầu khi xảy ra tai nạn",
+      "Giữ ấm"
+    ],
+    "answer_hash": "dff57851d7a67b874e17f3dce6455b8e87db7eaec16656768cb9b04e81d2457e",
+    "salt": "salt_v1_15"
+  },
+  {
+    "id": "qs17",
+    "question": "Khi đi trên vỉa hè, em nên đi như thế nào?",
+    "options": [
+      "Đi dàn hàng ngang",
+      "Đi thành nhóm chật kín đường",
+      "Đi gọn vào phía trong",
+      "Chạy nhảy lung tung"
+    ],
+    "answer_hash": "9acea2840aa894d7e529d719790cc6c66a35adcc637d883f4ab1eb2234f8226b",
+    "salt": "salt_v1_16"
+  },
+  {
+    "id": "qs18",
+    "question": "Đi tàu hỏa, em có được thò đầu ra ngoài cửa sổ không?",
+    "options": [
+      "Được thò thoải mái",
+      "Chỉ thò khi tàu chạy chậm",
+      "Tuyệt đối không được",
+      "Chỉ thò tay thôi"
+    ],
+    "answer_hash": "78305121f1470b9d4e2deb5dfaa63f36516359ff4d292a5376f3389491d56180",
+    "salt": "salt_v1_17"
+  },
+  {
+    "id": "qs19",
+    "question": "Khi đi thang cuốn ở siêu thị, em cần lưu ý điều gì?",
+    "options": [
+      "Chạy ngược chiều thang",
+      "Ngồi xuống bậc thang",
+      "Đứng ngoan, bám tay vịn",
+      "Leo trèo lên thành thang"
+    ],
+    "answer_hash": "2a1ff30d3336a001ede07c9cb751b4356b93b5e0f6080f5e1122db13f6a925e2",
+    "salt": "salt_v1_18"
+  },
+  {
+    "id": "qs20",
+    "question": "Vạch kẻ đường dành cho người đi bộ có hình dạng như thế nào?",
+    "options": [
+      "Các vạch trắng sọc dưa song song",
+      "Hình tròn màu vàng",
+      "Đường kẻ ngoằn ngoèo",
+      "Không có hình dạng gì"
+    ],
+    "answer_hash": "7da19b9f0e2229ba67818347141f6c03506ed276ffafa2ebb20411273bd0ecd8",
+    "salt": "salt_v1_19"
+  },
+  {
+    "id": "qs21",
+    "question": "Trước khi ăn cơm và sau khi đi vệ sinh, em phải làm gì?",
+    "options": [
+      "Lau tay vào áo",
+      "Rửa tay bằng xà phòng",
+      "Chỉ rửa tay bằng nước lã",
+      "Không cần làm gì"
+    ],
+    "answer_hash": "83d552266639a8ca046e18a358b394c37cd335ebb717989e813ae095b433a67b",
+    "salt": "salt_v1_20"
+  },
+  {
+    "id": "qs22",
+    "question": "Nên đánh răng ít nhất mấy lần mỗi ngày?",
+    "options": [
+      "Không cần đánh răng",
+      "1 lần",
+      "2 lần (sáng và tối)",
+      "5 lần"
+    ],
+    "answer_hash": "4cfb8d4df61eba4f501bc250788f8457d74d6e248c48b6ccc6fe4f770b99cb28",
+    "salt": "salt_v1_21"
+  },
+  {
+    "id": "qs23",
+    "question": "Sau khi hắt hơi hoặc ho, em nên làm gì?",
+    "options": [
+      "Bôi vào áo",
+      "Rửa tay hoặc dùng nước sát khuẩn",
+      "Chạm vào người khác",
+      "Ăn kẹo"
+    ],
+    "answer_hash": "d24f32ad3d184fb0b360fb4652d8580ab8013e54cce9abac236f79a3aeab962e",
+    "salt": "salt_v1_22"
+  },
+  {
+    "id": "qs24",
+    "question": "Để cơ thể luôn khỏe mạnh, em nên ăn nhiều loại thực phẩm nào?",
+    "options": [
+      "Kẹo mút",
+      "Rau xanh và trái cây",
+      "Bim bim",
+      "Nước ngọt có gas"
+    ],
+    "answer_hash": "0c129943433d16b2e00bb4abd7f55b3b64f97c3dcc5c9bec1c6f8bd927fee464",
+    "salt": "salt_v1_23"
+  },
+  {
+    "id": "qs25",
+    "question": "Khi đi nắng về, em có nên uống nước đá lạnh ngay không?",
+    "options": [
+      "Có, uống càng nhiều càng tốt",
+      "Không, nên uống nước lọc từ từ",
+      "Có, ăn thêm kem nữa",
+      "Không uống gì cả"
+    ],
+    "answer_hash": "c5af703031ffee49dc58f376f2c4e607b7a608164be1f2ee1ba1639aa2b5cd32",
+    "salt": "salt_v1_24"
+  },
+  {
+    "id": "qs26",
+    "question": "Mùa đông trời lạnh, em cần mặc trang phục như thế nào?",
+    "options": [
+      "Mặc quần áo cộc tay",
+      "Mặc đồ bơi",
+      "Mặc áo khoác ấm, quàng khăn",
+      "Chỉ mặc áo phông"
+    ],
+    "answer_hash": "ec36a328c1bb7fe54f84328da439913de2a3bd6a1c3413c7c43373959d53fcbc",
+    "salt": "salt_v1_25"
+  },
+  {
+    "id": "qs27",
+    "question": "Khi bị chảy máu cam, em nên làm gì?",
+    "options": [
+      "Ngửa cổ ra sau thật xa",
+      "Cúi đầu về trước và bóp nhẹ mũi",
+      "Nằm ngửa ra đất",
+      "Dùng tay ngoáy mũi"
+    ],
+    "answer_hash": "ac403732338d29cf72541aa314c41ddf6844ce70bd30f3e10d510093a205e302",
+    "salt": "salt_v1_26"
+  },
+  {
+    "id": "qs28",
+    "question": "Tắm rửa thường xuyên giúp ích gì cho cơ thể?",
+    "options": [
+      "Bị cảm lạnh",
+      "Làm cơ thể yếu đi",
+      "Loại bỏ vi khuẩn, giúp cơ thể sạch sẽ",
+      "Làm đau da"
+    ],
+    "answer_hash": "19c1ff59c6cd407d14c743f6e3d40688f24578dc9e8d49c4dbfb1c88b487c8a8",
+    "salt": "salt_v1_27"
+  },
+  {
+    "id": "qs29",
+    "question": "Để đôi mắt sáng khỏe, khi xem tivi em cần chú ý điều gì?",
+    "options": [
+      "Ngồi thật sát tivi",
+      "Xem trong bóng tối",
+      "Ngồi đúng khoảng cách, xem có thời gian giới hạn",
+      "Nằm dài ra xem"
+    ],
+    "answer_hash": "8cbcd3ac4042ecd151c92e8b1d5dbd6a23da9a6b9d8f518934318f6c11b5bae1",
+    "salt": "salt_v1_28"
+  },
+  {
+    "id": "qs30",
+    "question": "Lý do quan trọng nhất phải cắt móng tay, móng chân thường xuyên là gì?",
+    "options": [
+      "Để nhìn đẹp hơn",
+      "Để không cào rách áo",
+      "Ngăn vi khuẩn tích tụ dưới móng",
+      "Để gõ phím nhanh hơn"
+    ],
+    "answer_hash": "8932c336ef96861f5762c4699a991e6d5f1e88fd7c0443b962c25dcd33c69a27",
+    "salt": "salt_v1_29"
+  },
+  {
+    "id": "qs31",
+    "question": "Khi vừa ăn no xong, em KHÔNG nên làm gì?",
+    "options": [
+      "Nghỉ ngơi",
+      "Đọc sách nhẹ nhàng",
+      "Chạy nhảy vận động mạnh",
+      "Đi dạo chậm rãi"
+    ],
+    "answer_hash": "dd7a4d01862992dcba958b155f873cc9ce529ef62574ee8515c9e37874b8d99e",
+    "salt": "salt_v1_30"
+  },
+  {
+    "id": "qs32",
+    "question": "Nếu quần áo bị ướt do đi mưa, em cần làm gì ngay?",
+    "options": [
+      "Mặc kệ để tự khô",
+      "Thay quần áo khô và lau người",
+      "Bật quạt số to nhất để sấy",
+      "Đi ngủ luôn"
+    ],
+    "answer_hash": "d98b6e515f42ee8d9742b8552d580bdbff6c46780294ba23f9af1411e6148132",
+    "salt": "salt_v1_31"
+  },
+  {
+    "id": "qs33",
+    "question": "Ăn đồ ngọt (kẹo, bánh) vào buổi tối trước khi đi ngủ dễ bị làm sao?",
+    "options": [
+      "Tăng chiều cao",
+      "Mắt sáng hơn",
+      "Sâu răng",
+      "Giúp ngủ ngon hơn"
+    ],
+    "answer_hash": "01a9c524a9a0da8d9dd25598638b771ffc9c3f295833abf2921ff566548d710c",
+    "salt": "salt_v1_32"
+  },
+  {
+    "id": "qs34",
+    "question": "Nên uống bao nhiêu nước mỗi ngày là tốt cho sức khỏe?",
+    "options": [
+      "Khoảng 1.5 - 2 lít",
+      "Chỉ uống 1 ngụm nhỏ",
+      "Không cần uống nước",
+      "Uống 10 lít"
+    ],
+    "answer_hash": "fb06d3d9c5b934501ee61d6acb5a78f0807fd66fe8fa44ddf7b9cd15d2b5e61f",
+    "salt": "salt_v1_33"
+  },
+  {
+    "id": "qs35",
+    "question": "Để bảo vệ tai, em nên tránh làm gì?",
+    "options": [
+      "Nghe nhạc bằng loa ngoài",
+      "Đeo tai nghe bật âm lượng quá to",
+      "Vệ sinh tai bằng khăn mềm",
+      "Nói chuyện nhỏ nhẹ"
+    ],
+    "answer_hash": "8f12eb2118138327d9df925780a8ed132c3b824a8fd07fd88b8dfa271e328f8e",
+    "salt": "salt_v1_34"
+  },
+  {
+    "id": "qs36",
+    "question": "Khi bị sốt (người nóng ran), em nên báo với ai?",
+    "options": [
+      "Báo cho bố mẹ hoặc thầy cô giáo",
+      "Không nói với ai",
+      "Giấu đi và tự uống thuốc",
+      "Tiếp tục đi chơi"
+    ],
+    "answer_hash": "a287d5eff7c810c1ef3a588153cd784a60e195cbc93f20cad326ec3a99c3057f",
+    "salt": "salt_v1_35"
+  },
+  {
+    "id": "qs37",
+    "question": "Vì sao không nên dùng chung bàn chải đánh răng?",
+    "options": [
+      "Vì dễ bị nhầm màu",
+      "Làm bàn chải mau hỏng",
+      "Dễ lây truyền các bệnh răng miệng",
+      "Vì nó sẽ không có bọt"
+    ],
+    "answer_hash": "81dfbfbfe5d69a6a18aba2d7daa6a65fdb7d906c30d19c78702a659f6c661503",
+    "salt": "salt_v1_36"
+  },
+  {
+    "id": "qs38",
+    "question": "Tư thế ngồi học đúng là như thế nào?",
+    "options": [
+      "Nằm ườn ra bàn",
+      "Lưng thẳng, ngực không tì vào bàn",
+      "Ngồi gù lưng, mắt sát vở",
+      "Ngồi vắt chéo chân lên ghế"
+    ],
+    "answer_hash": "931cd63318d09b6bbde7dfc26b3fe2121a5cad90b0f509a1e02b9b187ba2d570",
+    "salt": "salt_v1_37"
+  },
+  {
+    "id": "qs39",
+    "question": "Đồ lót nên được thay bao lâu một lần?",
+    "options": [
+      "1 tuần/lần",
+      "Hàng ngày",
+      "Mỗi tháng/lần",
+      "Khi nào thấy bẩn mới thay"
+    ],
+    "answer_hash": "68d4686947e1f56fc26d7df1c5bb0b49f795416bff02c4b73a53b52058658432",
+    "salt": "salt_v1_38"
+  },
+  {
+    "id": "qs40",
+    "question": "Hành động nào là bảo vệ môi trường và sức khỏe cộng đồng?",
+    "options": [
+      "Vứt rác bừa bãi",
+      "Bỏ rác đúng nơi quy định",
+      "Khạc nhổ bừa bãi",
+      "Xả nước thải ra đường"
+    ],
+    "answer_hash": "242e5211e9a120812fa1ecd2c34dfcaa998296f8018db6bef23d32ca61bdc3f4",
+    "salt": "salt_v1_39"
+  },
+  {
+    "id": "qs41",
+    "question": "Khi người khác giúp đỡ mình, em nên nói câu gì?",
+    "options": [
+      "Xin lỗi",
+      "Cảm ơn",
+      "Tạm biệt",
+      "Không nói gì"
+    ],
+    "answer_hash": "a12a5b046eaae298cb58c7336ff93a6a1527cc7a5dcc13efde2e25f70fa8596e",
+    "salt": "salt_v1_40"
+  },
+  {
+    "id": "qs42",
+    "question": "Khi em làm sai hoặc gây phiền lòng người khác, em cần làm gì?",
+    "options": [
+      "Khóc lóc",
+      "Chạy trốn",
+      "Nói lời xin lỗi",
+      "Đổ lỗi cho bạn"
+    ],
+    "answer_hash": "e8d280a914594742ccca1ef1f0cdc3e1b3de8329982d4eafd68e63180a581189",
+    "salt": "salt_v1_41"
+  },
+  {
+    "id": "qs43",
+    "question": "Khi người lớn (ông bà, bố mẹ, thầy cô) gọi, em nên dạ thưa thế nào?",
+    "options": [
+      "Nói trống không: Ơi",
+      "Dạ / Vâng ạ",
+      "Gật đầu không nói",
+      "Lờ đi coi như không nghe"
+    ],
+    "answer_hash": "1a00ab1daf3335cee0643d4b5d6156fddd27f1a7d09b3c557f5d2cba0d2d1bbc",
+    "salt": "salt_v1_42"
+  },
+  {
+    "id": "qs44",
+    "question": "Nếu muốn mượn đồ chơi của bạn, em nên làm gì?",
+    "options": [
+      "Tự ý giật lấy",
+      "Đợi bạn chơi xong rồi cướp",
+      "Xin phép và hỏi mượn bạn",
+      "Khóc lóc đòi bằng được"
+    ],
+    "answer_hash": "f6d7b4443ca2425ac3f5ef8961ce22ec19b9316cdded01db0a6e0f1ae1282522",
+    "salt": "salt_v1_43"
+  },
+  {
+    "id": "qs45",
+    "question": "Khi đến nhà người khác chơi, em nên gõ cửa hoặc bấm chuông rồi làm gì?",
+    "options": [
+      "Tự động mở cửa bước vào",
+      "Chờ chủ nhà ra mở cửa và chào hỏi",
+      "Nhìn qua khe cửa và hét to",
+      "Phá cửa xông vào"
+    ],
+    "answer_hash": "1d0905d62a808132ab6a51b11ac9993faac0c0f602fdbb78391379268587bd58",
+    "salt": "salt_v1_44"
+  },
+  {
+    "id": "qs46",
+    "question": "Khi thấy người lớn đang nói chuyện, em không nên làm gì?",
+    "options": [
+      "Ngồi yên lặng",
+      "Chen ngang vào câu chuyện",
+      "Xin phép nếu có việc cần nói gấp",
+      "Đi ra chỗ khác chơi"
+    ],
+    "answer_hash": "a593b511e092287644352121c7feaa53b253359d9b1c020c3f5be154c2b304f1",
+    "salt": "salt_v1_45"
+  },
+  {
+    "id": "qs47",
+    "question": "Khi nhận quà từ người lớn, em nên dùng mấy tay để nhận?",
+    "options": [
+      "Một tay",
+      "Hai tay và nói lời cảm ơn",
+      "Không thèm nhận",
+      "Giật lấy quay đi luôn"
+    ],
+    "answer_hash": "97da8deaa5087137c857b50238c5a96d72c6cf96bfa3f989f30e272683a73f15",
+    "salt": "salt_v1_46"
+  },
+  {
+    "id": "qs48",
+    "question": "Khi ăn uống cùng người lớn, em nên làm gì trước khi ăn?",
+    "options": [
+      "Ăn luôn không cần nói gì",
+      "Chọn miếng ngon nhất ăn trước",
+      "Mời ông bà, bố mẹ và mọi người cùng ăn",
+      "Cầm bát lên đi chỗ khác ăn"
+    ],
+    "answer_hash": "d588df0691d31cc961771a64d30ef3b7f96cbaeac6669fddef917c29ef70d6af",
+    "salt": "salt_v1_47"
+  },
+  {
+    "id": "qs49",
+    "question": "Cách ứng xử đúng khi bạn bị ngã là gì?",
+    "options": [
+      "Cười nhạo bạn",
+      "Bỏ đi không quan tâm",
+      "Chạy đến đỡ bạn dậy và hỏi thăm",
+      "Đẩy bạn ngã thêm"
+    ],
+    "answer_hash": "84086908cf0a4bf20018a96e78612cb7b64b8de52adce48fe8707356d0b212be",
+    "salt": "salt_v1_48"
+  },
+  {
+    "id": "qs50",
+    "question": "Khi cãi nhau với bạn bè, em nên làm gì?",
+    "options": [
+      "Đánh bạn",
+      "Bình tĩnh nói chuyện để giải quyết",
+      "Gào thét chửi mắng",
+      "Rủ các bạn khác tẩy chay"
+    ],
+    "answer_hash": "2bce63d9dec23d2131b3fdb4e206ff4fe88189ec9f627a8f06398d79032b2a98",
+    "salt": "salt_v1_49"
+  },
+  {
+    "id": "qs51",
+    "question": "Để được người khác tôn trọng, bản thân em cần phải làm gì?",
+    "options": [
+      "Bắt nạt người nhỏ hơn",
+      "Khoe khoang tài sản",
+      "Tôn trọng người khác",
+      "Luôn tranh cãi giành phần thắng"
+    ],
+    "answer_hash": "ff5b57013e6348e80538d9236786b08e06e0dde197c8dba9120be444681e9ee2",
+    "salt": "salt_v1_50"
+  },
+  {
+    "id": "qs52",
+    "question": "Khi khách đến nhà chơi, em nên làm gì?",
+    "options": [
+      "Lờ đi không chào",
+      "Ra chào khách ngoan ngoãn",
+      "Trốn vào phòng đóng cửa",
+      "Khóc lóc đuổi khách về"
+    ],
+    "answer_hash": "0de48bda4d6117a690b9401a9d9321381f5b0b95ce0e96086b6879c05d57b831",
+    "salt": "salt_v1_51"
+  },
+  {
+    "id": "qs53",
+    "question": "Ở nơi công cộng (rạp phim, bệnh viện), em cần giữ thái độ thế nào?",
+    "options": [
+      "Cười đùa thật to",
+      "Chạy nhảy nô đùa",
+      "Giữ trật tự, đi lại nhẹ nhàng",
+      "Bật nhạc bằng loa ngoài"
+    ],
+    "answer_hash": "4146fd1be1d7904be474e554ffc0ff94ffda46c061639b72b8c89282dfa854be",
+    "salt": "salt_v1_52"
+  },
+  {
+    "id": "qs54",
+    "question": "Nếu có người lạ khen và cho bánh kẹo, em nên làm thế nào?",
+    "options": [
+      "Nhận ngay và ăn luôn",
+      "Từ chối khéo léo và không nhận",
+      "Đòi thêm tiền",
+      "Đi theo người đó"
+    ],
+    "answer_hash": "7e49cae8d07f8009fe2951034aff6dd88920dfc5178f0a3291156899709c8a02",
+    "salt": "salt_v1_53"
+  },
+  {
+    "id": "qs55",
+    "question": "Khi gọi điện thoại, câu đầu tiên em nên nói là gì?",
+    "options": [
+      "Alô, tôi là... Xin hỏi ai đang nghe máy ạ?",
+      "Nói chuyện luôn không cần chào",
+      "Cụp máy luôn",
+      "Hét lên alo alo alo"
+    ],
+    "answer_hash": "d43327f580f4bbbcc2bf6cafb2877f35b8a9c8aeb212120be1c82400ca2b9847",
+    "salt": "salt_v1_54"
+  },
+  {
+    "id": "qs56",
+    "question": "Nếu thấy bạn bị bắt nạt, em nên làm gì?",
+    "options": [
+      "Đứng xem và cổ vũ",
+      "Chạy đi báo với thầy cô giáo hoặc người lớn",
+      "Quay video đăng lên mạng",
+      "Tham gia bắt nạt cùng"
+    ],
+    "answer_hash": "b93742dd6ed996c7060c0c1f88021aff7d7acfba3ae57d341fed06ec6b459804",
+    "salt": "salt_v1_55"
+  },
+  {
+    "id": "qs57",
+    "question": "Nói dối là hành vi như thế nào?",
+    "options": [
+      "Tốt, giúp che giấu lỗi lầm",
+      "Rất ngầu",
+      "Xấu, làm mất lòng tin của mọi người",
+      "Bình thường"
+    ],
+    "answer_hash": "0e22cf423b4bc3e4de2d70ef0fe4cf3bf1221d6080f5cbb2d3457d38e61cc5c7",
+    "salt": "salt_v1_56"
+  },
+  {
+    "id": "qs58",
+    "question": "Để giữ tình bạn bền lâu, em nên có đức tính gì?",
+    "options": [
+      "Thích kiểm soát bạn",
+      "Chân thành, biết chia sẻ và tha thứ",
+      "Hay ghen tị",
+      "Nói xấu bạn sau lưng"
+    ],
+    "answer_hash": "26b7be5a83b2558111eb779272dba99869f765499dc75967312ad463d9122b97",
+    "salt": "salt_v1_57"
+  },
+  {
+    "id": "qs59",
+    "question": "Khi muốn hỏi đường một người lớn tuổi, em xưng hô thế nào cho lịch sự?",
+    "options": [
+      "Ê ông, đường này đi đâu?",
+      "Ông/bà ơi, cho cháu hỏi đường...",
+      "Tránh ra cho cháu đi",
+      "Không thèm hỏi, tự mò đường"
+    ],
+    "answer_hash": "cabfbfc583862d20fed282ed7e607e7ec916b5015c098d3c4c2c7373c84d9032",
+    "salt": "salt_v1_58"
+  },
+  {
+    "id": "qs60",
+    "question": "Biết giữ lời hứa sẽ mang lại điều gì?",
+    "options": [
+      "Sự tin tưởng và tôn trọng từ mọi người",
+      "Tiền bạc",
+      "Bị người khác ghét",
+      "Không có lợi ích gì"
+    ],
+    "answer_hash": "6b6fc5f0e43c1dd5b7259259c57ab015972b6848106f1ab71cf563382da591ae",
+    "salt": "salt_v1_59"
+  },
+  {
+    "id": "qs61",
+    "question": "Số điện thoại gọi cứu hỏa (chữa cháy) ở Việt Nam là số nào?",
+    "options": [
+      "113",
+      "114",
+      "115",
+      "111"
+    ],
+    "answer_hash": "db3cb372e148a4fe1b1cba2f115502b71ed35e8a7096376bbf50b5d1496762ec",
+    "salt": "salt_v1_60"
+  },
+  {
+    "id": "qs62",
+    "question": "Số điện thoại gọi cảnh sát (công an) ở Việt Nam là số nào?",
+    "options": [
+      "113",
+      "114",
+      "115",
+      "111"
+    ],
+    "answer_hash": "910517704d0f3ca0bfcef6314062baf51a6262b17679c9e8ba6cb5d7ec2255b3",
+    "salt": "salt_v1_61"
+  },
+  {
+    "id": "qs63",
+    "question": "Số điện thoại gọi cấp cứu y tế ở Việt Nam là số nào?",
+    "options": [
+      "113",
+      "114",
+      "115",
+      "112"
+    ],
+    "answer_hash": "55de17e33f05280fc7a8fa066e4ba19f856c07b39cfb361d8db409e7d738bd03",
+    "salt": "salt_v1_62"
+  },
+  {
+    "id": "qs64",
+    "question": "Khi ngửi thấy mùi khét hoặc phát hiện cháy trong nhà, em phải làm gì?",
+    "options": [
+      "Trốn vào gầm giường",
+      "Tìm nước để hất vào",
+      "Hô hoán và chạy thoát ra ngoài ngay lập tức",
+      "Lấy điện thoại ra quay phim"
+    ],
+    "answer_hash": "17bf8795300ac75ae95ca7a4babae4a3ecf59fdfe5a42b02219f2a6aa2f0b354",
+    "salt": "salt_v1_63"
+  },
+  {
+    "id": "qs65",
+    "question": "Nếu quần áo bị bắt lửa, em phải làm gì?",
+    "options": [
+      "Chạy vòng quanh",
+      "Đứng im khóc",
+      "Nằm xuống sàn và lăn qua lăn lại",
+      "Cố gắng cởi quần áo ra"
+    ],
+    "answer_hash": "e795d09322e348085354ab7c9bd2b60d8e9649a7f22f3e2f731a19da5ffdd368",
+    "salt": "salt_v1_64"
+  },
+  {
+    "id": "qs66",
+    "question": "Khi bị kẹt trong thang máy, em nên làm gì?",
+    "options": [
+      "Đập phá cửa thang máy",
+      "Bấm nút gọi cứu hộ (hình cái chuông) và bình tĩnh chờ",
+      "Gào khóc thảm thiết",
+      "Cố gắng cạy cửa bằng tay"
+    ],
+    "answer_hash": "5dfce98b036484391fbfd951781b0476c3458f4d79718129f0626a58294c0f37",
+    "salt": "salt_v1_65"
+  },
+  {
+    "id": "qs67",
+    "question": "Nếu ở nhà một mình và có người lạ gõ cửa xin vào, em có nên mở không?",
+    "options": [
+      "Mở ngay để xem họ cần gì",
+      "Tuyệt đối không mở cửa",
+      "Nhờ hàng xóm ra mở giúp",
+      "Hét lên bảo họ đợi"
+    ],
+    "answer_hash": "d5046db4931f349bc8a8c670bd3c533a26afdd76a5ee11263e40d1dfaebcef64",
+    "salt": "salt_v1_66"
+  },
+  {
+    "id": "qs68",
+    "question": "Khi phát hiện rò rỉ khí gas (có mùi nồng nặc), em KHÔNG được làm điều gì?",
+    "options": [
+      "Mở toang các cửa sổ",
+      "Chạy ra ngoài báo người lớn",
+      "Bật bật lửa hoặc bật công tắc điện",
+      "Khóa van gas nếu biết cách"
+    ],
+    "answer_hash": "99f20c79befc4e194a309e5fde4c044f55c2d35c48b4806332d16cf2940cc453",
+    "salt": "salt_v1_67"
+  },
+  {
+    "id": "qs69",
+    "question": "Khi bị bỏng nước sôi, việc đầu tiên cần làm là gì?",
+    "options": [
+      "Bôi kem đánh răng lên vết bỏng",
+      "Xả nước mát sạch lên vết bỏng từ 10-15 phút",
+      "Bôi mắm muối lên",
+      "Băng kín lại ngay"
+    ],
+    "answer_hash": "c79ae021476169b13ccab218bd278a49458138009bc251976479b7d553e9ba4a",
+    "salt": "salt_v1_68"
+  },
+  {
+    "id": "qs70",
+    "question": "Khi đi bơi, nếu thấy bạn bị đuối nước, em nên làm gì?",
+    "options": [
+      "Tự nhảy xuống cứu ngay lập tức",
+      "Ném phao xuống và hô hoán người lớn cứu giúp",
+      "Bỏ chạy đi chỗ khác",
+      "Đứng nhìn"
+    ],
+    "answer_hash": "eb67e26a31d7a6ba3d1848b81c9b926b65e00caef3efce312c7f3f7df91f550b",
+    "salt": "salt_v1_69"
+  },
+  {
+    "id": "qs71",
+    "question": "Nếu bị ong đốt, em nên xử lý thế nào?",
+    "options": [
+      "Nặn nọc độc ra bằng tay",
+      "Rửa bằng nước xà phòng và chườm đá lạnh",
+      "Gãi mạnh cho đỡ ngứa",
+      "Bôi bùn đất lên"
+    ],
+    "answer_hash": "a35e87f4632f9977d536f246d70b40eea7fd4b3de50477f7b75b3aed9062a5b5",
+    "salt": "salt_v1_70"
+  },
+  {
+    "id": "qs72",
+    "question": "Khi đi rừng hoặc chơi ở bụi rậm, em nên mặc đồ thế nào để tránh côn trùng/rắn cắn?",
+    "options": [
+      "Mặc quần áo ngắn cộc tay",
+      "Đi chân trần",
+      "Mặc quần dài, áo dài tay và đi giày kín",
+      "Mặc đồ sặc sỡ"
+    ],
+    "answer_hash": "01e4ab355e64c4320bfe5cea8835373a20be2dad57568b4dd47b60e4bc600df1",
+    "salt": "salt_v1_71"
+  },
+  {
+    "id": "qs73",
+    "question": "Khi bị chảy máu vết thương sâu, em cần làm gì để sơ cứu tạm thời?",
+    "options": [
+      "Dùng mảnh vải/gạc sạch băng ép chặt lên vết thương",
+      "Cứ để máu chảy tự nhiên",
+      "Bôi nhọ nồi lên",
+      "Rửa bằng nước chanh"
+    ],
+    "answer_hash": "76b5588d9b797affb0e7a00a0cf6d75de07f3df3827ba20fb6082a3120e10a21",
+    "salt": "salt_v1_72"
+  },
+  {
+    "id": "qs74",
+    "question": "Khi trời mưa dông có sấm sét, em KHÔNG nên trú mưa ở đâu?",
+    "options": [
+      "Trong ngôi nhà xây kín",
+      "Dưới gốc cây to ngoài đồng trống",
+      "Trong xe ô tô",
+      "Trong siêu thị"
+    ],
+    "answer_hash": "1da68e6e4c4ec2290c95e984ea46f3fc70e5ac6b496075852f59936a5a4d313d",
+    "salt": "salt_v1_73"
+  },
+  {
+    "id": "qs75",
+    "question": "Nếu bị dị vật (xương cá, đồ chơi nhỏ) hóc ở cổ, em phải làm gì?",
+    "options": [
+      "Cố gắng nuốt cục cơm to",
+      "Dùng tay móc họng",
+      "Báo ngay cho người lớn để đưa đi bác sĩ",
+      "Uống thật nhiều nước mắm"
+    ],
+    "answer_hash": "07a7ee01a3b4a0009624ccf4020e7cd3398cd49a1afe7762426fc03048cef95f",
+    "salt": "salt_v1_74"
+  },
+  {
+    "id": "qs76",
+    "question": "Để tránh bị điện giật, em không được làm gì?",
+    "options": [
+      "Dùng tay ướt cắm phích điện",
+      "Cầm vào phần nhựa của phích cắm",
+      "Nhờ người lớn cắm điện giúp",
+      "Tắt công tắc trước khi rút phích"
+    ],
+    "answer_hash": "9e82cc3c0fb96a7a4b5f5c1e080085aa712c44b3f32785ea3382b554fc257a93",
+    "salt": "salt_v1_75"
+  },
+  {
+    "id": "qs77",
+    "question": "Khi phát hiện bạn bị điện giật, em phải làm gì trước tiên?",
+    "options": [
+      "Cầm tay kéo bạn ra",
+      "Hắt nước vào người bạn",
+      "Ngắt cầu dao điện hoặc dùng đồ gỗ/nhựa gạt dây điện ra",
+      "Khóc lóc gọi mẹ"
+    ],
+    "answer_hash": "71b7201a714b4f06f56d3f0d73354bc25f30f5a14c94103930b151050f2cd8ad",
+    "salt": "salt_v1_76"
+  },
+  {
+    "id": "qs78",
+    "question": "Khi đi siêu thị mà bị lạc cha mẹ, em KHÔNG nên làm gì?",
+    "options": [
+      "Chạy lung tung đi tìm",
+      "Đứng yên tại chỗ",
+      "Tìm nhân viên bảo vệ nhờ gọi loa",
+      "Bình tĩnh không khóc"
+    ],
+    "answer_hash": "aa4559fe49702a9e5636e34ef737c48b7d437286aa553ce5dc8255cf6652db14",
+    "salt": "salt_v1_77"
+  },
+  {
+    "id": "qs79",
+    "question": "Nếu chó lạ sủa gầm gừ tiếp cận em, em nên làm gì?",
+    "options": [
+      "Bỏ chạy thật nhanh",
+      "Ném đá vào nó",
+      "Đứng im, không nhìn vào mắt nó và từ từ lùi lại",
+      "La hét giang tay đuổi nó"
+    ],
+    "answer_hash": "0d09178b8400b9f2e37c36bf7ba5a8bfa410ff20936c2929403775512351b2e5",
+    "salt": "salt_v1_78"
+  },
+  {
+    "id": "qs80",
+    "question": "Trong tình huống xảy ra động đất (nhà rung lắc), em nên trốn ở đâu?",
+    "options": [
+      "Gần cửa kính sổ",
+      "Dưới gầm bàn chắc chắn và che bảo vệ đầu",
+      "Chạy ra ban công",
+      "Đứng ở giữa phòng"
+    ],
+    "answer_hash": "a86c19894b38b955cd5a58739f096bb9141f36b52ad5fa44079e0af3f3f50c01",
+    "salt": "salt_v1_79"
+  },
+  {
+    "id": "qs81",
+    "question": "Sau khi chơi đồ chơi xong, em cần làm gì?",
+    "options": [
+      "Bỏ đó đi chơi tiếp",
+      "Bắt mẹ dọn",
+      "Tự giác cất dọn đồ chơi gọn gàng",
+      "Vứt đồ chơi ra sân"
+    ],
+    "answer_hash": "60d2c0ddf40fbc3b9421e3f00096adc50ffb605ec1af78bc8388eed81f0efc6b",
+    "salt": "salt_v1_80"
+  },
+  {
+    "id": "qs82",
+    "question": "Để phòng ngủ luôn sạch sẽ, mỗi buổi sáng thức dậy em nên làm gì?",
+    "options": [
+      "Lăn ra ngủ tiếp",
+      "Gấp chăn màn gọn gàng",
+      "Mang đồ ăn lên giường",
+      "Nhảy múa trên giường"
+    ],
+    "answer_hash": "f5a6804c5aee2b50def1c0a2eb92def290bbe0bdfc892053ddbe4411e2d3703d",
+    "salt": "salt_v1_81"
+  },
+  {
+    "id": "qs83",
+    "question": "Quần áo bẩn sau khi thay ra em nên để ở đâu?",
+    "options": [
+      "Vứt xuống sàn nhà",
+      "Bỏ vào máy giặt hoặc giỏ đựng đồ bẩn",
+      "Giấu dưới gầm giường",
+      "Ném ra ngoài cửa"
+    ],
+    "answer_hash": "3fbc3cc71e5075c4f5bd6a836bd717f50183b690330432d83b51551e344ca2ac",
+    "salt": "salt_v1_82"
+  },
+  {
+    "id": "qs84",
+    "question": "Khi quét nhà, em nên quét như thế nào để bụi không bay mù mịt?",
+    "options": [
+      "Quét thật mạnh tay",
+      "Bật quạt số to rồi quét",
+      "Quét nhẹ nhàng gom vào hót rác",
+      "Quét hắt ra ngoài đường"
+    ],
+    "answer_hash": "099963bb138452af1ce67ccb40a5bbc24e5d1a8e88257f329a7052a73ae6af1b",
+    "salt": "salt_v1_83"
+  },
+  {
+    "id": "qs85",
+    "question": "Trước bữa ăn, em có thể giúp bố mẹ việc gì?",
+    "options": [
+      "Lau bàn và dọn bát đũa",
+      "Nằm xem tivi chờ ăn",
+      "Chơi điện thoại",
+      "Đi ngủ"
+    ],
+    "answer_hash": "cc8aff4682d3245b2ea6cd0773338a3810ea22ba34dd6badffc1d4adbd3855b9",
+    "salt": "salt_v1_84"
+  },
+  {
+    "id": "qs86",
+    "question": "Sau bữa ăn, em nên làm gì để thể hiện tính tự lập?",
+    "options": [
+      "Đứng dậy đi luôn",
+      "Tự mang bát đũa của mình ra bồn rửa",
+      "Bắt em nhỏ dọn",
+      "Vứt xương vụn ra bàn"
+    ],
+    "answer_hash": "b6d456fbfa1026d5146281a69cd43555e339ce3bd88049c94e3704a2e89c0b96",
+    "salt": "salt_v1_85"
+  },
+  {
+    "id": "qs87",
+    "question": "Làm thế nào để góc học tập luôn ngăn nắp?",
+    "options": [
+      "Cất sách vở đúng vị trí sau khi học xong",
+      "Vứt bút thước lung tung",
+      "Dán giấy nháp khắp bàn",
+      "Để đồ chơi chung với sách vở"
+    ],
+    "answer_hash": "f37383487c66b222a5b75952f70536b492640d75e66fe5e4811754d9866a80ad",
+    "salt": "salt_v1_86"
+  },
+  {
+    "id": "qs88",
+    "question": "Khi rửa bát, em cần dùng gì để làm sạch dầu mỡ?",
+    "options": [
+      "Chỉ dùng nước lã",
+      "Dùng nước rửa bát và giẻ rửa bát",
+      "Dùng bột giặt quần áo",
+      "Dùng nước hoa"
+    ],
+    "answer_hash": "efec6ca18767a65b520fb3fbf201ea8004c48fa42d1059ae968236ef552f3e8b",
+    "salt": "salt_v1_87"
+  },
+  {
+    "id": "qs89",
+    "question": "Cách bảo quản sách vở tốt nhất là gì?",
+    "options": [
+      "Gấp mép sách để đánh dấu",
+      "Viết vẽ bậy lên trang sách",
+      "Bọc bìa, dán nhãn và để trên giá sách",
+      "Dùng sách làm gối ngủ"
+    ],
+    "answer_hash": "c87df9d3c9099833b3e9af6f4ed00af5f6330953c34cde34b9c728e0724600e8",
+    "salt": "salt_v1_88"
+  },
+  {
+    "id": "qs90",
+    "question": "Khi tưới cây trong nhà, em cần chú ý điều gì?",
+    "options": [
+      "Tưới thật nhiều nước cho ngập",
+      "Chỉ tưới một lượng nước vừa đủ",
+      "Tưới bằng nước sôi",
+      "Không tưới nước bao giờ"
+    ],
+    "answer_hash": "f1dee40a6e9f8a388aa77e6fdea270cff958afd83da8dc359457c69368f82f4c",
+    "salt": "salt_v1_89"
+  },
+  {
+    "id": "qs91",
+    "question": "Để giúp bố mẹ tiết kiệm điện, em nên làm gì?",
+    "options": [
+      "Mở tủ lạnh liên tục",
+      "Tắt tivi, tắt đèn khi ra khỏi phòng",
+      "Bật quạt cả khi không có ai",
+      "Bật điều hòa 16 độ rồi mở cửa"
+    ],
+    "answer_hash": "311ff870a522ee25fd2e073ed16e538d17d936da8ce015ea91dce4be43b67987",
+    "salt": "salt_v1_90"
+  },
+  {
+    "id": "qs92",
+    "question": "Để tiết kiệm nước, khi đánh răng em nên làm gì?",
+    "options": [
+      "Mở vòi nước chảy liên tục",
+      "Lấy nước ra cốc và khóa vòi lại",
+      "Dùng vòi xịt tưới cây để đánh răng",
+      "Không đánh răng"
+    ],
+    "answer_hash": "76a8c2f08de68efd9210e1451cb88013140c07ce4a906b955ba8ae97d5e9f2ae",
+    "salt": "salt_v1_91"
+  },
+  {
+    "id": "qs93",
+    "question": "Khi sắp xếp quần áo vào tủ, em làm thế nào để dễ tìm?",
+    "options": [
+      "Nhét bừa tất cả vào một ngăn",
+      "Phân loại quần, áo, đồ lót xếp riêng",
+      "Đổ cả giỏ đồ vào tủ",
+      "Mặc nhiều áo cùng lúc"
+    ],
+    "answer_hash": "c97dc41ce28a1f3943fff2ad81420f0d1daf8e61c18e440e7cc2472e9055c1a7",
+    "salt": "salt_v1_92"
+  },
+  {
+    "id": "qs94",
+    "question": "Thức ăn thừa sau bữa cơm nên bảo quản thế nào?",
+    "options": [
+      "Để ngoài bàn qua đêm",
+      "Đậy kín và cho vào tủ lạnh",
+      "Đổ vào thùng rác luôn",
+      "Vứt ra ngoài vườn"
+    ],
+    "answer_hash": "a9d475e79af2f647b0c6557ee4ab0ca4afc2ba59fefcefa35afe7478d4a7b92a",
+    "salt": "salt_v1_93"
+  },
+  {
+    "id": "qs95",
+    "question": "Khi dùng dao kéo cắt thủ công, em cần lưu ý gì?",
+    "options": [
+      "Cầm lưỡi dao",
+      "Vừa cắt vừa chạy nhảy",
+      "Cẩn thận không để đứt tay, dùng xong cất đi ngay",
+      "Cắt vào quần áo của mình"
+    ],
+    "answer_hash": "e679221be34e2e342af423895bde3b89f72568d7e949dcf390f424fa08ec7cf5",
+    "salt": "salt_v1_94"
+  },
+  {
+    "id": "qs96",
+    "question": "Kỹ năng quản lý thời gian tốt nhất là gì?",
+    "options": [
+      "Học lúc nào thích thì học",
+      "Làm bài tập ngay sát giờ đi học",
+      "Lập thời gian biểu rõ ràng giờ học, giờ chơi",
+      "Chỉ chơi không học"
+    ],
+    "answer_hash": "86e76a2c53df0ea8c752c95766d8c37d066eb40ee6a70b18618385f10bc10cf0",
+    "salt": "salt_v1_95"
+  },
+  {
+    "id": "qs97",
+    "question": "Để chuẩn bị đi học vào sáng hôm sau, tối nay em nên làm gì?",
+    "options": [
+      "Không cần làm gì",
+      "Soạn sẵn sách vở và cặp xách theo thời khóa biểu",
+      "Thức khuya xem phim",
+      "Mặc luôn quần áo đồng phục đi ngủ"
+    ],
+    "answer_hash": "7d91100efeb9983030027970e9833b920756a670a68fafc4d3d20a2931b13b87",
+    "salt": "salt_v1_96"
+  },
+  {
+    "id": "qs98",
+    "question": "Khi có rác thải nhựa (chai lọ), em nên làm gì?",
+    "options": [
+      "Vứt ra sông suối",
+      "Đốt cháy",
+      "Phân loại để tái chế hoặc bỏ vào thùng rác nhựa",
+      "Chôn xuống đất"
+    ],
+    "answer_hash": "ee152df4741d3d68a1f2fbb236441d9a56730b024b40456e45ef5e0b4da600e8",
+    "salt": "salt_v1_97"
+  },
+  {
+    "id": "qs99",
+    "question": "Tại sao em cần học cách tự thắt dây giày?",
+    "options": [
+      "Để không làm phiền người lớn và tự phục vụ bản thân",
+      "Để khoe với bạn bè",
+      "Để giày không bị mất",
+      "Không cần học, đi giày lười"
+    ],
+    "answer_hash": "2af6ffb55de46f6f3f2920007a4a2813114c59338e8517ac743d5e67600023c4",
+    "salt": "salt_v1_98"
+  },
+  {
+    "id": "qs100",
+    "question": "Để nuôi thú cưng (chó, mèo), trách nhiệm của em là gì?",
+    "options": [
+      "Chỉ chơi đùa, không cho ăn",
+      "Cho ăn đúng giờ, giữ vệ sinh và yêu thương chúng",
+      "Đánh đập khi chúng làm ồn",
+      "Bỏ đói vài ngày"
+    ],
+    "answer_hash": "c78a2a400bec08f99d64b87a59edfb850872197e4b2d2706025f2e387257daf4",
+    "salt": "salt_v1_99"
+  }
+]
