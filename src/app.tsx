@@ -31,21 +31,18 @@ const wrongSounds = [sndWrong1, sndWrong2];
 const victorySounds = [sndVictory1, sndVictory2, sndVictory3];
 
 const playRandomCorrectVocal = () => {
-    if (isBgmMuted) return;
     const snd = correctSounds[Math.floor(Math.random() * correctSounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
 };
 
 const playRandomWrongVocal = () => {
-    if (isBgmMuted) return;
     const snd = wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
 };
 
 const playRandomVictoryVocal = () => {
-    if (isBgmMuted) return;
     const snd = victorySounds[Math.floor(Math.random() * victorySounds.length)];
     const audio = new Audio(snd);
     audio.play().catch(e => console.log('Audio play failed:', e));
@@ -147,11 +144,21 @@ let inGameGain: GainNode | null = null;
 
 export const toggleBgmMute = () => {
   isBgmMuted = !isBgmMuted;
-  if (bgmGain) {
-    bgmGain.gain.value = isBgmMuted ? 0 : 0.4;
-  }
-  if (inGameGain) {
-    inGameGain.gain.value = isBgmMuted ? 0 : 0.4;
+  const targetGain = isBgmMuted ? 0 : 0.4;
+  console.log('[Audio] Mute toggled, isBgmMuted:', isBgmMuted, 'targetGain:', targetGain);
+  
+  const ctx = audioCtx;
+  if (ctx) {
+    const now = ctx.currentTime;
+    if (bgmGain) {
+      bgmGain.gain.setTargetAtTime(targetGain, now, 0.1);
+    }
+    if (inGameGain) {
+      inGameGain.gain.setTargetAtTime(targetGain, now, 0.1);
+    }
+  } else {
+    if (bgmGain) bgmGain.gain.value = targetGain;
+    if (inGameGain) inGameGain.gain.value = targetGain;
   }
 };
 
@@ -294,7 +301,6 @@ export const playInGameMusic = async () => {
 };
 
 export const playBuzzSound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -324,7 +330,6 @@ export const playBuzzSound = () => {
 };
 
 export const playTickSound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -346,7 +351,6 @@ export const playTickSound = () => {
 };
 
 export const playCorrectSound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -433,7 +437,6 @@ const playCrowdBooSound = () => {
 };
 
 export const playWrongSound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -510,7 +513,6 @@ const playFireworkSound = () => {
 };
 
 export const playVictorySound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -573,7 +575,6 @@ export const playVictorySound = () => {
 };
 
 export const playPullRopeSound = () => {
-  if (isBgmMuted) return;
   const ctx = resumeAudioContext();
   if (!ctx) return;
 
@@ -916,7 +917,8 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
   // Modal and validation states
   const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
-
+  const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
+  const [rulesTab, setRulesTab] = useState<'players' | 'mc'>('players');
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
   const [correctOptionIndex, setCorrectOptionIndex] = useState<number | null>(null);
@@ -1001,6 +1003,30 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [state.value, send]);
+
+  // Global keydown listener for MC controls
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Ignore keys when targeting input controls
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+         target.tagName === 'TEXTAREA' ||
+         target.isContentEditable)
+      ) {
+        return;
+      }
+      
+      if (e.code === 'KeyG') {
+        e.preventDefault();
+        send({ type: 'TOGGLE_GOLDEN_QUESTION' });
+      }
+    };
+    
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [send]);
 
   // Timer interval for answering state
   useEffect(() => {
@@ -1302,6 +1328,24 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
         >
           <span className="material-symbols-outlined text-[20px]">refresh</span>
         </button>
+
+        <button 
+          onClick={() => {
+            send({ type: 'TOGGLE_GOLDEN_QUESTION' });
+          }}
+          title="Kích hoạt Câu hỏi Vàng (Phím G)"
+          className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors backdrop-blur-md border border-white/20 shadow-lg pointer-events-auto ${state.context.isGoldenQuestion ? 'bg-yellow-500 text-white animate-pulse shadow-[0_0_15px_rgba(234,179,8,0.8)]' : 'bg-neutral-800/80 text-white hover:bg-neutral-900'}`}
+        >
+          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: state.context.isGoldenQuestion ? "'FILL' 1" : "'FILL' 0" }}>star</span>
+        </button>
+
+        <button 
+          onClick={() => setIsAuthorModalOpen(true)}
+          title="Thông tin tác giả"
+          className="w-10 h-10 flex items-center justify-center bg-blue-600/90 text-white rounded-full hover:bg-blue-700 transition-colors backdrop-blur-md border border-white/20 shadow-lg pointer-events-auto mt-2"
+        >
+          <span className="material-symbols-outlined text-[20px]">info</span>
+        </button>
       </div>
 
       <div 
@@ -1451,7 +1495,9 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           <main className="absolute inset-0 z-40 flex items-center justify-center px-lg pointer-events-none">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-px h-[40%] border-l-2 border-dashed border-white/30"></div>
             
-            <div className="glass-panel p-lg rounded-2xl shadow-2xl border border-white/50 max-w-4xl w-full flex flex-col items-center gap-md bg-white/90 pointer-events-auto max-h-[85vh] overflow-y-auto">
+            <div className="relative w-full max-w-4xl flex flex-col items-center justify-center">
+
+              <div className={`glass-panel p-lg rounded-2xl shadow-2xl border w-full flex flex-col items-center gap-md bg-white/90 pointer-events-auto max-h-[85vh] overflow-y-auto relative transition-all duration-500 ${state.context.isGoldenQuestion && state.value !== 'ended' ? 'border-yellow-400 shadow-[0_0_40px_rgba(250,204,21,0.6)] mt-4 md:mt-8' : 'border-white/50'}`}>
               {state.value === 'ended' ? (
                  <div className="flex flex-col items-center text-center w-full">
                    <div className="relative flex justify-center items-center">
@@ -1508,6 +1554,16 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                     {currentQuestion ? currentQuestion.question : ""}
                   </h2>
                 </div>
+
+                {state.context.isGoldenQuestion && state.value !== 'ended' && (
+                  <div className="w-full relative py-3 mt-4 mb-2 flex items-center justify-center bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 rounded-xl shadow-[0_4px_15px_rgba(250,204,21,0.6)] border border-yellow-200 animate-pulse overflow-hidden">
+                    <span className="font-display-force font-black text-yellow-900 tracking-widest text-lg md:text-xl uppercase flex items-center gap-3 drop-shadow-sm relative z-10">
+                      <span className="text-2xl drop-shadow-md animate-bounce">🌟</span>
+                      CÂU HỎI NHÂN ĐÔI ĐIỂM SỐ
+                      <span className="text-2xl drop-shadow-md animate-bounce" style={{ animationDelay: '0.2s' }}>🌟</span>
+                    </span>
+                  </div>
+                )}
 
                 {state.value === 'waiting_buzz' && (
                   <div className="text-orange-600 font-headline-lg font-bold text-sm tracking-widest uppercase animate-pulse my-2 text-center w-full">
@@ -1605,6 +1661,7 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
                 )}
               </>
             )}
+            </div>
           </div>
           </main>
         )}
@@ -1616,18 +1673,18 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             {/* Green Progress Filling for Team 1 */}
             <div 
               className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-green-800 via-green-500 to-green-400 rounded-l-full transition-all duration-700 ease-out" 
-              style={{ width: `${t1Percent}%`, boxShadow: state.context.score.team1 >= 8 ? '0 0 15px rgba(34,197,94,0.8)' : 'none' }}>
+              style={{ width: `${t2Percent}%`, boxShadow: state.context.score.team1 >= 8 ? '0 0 15px rgba(34,197,94,0.8)' : 'none' }}>
             </div>
             {/* Blue Progress Filling for Team 2 */}
             <div 
               className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-blue-900 via-blue-600 to-blue-400 rounded-r-full transition-all duration-700 ease-out" 
-              style={{ width: `${t2Percent}%`, boxShadow: state.context.score.team2 >= 8 ? '0 0 15px rgba(33,112,228,0.8)' : 'none' }}>
+              style={{ width: `${t1Percent}%`, boxShadow: state.context.score.team2 >= 8 ? '0 0 15px rgba(33,112,228,0.8)' : 'none' }}>
             </div>
             
             {/* Centered Marker with Flame Icon */}
             <div 
               className="absolute top-1/2 z-50 transition-all duration-700 ease-out"
-              style={{ left: `calc(${t1Percent}%)`, transform: 'translate(-50%, -50%)' }}
+              style={{ left: `calc(${t2Percent}%)`, transform: 'translate(-50%, -50%)' }}
             >
               <div className="relative flex items-center justify-center">
                 <div className="absolute w-20 h-20 bg-orange-500 rounded-full blur-2xl opacity-60 animate-pulse"></div>
@@ -1784,12 +1841,12 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             
             {/* Team 1 Character */}
             <div className="absolute bottom-[-5%] left-[-5%] md:left-5 lg:left-20 animate-pull-left z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
-               <img src="./team_green_pulling.png?v=13" alt="Team 1" className="h-[250px] md:h-[400px] lg:h-[550px] object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
+               <img src="./team_green_pulling.png?v=13" alt="Team 1" className="h-[270px] md:h-[430px] lg:h-[590px] object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
             </div>
 
             {/* Team 2 Character */}
             <div className="absolute bottom-[-5%] right-[-5%] md:right-5 lg:right-20 animate-pull-right z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
-               <img src="./team_blue_pulling.png?v=13" alt="Team 2" className="h-[250px] md:h-[400px] lg:h-[550px] object-contain drop-shadow-[0_0_20px_rgba(33,112,228,0.5)] scale-x-[-1]" />
+               <img src="./team_blue_pulling.png?v=13" alt="Team 2" className="h-[270px] md:h-[430px] lg:h-[590px] object-contain drop-shadow-[0_0_20px_rgba(33,112,228,0.5)] scale-x-[-1]" />
             </div>
 
             {/* Foreground Content */}
@@ -1835,6 +1892,51 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
             </div>
           </div>
         )}
+
+      {/* Author Credits Modal */}
+      {isAuthorModalOpen && (
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[80] flex items-center justify-center p-6 transition-all duration-300">
+          <div className="bg-white rounded-2xl border-2 border-neutral-200 w-full max-w-md shadow-2xl text-neutral-900 overflow-hidden relative">
+            <button 
+              onClick={() => setIsAuthorModalOpen(false)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-800 font-bold text-3xl leading-none transition-colors"
+            >
+              &times;
+            </button>
+            <div className="p-8 flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 shadow-inner border-4 border-white shadow-[0_4px_10px_rgba(0,0,0,0.1)]">
+                <span className="material-symbols-outlined text-5xl">code</span>
+              </div>
+              <h2 className="font-display font-black text-2xl text-neutral-800 mb-1">Trần Vĩ Thành</h2>
+              <p className="text-blue-600 font-bold mb-1">Technology Solution Implementation and Consulting Specialist</p>
+              <p className="text-sm text-neutral-500 mb-6 font-semibold">(Chuyên Viên Tư Vấn – Triển Khai Giải Pháp Công Nghệ)</p>
+              
+              <div className="w-full space-y-3 font-body-md text-left">
+                <a href="https://techsharevn.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors border border-neutral-100 group">
+                  <span className="material-symbols-outlined text-neutral-400 group-hover:text-blue-500">language</span>
+                  <span>Techsharevn.com</span>
+                </a>
+                <a href="https://www.facebook.com/thanhtechsharevn/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors border border-neutral-100 group">
+                  <span className="material-symbols-outlined text-neutral-400 group-hover:text-blue-500">thumb_up</span>
+                  <span>/thanhtechsharevn</span>
+                </a>
+                <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                  <span className="material-symbols-outlined text-neutral-400">call</span>
+                  <span>0949.897.293</span>
+                </div>
+                <a href="https://github.com/vitinhthanhphat-png/knowledge-tug-of-war" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 hover:text-black transition-colors border border-neutral-100 group">
+                  <span className="material-symbols-outlined text-neutral-400 group-hover:text-black">code_blocks</span>
+                  <span>Mã nguồn trò chơi (GitHub)</span>
+                </a>
+              </div>
+              
+              <div className="mt-8 text-xs text-neutral-400">
+                Phiên bản 1.0.0 &copy; 2026. All rights reserved.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 2. Topic Selection Modal - MOUNTED OUTSIDE THE 16:9 CANVAS */}
       {isTopicModalOpen && (
@@ -2089,60 +2191,140 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
       {/* 3. Game Rules Modal - MOUNTED OUTSIDE THE 16:9 CANVAS */}
       {isRulesModalOpen && (
         <div className="absolute inset-0 bg-black/80 backdrop-blur-md z-[70] flex items-center justify-center p-6 transition-all duration-300">
-          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col border border-white/20">
-            <h2 className="text-2xl font-black mb-6 text-center font-display-force uppercase text-green-700 tracking-wider">
-              Luật Chơi (Game Rules)
-            </h2>
-            
-            <div className="text-left space-y-4 overflow-y-auto p-2 font-body-md text-neutral-700 flex-1">
-              <div className="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
-                <h3 className="font-bold text-green-800 mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined">flag</span>
-                  Mục tiêu (Objective)
-                </h3>
-                <p>Trả lời đúng câu hỏi để kéo cờ về phía đội mình. Đội nào kéo cờ qua vạch chiến thắng trước sẽ giành phần thắng.</p>
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-0 relative max-h-[90vh] flex flex-col border border-white/20 overflow-hidden">
+            {/* Header with Tabs */}
+            <div className="bg-neutral-100 border-b border-neutral-200">
+              <div className="flex justify-between items-center p-4 pb-0">
+                <h2 className="text-2xl font-black text-green-700 font-display-force uppercase tracking-wider mb-2">
+                  Hướng Dẫn
+                </h2>
+                <button 
+                  onClick={() => setIsRulesModalOpen(false)}
+                  className="text-neutral-400 hover:text-neutral-700 font-bold text-3xl px-2 leading-none mb-4 transition-colors"
+                >
+                  &times;
+                </button>
               </div>
-              
-              <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
-                <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined">touch_app</span>
-                  Cách trả lời (How to Answer)
-                </h3>
-                <ul className="list-disc pl-6 space-y-1">
-                  <li>Đọc kỹ câu hỏi hiển thị trên màn hình.</li>
-                  <li>Chọn đáp án đúng từ các lựa chọn có sẵn.</li>
-                </ul>
-              </div>
-
-              <div className="bg-orange-50 p-4 rounded-xl border border-orange-100 shadow-sm">
-                <h3 className="font-bold text-orange-800 mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined">swap_horiz</span>
-                  Cơ chế Kéo Co (Mechanics)
-                </h3>
-                <ul className="list-disc pl-6 space-y-1">
-                  <li><strong className="text-green-600">Trả lời đúng:</strong> Cộng điểm cho đội, kéo cờ về phía đội mình một nhịp.</li>
-                  <li><strong className="text-red-600">Trả lời sai:</strong> Không kéo được dây, tạo cơ hội cho đội bạn phản công.</li>
-                </ul>
-              </div>
-
-              <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 shadow-sm">
-                <h3 className="font-bold text-purple-800 mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined">emoji_events</span>
-                  Điều kiện thắng (Winning)
-                </h3>
-                <ul className="list-disc pl-6 space-y-1">
-                  <li>Trò chơi kết thúc khi một đội kéo cờ hoàn toàn về phía mình (điểm tuyệt đối).</li>
-                  <li>Nếu hết câu hỏi mà chưa bên nào kéo được về đích: đội có cờ nằm nghiêng về phía mình nhiều hơn sẽ thắng (hoặc <strong>Hòa</strong> nếu cờ ở giữa).</li>
-                </ul>
+              <div className="flex px-4 gap-6">
+                <button
+                  className={`pb-3 font-bold text-sm transition-colors relative flex items-center gap-2 ${rulesTab === 'players' ? 'text-blue-600' : 'text-neutral-500 hover:text-neutral-700'}`}
+                  onClick={() => setRulesTab('players')}
+                >
+                  <span className="material-symbols-outlined text-[18px]">group</span>
+                  Dành Cho 2 Đội Chơi
+                  {rulesTab === 'players' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-lg"></div>}
+                </button>
+                <button
+                  className={`pb-3 font-bold text-sm transition-colors relative flex items-center gap-2 ${rulesTab === 'mc' ? 'text-green-600' : 'text-neutral-500 hover:text-neutral-700'}`}
+                  onClick={() => setRulesTab('mc')}
+                >
+                  <span className="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                  Dành Cho MC (Quản Trò)
+                  {rulesTab === 'mc' && <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-600 rounded-t-lg"></div>}
+                </button>
               </div>
             </div>
+            
+            {/* Scrollable Content Area */}
+            <div className="p-6 overflow-y-auto flex-1 font-body-md text-neutral-700 bg-white">
+              {rulesTab === 'players' && (
+                <div className="space-y-4">
+                  <div className="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm">
+                    <h3 className="font-bold text-green-800 mb-2 flex items-center gap-2">
+                      <span className="material-symbols-outlined">flag</span>
+                      Mục tiêu (Objective)
+                    </h3>
+                    <p>Trả lời đúng câu hỏi để kéo cờ về phía đội mình. Đội nào kéo cờ qua vạch chiến thắng trước sẽ giành phần thắng.</p>
+                  </div>
+                  
+                  <div className="bg-red-50 p-4 rounded-xl border border-red-100 shadow-sm">
+                    <h3 className="font-bold text-red-800 mb-2 flex items-center gap-2">
+                      <span className="material-symbols-outlined">notifications_active</span>
+                      Cơ chế Đập Chuông Giành Quyền (Buzzer)
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Khi MC mở câu hỏi, hãy nhanh tay nhấn phím <strong className="text-red-600">Space</strong> (hoặc Enter) để giành quyền trả lời.</li>
+                      <li><strong className="text-red-600">Chú ý:</strong> Nếu đập chuông <strong>TRƯỚC</strong> khi MC đọc xong và mở khóa chuông, đội của bạn sẽ bị <strong>phạt mất lượt</strong> trong câu đó!</li>
+                      <li>Chỉ có <strong>10 giây</strong> để trả lời sau khi giành được quyền. Hãy thảo luận nhanh!</li>
+                    </ul>
+                  </div>
 
-            <button 
-              className="mt-6 w-full py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition font-black uppercase shadow-[0_5px_0_rgb(20,83,45)] active:shadow-[0_0px_0_rgb(20,83,45)] active:translate-y-[5px] text-lg tracking-widest"
-              onClick={() => setIsRulesModalOpen(false)}
-            >
-              Đã Hiểu (Close)
-            </button>
+                  <div className="bg-yellow-50 p-4 rounded-xl border border-yellow-200 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 -mt-2 -mr-2 text-4xl opacity-20">🌟</div>
+                    <h3 className="font-bold text-yellow-800 mb-2 flex items-center gap-2">
+                      <span className="material-symbols-outlined text-yellow-600">stars</span>
+                      Câu Hỏi Vàng (X2 Điểm Số)
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-1 relative z-10">
+                      <li>Vào giai đoạn nước rút (từ câu hỏi số 10), MC có thể bật chế độ <strong>CÂU HỎI VÀNG</strong>.</li>
+                      <li>Trả lời <strong className="text-green-600">ĐÚNG</strong>: Đội bạn kéo cờ được <strong>2 nhịp</strong> (gấp đôi lực).</li>
+                      <li>Trả lời <strong className="text-red-600">SAI</strong>: Đội đối phương tự động được kéo cờ <strong>2 nhịp</strong> (bị phạt ngược).</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm">
+                    <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                      <span className="material-symbols-outlined">emoji_events</span>
+                      Điều kiện thắng (Winning)
+                    </h3>
+                    <ul className="list-disc pl-6 space-y-1">
+                      <li>Trò chơi kết thúc khi một đội kéo cờ chạm đích hoàn toàn (K.O - Knockout).</li>
+                      <li>Nếu hết câu hỏi mà chưa có ai chạm đích: Đội có cờ nghiêng về sân mình nhiều hơn sẽ thắng.</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {rulesTab === 'mc' && (
+                <div className="space-y-4">
+                  <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+                    <p className="text-sm mb-4">Là MC, bạn điều khiển luồng của trò chơi thông qua các phím tắt bí mật sau để tạo kịch tính cho khán giả:</p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="bg-white p-3 rounded-lg border border-neutral-200 shadow-sm flex items-start gap-3">
+                        <kbd className="px-2 py-1 bg-neutral-800 text-white rounded font-mono text-sm font-bold min-w-[30px] text-center shadow-md">M</kbd>
+                        <div>
+                          <div className="font-bold text-sm">Tắt/Mở Nhạc (Mute)</div>
+                          <div className="text-xs text-neutral-500 mt-1">Hữu ích khi bạn cần đọc to câu hỏi hoặc giải thích mà không bị nhạc lấn át.</div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-white p-3 rounded-lg border border-neutral-200 shadow-sm flex items-start gap-3">
+                        <kbd className="px-2 py-1 bg-yellow-500 text-white rounded font-mono text-sm font-bold min-w-[30px] text-center shadow-md">G</kbd>
+                        <div>
+                          <div className="font-bold text-sm">Bật CÂU HỎI VÀNG</div>
+                          <div className="text-xs text-neutral-500 mt-1">Kích hoạt thủ công chế độ X2 điểm số. Tự động bật khi đến câu 10.</div>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-3 rounded-lg border border-neutral-200 shadow-sm flex items-start gap-3">
+                        <kbd className="px-2 py-1 bg-blue-500 text-white rounded font-mono text-sm font-bold min-w-[30px] text-center shadow-md">P</kbd>
+                        <div>
+                          <div className="font-bold text-sm">Ẩn/Hiện Bảng Câu Hỏi</div>
+                          <div className="text-xs text-neutral-500 mt-1">Giấu bảng câu hỏi đi để khoe 2 con robot, tạo sự hồi hộp.</div>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-3 rounded-lg border border-neutral-200 shadow-sm flex items-start gap-3">
+                        <kbd className="px-2 py-1 bg-purple-500 text-white rounded font-mono text-sm font-bold min-w-[30px] text-center shadow-md">F</kbd>
+                        <div>
+                          <div className="font-bold text-sm">Toàn Màn Hình</div>
+                          <div className="text-xs text-neutral-500 mt-1">Bật/tắt Fullscreen để giao diện tràn viền.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-green-50 p-4 rounded-xl border border-green-100 shadow-sm flex items-start gap-3">
+                    <span className="material-symbols-outlined text-green-600">tips_and_updates</span>
+                    <div className="text-sm">
+                      <strong className="block text-green-800 mb-1">Mẹo MC:</strong>
+                      Khi chuyển câu hỏi, màn hình sẽ đếm ngược (3-2-1) trước khi hiển thị nút đập chuông. Hãy đọc câu hỏi và nói <em>"Hết thời gian chờ, xin mời!"</em> đúng lúc mở khóa để các đội tranh tài!
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -12,6 +12,7 @@ export interface TugOfWarContext {
   buzzWinner: 'team1' | 'team2' | null;
   importError: string | null;
   lastResult?: 'correct' | 'incorrect' | 'timeout' | null;
+  isGoldenQuestion: boolean;
 }
 
 export type TugOfWarEvent =
@@ -24,6 +25,7 @@ export type TugOfWarEvent =
   | { type: 'TIMEOUT' }
   | { type: 'TIMEOUT_BUZZ' }
   | { type: 'NEXT_QUESTION' }
+  | { type: 'TOGGLE_GOLDEN_QUESTION' }
   | { type: 'RESET' };
 
 export const tugOfWarMachine = createMachine({
@@ -45,8 +47,14 @@ export const tugOfWarMachine = createMachine({
     buzzWinner: null,
     importError: null,
     lastResult: null,
+    isGoldenQuestion: false,
   }),
   on: {
+    TOGGLE_GOLDEN_QUESTION: {
+      actions: assign(({ context }) => ({
+        isGoldenQuestion: !context.isGoldenQuestion,
+      })),
+    },
     IMPORT_QUESTIONS: {
       target: '.idle',
       actions: assign(({ event }) => {
@@ -93,6 +101,7 @@ export const tugOfWarMachine = createMachine({
               buzzWinner: null,
               importError: null,
               lastResult: null,
+              isGoldenQuestion: false,
             };
           }),
         },
@@ -157,25 +166,26 @@ export const tugOfWarMachine = createMachine({
           actions: assign(({ context, event }) => {
             const isCorrect = event.isCorrect;
             const active = context.activeTeam;
+            const points = context.isGoldenQuestion ? 2 : 1;
             
             let t1Score = context.score.team1;
             let t2Score = context.score.team2;
             
             if (active === 'team1') {
               if (isCorrect) {
-                t1Score += 1;
-                t2Score -= 1;
+                t1Score += points;
+                t2Score -= points;
               } else {
-                t1Score -= 1;
-                t2Score += 1;
+                t1Score -= points;
+                t2Score += points;
               }
             } else if (active === 'team2') {
               if (isCorrect) {
-                t2Score += 1;
-                t1Score -= 1;
+                t2Score += points;
+                t1Score -= points;
               } else {
-                t2Score -= 1;
-                t1Score += 1;
+                t2Score -= points;
+                t1Score += points;
               }
             }
             
@@ -199,15 +209,16 @@ export const tugOfWarMachine = createMachine({
             target: 'result',
             actions: assign(({ context }) => {
               const active = context.activeTeam;
+              const points = context.isGoldenQuestion ? 2 : 1;
               let t1Score = context.score.team1;
               let t2Score = context.score.team2;
               
               if (active === 'team1') {
-                t1Score -= 1;
-                t2Score += 1;
+                t1Score -= points;
+                t2Score += points;
               } else if (active === 'team2') {
-                t2Score -= 1;
-                t1Score += 1;
+                t2Score -= points;
+                t1Score += points;
               }
               
               t1Score = Math.max(0, Math.min(10, t1Score));
@@ -225,15 +236,16 @@ export const tugOfWarMachine = createMachine({
           target: 'result',
           actions: assign(({ context }) => {
             const active = context.activeTeam;
+            const points = context.isGoldenQuestion ? 2 : 1;
             let t1Score = context.score.team1;
             let t2Score = context.score.team2;
             
             if (active === 'team1') {
-              t1Score -= 1;
-              t2Score += 1;
+              t1Score -= points;
+              t2Score += points;
             } else if (active === 'team2') {
-              t2Score -= 1;
-              t1Score += 1;
+              t2Score -= points;
+              t1Score += points;
             }
             
             t1Score = Math.max(0, Math.min(10, t1Score));
@@ -256,6 +268,7 @@ export const tugOfWarMachine = createMachine({
             buzzWinner: null,
             importError: null,
             lastResult: null,
+            isGoldenQuestion: false,
           })),
         },
       },
@@ -274,6 +287,7 @@ export const tugOfWarMachine = createMachine({
             target: 'waiting_buzz',
             actions: assign(({ context }) => ({
               currentQuestionIndex: context.currentQuestionIndex + 1,
+              isGoldenQuestion: context.currentQuestionIndex + 1 >= 9,
             })),
           },
         ],
@@ -289,6 +303,7 @@ export const tugOfWarMachine = createMachine({
             buzzWinner: null,
             importError: null,
             lastResult: null,
+            isGoldenQuestion: false,
           })),
         },
       },
@@ -307,6 +322,7 @@ export const tugOfWarMachine = createMachine({
             target: 'waiting_buzz',
             actions: assign(({ context }) => ({
               currentQuestionIndex: context.currentQuestionIndex + 1,
+              isGoldenQuestion: context.currentQuestionIndex + 1 >= 9,
             })),
           },
         ],
@@ -322,6 +338,7 @@ export const tugOfWarMachine = createMachine({
             buzzWinner: null,
             importError: null,
             lastResult: null,
+            isGoldenQuestion: false,
           })),
         },
       },
@@ -340,6 +357,7 @@ export const tugOfWarMachine = createMachine({
             buzzWinner: null,
             importError: null,
             lastResult: null,
+            isGoldenQuestion: false,
           })),
         },
       },

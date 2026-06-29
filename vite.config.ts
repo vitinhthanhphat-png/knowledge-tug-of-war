@@ -7,7 +7,7 @@ export default defineConfig({
     cssCodeSplit: false,
     assetsInlineLimit: 10485760,
     sourcemap: false,
-    emptyOutDir: true,
+    emptyOutDir: false,
     lib: {
       entry: 'src/main.tsx',
       name: 'KnowledgeTugOfWar',
