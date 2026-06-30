@@ -1837,16 +1837,16 @@ export function App({ defaultQuestions, host, validationError: propValidationErr
           <div className="absolute inset-0 z-[60] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md overflow-hidden">
             
             {/* Background Rope for Tug of War effect */}
-            <div className="absolute bottom-[20%] md:bottom-[25%] left-0 right-0 h-4 bg-gradient-to-r from-green-500 via-orange-500 to-blue-500 opacity-20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
+            <div className="absolute bottom-[21%] md:bottom-[32%] lg:bottom-[50%] xl:bottom-[57%] left-0 right-0 h-4 bg-gradient-to-r from-green-500 via-orange-500 to-blue-500 opacity-20 shadow-[0_0_15px_rgba(255,255,255,0.1)]"></div>
             
             {/* Team 1 Character */}
-            <div className="absolute bottom-[-5%] left-[-5%] md:left-5 lg:left-20 animate-pull-left z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
-               <img src="./team_green_pulling.png?v=13" alt="Team 1" className="h-[270px] md:h-[430px] lg:h-[590px] object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
+            <div className="absolute bottom-[-5%] -left-[15%] md:-left-[5%] lg:-left-[2%] xl:-left-[5%] animate-pull-left z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
+               <img src="./team_green_pulling.png?v=13" alt="Team 1" className="h-[35vh] md:h-[50vh] lg:h-[75vh] xl:h-[85vh] object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)]" />
             </div>
 
             {/* Team 2 Character */}
-            <div className="absolute bottom-[-5%] right-[-5%] md:right-5 lg:right-20 animate-pull-right z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
-               <img src="./team_blue_pulling.png?v=13" alt="Team 2" className="h-[270px] md:h-[430px] lg:h-[590px] object-contain drop-shadow-[0_0_20px_rgba(33,112,228,0.5)] scale-x-[-1]" />
+            <div className="absolute bottom-[-5%] -right-[15%] md:-right-[5%] lg:-right-[2%] xl:-right-[5%] animate-pull-right z-0 opacity-90 hover:opacity-100 transition-opacity pointer-events-none">
+               <img src="./team_blue_pulling.png?v=13" alt="Team 2" className="h-[35vh] md:h-[50vh] lg:h-[75vh] xl:h-[85vh] object-contain drop-shadow-[0_0_20px_rgba(33,112,228,0.5)] scale-x-[-1]" />
             </div>
 
             {/* Foreground Content */}

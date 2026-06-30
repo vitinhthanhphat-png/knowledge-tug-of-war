@@ -22,11 +22,67 @@
       min-height: 100vh;
       overflow: hidden;
     }
+    .portrait-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #111c2d;
+      z-index: 99999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 24px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-sizing: border-box;
+    }
+    @media (orientation: portrait) and (max-width: 900px) {
+      .portrait-overlay {
+        display: flex;
+      }
+      .game-container-wrapper {
+        display: none !important;
+      }
+    }
+    .rotate-icon {
+      font-size: 64px !important;
+      margin-bottom: 24px;
+      animation: rotatePhone 2s infinite ease-in-out;
+    }
+    .portrait-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #22c55e;
+      margin-bottom: 16px;
+      margin-top: 0;
+    }
+    .portrait-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 300px;
+      line-height: 1.5;
+      margin: 0;
+    }
+    @keyframes rotatePhone {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(90deg); }
+      100% { transform: rotate(90deg); }
+    }
   </style>
 </head>
 <body>
   
-  <div class="w-full h-[100vh]">
+  <div class="portrait-overlay">
+    <span class="material-symbols-outlined rotate-icon">screen_rotation</span>
+    <h2 class="portrait-title">Vui lòng xoay ngang điện thoại</h2>
+    <p class="portrait-desc">Trải nghiệm Đấu Trường Kéo Co Kiến Thức tốt nhất khi màn hình nằm ngang.</p>
+  </div>
+
+  <div class="w-full h-[100vh] game-container-wrapper">
 
     
     <!-- Custom HTML Web Component -->
